@@ -1,6 +1,7 @@
 import type { QuizQuestionInsert, QuizQuestionRepository } from "@/domain/repositories";
 import { quizQuestionFromRow } from "@/infrastructure/mappers/entity-mappers";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import { throwIfPostgrestError } from "@/lib/supabase-user-message";
 import type { QuizQuestionRow } from "@/types/database";
 
 export class SupabaseQuizQuestionRepository implements QuizQuestionRepository {
@@ -10,13 +11,13 @@ export class SupabaseQuizQuestionRepository implements QuizQuestionRepository {
       .select("*")
       .eq("quiz_id", quizId)
       .order("sort_order");
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return (data as QuizQuestionRow[]).map(quizQuestionFromRow);
   }
 
   async insertMany(questions: QuizQuestionInsert[]) {
     if (questions.length === 0) return;
     const { error } = await getSupabaseAdmin().from("quiz_questions").insert(questions);
-    if (error) throw error;
+    throwIfPostgrestError(error);
   }
 }

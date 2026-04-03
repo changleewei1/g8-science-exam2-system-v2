@@ -1,6 +1,7 @@
 import type { VideoInsert, VideoRepository } from "@/domain/repositories";
 import { videoFromRow } from "@/infrastructure/mappers/entity-mappers";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import { throwIfPostgrestError } from "@/lib/supabase-user-message";
 import type { VideoRow } from "@/types/database";
 
 export class SupabaseVideoRepository implements VideoRepository {
@@ -10,7 +11,7 @@ export class SupabaseVideoRepository implements VideoRepository {
       .select("*")
       .eq("id", id)
       .maybeSingle();
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return data ? videoFromRow(data as VideoRow) : null;
   }
 
@@ -21,7 +22,7 @@ export class SupabaseVideoRepository implements VideoRepository {
       .eq("unit_id", unitId)
       .eq("is_active", true)
       .order("sort_order");
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return (data as VideoRow[]).map(videoFromRow);
   }
 
@@ -32,7 +33,7 @@ export class SupabaseVideoRepository implements VideoRepository {
       .eq("is_active", true)
       .order("unit_id", { ascending: true })
       .order("sort_order", { ascending: true });
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return (data as VideoRow[]).map(videoFromRow);
   }
 
@@ -42,14 +43,14 @@ export class SupabaseVideoRepository implements VideoRepository {
       .select("*")
       .order("unit_id", { ascending: true })
       .order("sort_order", { ascending: true });
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return (data as VideoRow[]).map(videoFromRow);
   }
 
   async insertMany(videos: VideoInsert[]) {
     if (videos.length === 0) return;
     const { error } = await getSupabaseAdmin().from("videos").insert(videos);
-    if (error) throw error;
+    throwIfPostgrestError(error);
   }
 
   async insertReturningId(video: VideoInsert) {
@@ -58,7 +59,7 @@ export class SupabaseVideoRepository implements VideoRepository {
       .insert(video)
       .select("id")
       .single();
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return (data as { id: string }).id;
   }
 }

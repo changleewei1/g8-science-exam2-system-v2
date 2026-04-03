@@ -6,6 +6,7 @@ import type {
 } from "@/domain/repositories";
 import { quizAttemptFromRow } from "@/infrastructure/mappers/entity-mappers";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import { throwIfPostgrestError } from "@/lib/supabase-user-message";
 import type { StudentQuizAttemptRow } from "@/types/database";
 
 export class SupabaseQuizAttemptRepository implements QuizAttemptRepository {
@@ -15,7 +16,7 @@ export class SupabaseQuizAttemptRepository implements QuizAttemptRepository {
       .select("*")
       .eq("id", id)
       .maybeSingle();
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return data ? quizAttemptFromRow(data as StudentQuizAttemptRow) : null;
   }
 
@@ -25,7 +26,7 @@ export class SupabaseQuizAttemptRepository implements QuizAttemptRepository {
       .insert(input)
       .select("id")
       .single();
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return { id: (data as { id: string }).id };
   }
 
@@ -34,13 +35,13 @@ export class SupabaseQuizAttemptRepository implements QuizAttemptRepository {
       .from("student_quiz_attempts")
       .update({ score, is_passed: isPassed, submitted_at: submittedAt })
       .eq("id", id);
-    if (error) throw error;
+    throwIfPostgrestError(error);
   }
 
   async insertAnswers(rows: AnswerInsert[]) {
     if (rows.length === 0) return;
     const { error } = await getSupabaseAdmin().from("student_quiz_answers").insert(rows);
-    if (error) throw error;
+    throwIfPostgrestError(error);
   }
 
   async findLatestByStudentAndQuiz(studentId: string, quizId: string) {
@@ -52,7 +53,7 @@ export class SupabaseQuizAttemptRepository implements QuizAttemptRepository {
       .order("submitted_at", { ascending: false, nullsFirst: false })
       .limit(1)
       .maybeSingle();
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return data ? quizAttemptFromRow(data as StudentQuizAttemptRow) : null;
   }
 
@@ -61,7 +62,7 @@ export class SupabaseQuizAttemptRepository implements QuizAttemptRepository {
       .from("student_quiz_attempts")
       .select("*")
       .eq("student_id", studentId);
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return (data as StudentQuizAttemptRow[]).map(quizAttemptFromRow);
   }
 
@@ -70,7 +71,7 @@ export class SupabaseQuizAttemptRepository implements QuizAttemptRepository {
       .from("student_quiz_answers")
       .select("question_id, selected_answer, is_correct")
       .eq("attempt_id", attemptId);
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return (data ?? []) as AttemptAnswerRow[];
   }
 }

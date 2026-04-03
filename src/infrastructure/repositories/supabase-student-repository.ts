@@ -1,6 +1,7 @@
 import type { StudentInsertRow, StudentRepository } from "@/domain/repositories";
 import { studentFromRow } from "@/infrastructure/mappers/entity-mappers";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import { throwIfPostgrestError } from "@/lib/supabase-user-message";
 import type { StudentRow } from "@/types/database";
 
 export class SupabaseStudentRepository implements StudentRepository {
@@ -10,7 +11,7 @@ export class SupabaseStudentRepository implements StudentRepository {
       .insert(row)
       .select("id")
       .single();
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return data as { id: string };
   }
 
@@ -19,7 +20,7 @@ export class SupabaseStudentRepository implements StudentRepository {
       .from("students")
       .update({ password_hash: passwordHash })
       .eq("id", id);
-    if (error) throw error;
+    throwIfPostgrestError(error);
   }
 
   async findById(id: string) {
@@ -28,7 +29,7 @@ export class SupabaseStudentRepository implements StudentRepository {
       .select("*")
       .eq("id", id)
       .maybeSingle();
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return data ? studentFromRow(data as StudentRow) : null;
   }
 
@@ -38,7 +39,7 @@ export class SupabaseStudentRepository implements StudentRepository {
       .select("*")
       .eq("student_code", code)
       .maybeSingle();
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return data ? studentFromRow(data as StudentRow) : null;
   }
 
@@ -47,7 +48,7 @@ export class SupabaseStudentRepository implements StudentRepository {
       .from("students")
       .select("*")
       .order("student_code");
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return (data as StudentRow[]).map(studentFromRow);
   }
 
@@ -58,7 +59,7 @@ export class SupabaseStudentRepository implements StudentRepository {
       .eq("class_name", className)
       .eq("is_active", true)
       .order("student_code");
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return (data as StudentRow[]).map(studentFromRow);
   }
 }

@@ -3,6 +3,7 @@ import type {
   StudentTaskProgressUpsert,
 } from "@/domain/repositories/student-task-progress-repository";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import { throwIfPostgrestError } from "@/lib/supabase-user-message";
 import type { StudentTaskProgressRow } from "@/types/database";
 
 export class SupabaseStudentTaskProgressRepository implements StudentTaskProgressRepository {
@@ -10,7 +11,7 @@ export class SupabaseStudentTaskProgressRepository implements StudentTaskProgres
     const { error } = await getSupabaseAdmin()
       .from("student_task_progress")
       .upsert(row, { onConflict: "student_id,task_id,video_id" });
-    if (error) throw error;
+    throwIfPostgrestError(error);
   }
 
   async listByTaskId(taskId: string) {
@@ -18,7 +19,7 @@ export class SupabaseStudentTaskProgressRepository implements StudentTaskProgres
       .from("student_task_progress")
       .select("*")
       .eq("task_id", taskId);
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return data as StudentTaskProgressRow[];
   }
 
@@ -28,7 +29,7 @@ export class SupabaseStudentTaskProgressRepository implements StudentTaskProgres
       .select("*")
       .eq("task_id", taskId)
       .eq("student_id", studentId);
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return data as StudentTaskProgressRow[];
   }
 }

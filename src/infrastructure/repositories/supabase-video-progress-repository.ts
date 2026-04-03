@@ -4,6 +4,7 @@ import type {
 } from "@/domain/repositories";
 import { videoProgressFromRow } from "@/infrastructure/mappers/entity-mappers";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import { throwIfPostgrestError } from "@/lib/supabase-user-message";
 import type { StudentVideoProgressRow } from "@/types/database";
 
 export class SupabaseVideoProgressRepository implements VideoProgressRepository {
@@ -14,7 +15,7 @@ export class SupabaseVideoProgressRepository implements VideoProgressRepository 
       .eq("student_id", studentId)
       .eq("video_id", videoId)
       .maybeSingle();
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return data ? videoProgressFromRow(data as StudentVideoProgressRow) : null;
   }
 
@@ -31,7 +32,7 @@ export class SupabaseVideoProgressRepository implements VideoProgressRepository 
       .upsert(payload, { onConflict: "student_id,video_id" })
       .select("*")
       .single();
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return videoProgressFromRow(data as StudentVideoProgressRow);
   }
 
@@ -40,7 +41,7 @@ export class SupabaseVideoProgressRepository implements VideoProgressRepository 
       .from("student_video_progress")
       .select("*")
       .eq("student_id", studentId);
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return (data as StudentVideoProgressRow[]).map(videoProgressFromRow);
   }
 
@@ -50,7 +51,7 @@ export class SupabaseVideoProgressRepository implements VideoProgressRepository 
       .select("*", { count: "exact", head: true })
       .eq("student_id", studentId)
       .eq("is_completed", true);
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return count ?? 0;
   }
 }

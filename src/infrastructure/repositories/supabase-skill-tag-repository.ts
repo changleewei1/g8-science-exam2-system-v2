@@ -1,6 +1,7 @@
 import type { SkillTagRepository, SkillTagUpsert } from "@/domain/repositories";
 import { skillTagFromRow } from "@/infrastructure/mappers/entity-mappers";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import { throwIfPostgrestError } from "@/lib/supabase-user-message";
 import type { SkillTagRow } from "@/types/database";
 
 export class SupabaseSkillTagRepository implements SkillTagRepository {
@@ -9,7 +10,7 @@ export class SupabaseSkillTagRepository implements SkillTagRepository {
       .from("skill_tags")
       .select("*")
       .order("code");
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return (data as SkillTagRow[]).map(skillTagFromRow);
   }
 
@@ -19,7 +20,7 @@ export class SupabaseSkillTagRepository implements SkillTagRepository {
       .select("*")
       .eq("code", code)
       .maybeSingle();
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return data ? skillTagFromRow(data as SkillTagRow) : null;
   }
 
@@ -28,6 +29,6 @@ export class SupabaseSkillTagRepository implements SkillTagRepository {
     const { error } = await getSupabaseAdmin()
       .from("skill_tags")
       .upsert(tags, { onConflict: "code" });
-    if (error) throw error;
+    throwIfPostgrestError(error);
   }
 }

@@ -1,6 +1,7 @@
 import type { ScopeUnitRepository } from "@/domain/repositories";
 import { scopeUnitFromRow } from "@/infrastructure/mappers/entity-mappers";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import { throwIfPostgrestError } from "@/lib/supabase-user-message";
 import type { ScopeUnitRow } from "@/types/database";
 
 export class SupabaseScopeUnitRepository implements ScopeUnitRepository {
@@ -10,7 +11,7 @@ export class SupabaseScopeUnitRepository implements ScopeUnitRepository {
       .select("*")
       .eq("id", id)
       .maybeSingle();
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return data ? scopeUnitFromRow(data as ScopeUnitRow) : null;
   }
 
@@ -20,7 +21,7 @@ export class SupabaseScopeUnitRepository implements ScopeUnitRepository {
       .select("*")
       .eq("exam_scope_id", examScopeId)
       .order("sort_order");
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return (data as ScopeUnitRow[]).map(scopeUnitFromRow);
   }
 }

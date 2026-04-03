@@ -1,3 +1,26 @@
+import { PostgrestError } from "@supabase/supabase-js";
+
+/**
+ * Supabase `.from().insert()` 等在失敗時回傳的 `error` 常為 **plain object**（非 `Error` 實例）。
+ * 若直接 `throw error`，上層 `e instanceof Error` 會為 false，API 會誤回 `{ error: "UNKNOWN" }`。
+ */
+export function throwIfPostgrestError(
+  error: {
+    message?: string;
+    details?: string | null;
+    hint?: string | null;
+    code?: string | null;
+  } | null,
+): asserts error is null {
+  if (!error) return;
+  throw new PostgrestError({
+    message: error.message ?? "資料庫請求失敗",
+    details: error.details == null ? "" : String(error.details),
+    hint: error.hint == null ? "" : String(error.hint),
+    code: error.code == null ? "" : String(error.code),
+  });
+}
+
 /**
  * 將 Supabase / PostgREST 錯誤轉成可讀字串（供除錯與使用者提示）
  */

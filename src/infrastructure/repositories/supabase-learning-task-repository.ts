@@ -3,7 +3,10 @@ import type {
   LearningTaskRepository,
   TaskVideoInsert,
 } from "@/domain/repositories/learning-task-repository";
-import { looksLikeMissingLearningTaskAssigneesTable } from "@/lib/supabase-user-message";
+import {
+  looksLikeMissingLearningTaskAssigneesTable,
+  throwIfPostgrestError,
+} from "@/lib/supabase-user-message";
 
 type TaskUpdateRow = Pick<
   LearningTaskInsert,
@@ -19,24 +22,24 @@ export class SupabaseLearningTaskRepository implements LearningTaskRepository {
       .insert(row)
       .select("id")
       .single();
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return data as { id: string };
   }
 
   async insertTaskVideos(rows: TaskVideoInsert[]) {
     if (rows.length === 0) return;
     const { error } = await getSupabaseAdmin().from("task_videos").insert(rows);
-    if (error) throw error;
+    throwIfPostgrestError(error);
   }
 
   async updateTask(id: string, row: TaskUpdateRow) {
     const { error } = await getSupabaseAdmin().from("learning_tasks").update(row).eq("id", id);
-    if (error) throw error;
+    throwIfPostgrestError(error);
   }
 
   async deleteTaskVideosForTask(taskId: string) {
     const { error } = await getSupabaseAdmin().from("task_videos").delete().eq("task_id", taskId);
-    if (error) throw error;
+    throwIfPostgrestError(error);
   }
 
   async findAll() {
@@ -44,7 +47,7 @@ export class SupabaseLearningTaskRepository implements LearningTaskRepository {
       .from("learning_tasks")
       .select("*")
       .order("start_date", { ascending: false });
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return data as LearningTaskRow[];
   }
 
@@ -54,7 +57,7 @@ export class SupabaseLearningTaskRepository implements LearningTaskRepository {
       .select("*")
       .eq("id", id)
       .maybeSingle();
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return (data as LearningTaskRow | null) ?? null;
   }
 
@@ -65,7 +68,7 @@ export class SupabaseLearningTaskRepository implements LearningTaskRepository {
       .eq("task_id", taskId)
       .order("day_index", { ascending: true })
       .order("video_id", { ascending: true });
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return data as TaskVideoRow[];
   }
 
@@ -74,7 +77,7 @@ export class SupabaseLearningTaskRepository implements LearningTaskRepository {
       .from("task_videos")
       .select("task_id")
       .eq("video_id", videoId);
-    if (error) throw error;
+    throwIfPostgrestError(error);
     return (data as { task_id: string }[]).map((r) => ({ taskId: r.task_id }));
   }
 
@@ -84,7 +87,7 @@ export class SupabaseLearningTaskRepository implements LearningTaskRepository {
         .from("learning_task_assignees")
         .select("student_id")
         .eq("task_id", taskId);
-      if (error) throw error;
+      throwIfPostgrestError(error);
       return (data as { student_id: string }[]).map((r) => r.student_id);
     } catch (e) {
       if (looksLikeMissingLearningTaskAssigneesTable(e)) return [];
@@ -96,11 +99,11 @@ export class SupabaseLearningTaskRepository implements LearningTaskRepository {
     const db = getSupabaseAdmin();
     try {
       const { error: delErr } = await db.from("learning_task_assignees").delete().eq("task_id", taskId);
-      if (delErr) throw delErr;
+      throwIfPostgrestError(delErr);
       if (studentIds.length === 0) return;
       const rows = studentIds.map((student_id) => ({ task_id: taskId, student_id }));
       const { error } = await db.from("learning_task_assignees").insert(rows);
-      if (error) throw error;
+      throwIfPostgrestError(error);
     } catch (e) {
       if (!looksLikeMissingLearningTaskAssigneesTable(e)) throw e;
       if (studentIds.length > 0) {

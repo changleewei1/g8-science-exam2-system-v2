@@ -4,6 +4,7 @@ import {
   getListLearningTasksUseCase,
 } from "@/infrastructure/composition";
 import { getAdminSession } from "@/lib/session";
+import { getSupabaseErrorMessage } from "@/lib/supabase-user-message";
 import { createLearningTaskBodySchema } from "@/lib/validation";
 
 export async function GET() {
@@ -47,7 +48,7 @@ export async function POST(req: Request) {
     });
     return NextResponse.json(result, { status: 201 });
   } catch (e) {
-    const msg = e instanceof Error ? e.message : "UNKNOWN";
+    const msg = e instanceof Error ? e.message : getSupabaseErrorMessage(e);
     return NextResponse.json({ error: msg }, { status: 400 });
   }
 }

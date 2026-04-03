@@ -4,6 +4,7 @@ import {
   getUpdateLearningTaskUseCase,
 } from "@/infrastructure/composition";
 import { getAdminSession } from "@/lib/session";
+import { getSupabaseErrorMessage } from "@/lib/supabase-user-message";
 import { createLearningTaskBodySchema } from "@/lib/validation";
 
 type Params = { taskId: string };
@@ -52,7 +53,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<Params> }) {
     });
     return NextResponse.json({ ok: true });
   } catch (e) {
-    const msg = e instanceof Error ? e.message : "UNKNOWN";
+    const msg = e instanceof Error ? e.message : getSupabaseErrorMessage(e);
     return NextResponse.json({ error: msg }, { status: 400 });
   }
 }
