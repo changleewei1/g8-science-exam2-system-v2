@@ -5,6 +5,7 @@ import type { VideoRepository } from "@/domain/repositories/video-repository";
 import type { Student } from "@/domain/entities/student";
 import type { LearningTaskRow, StudentTaskProgressRow } from "@/types/database";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import { comparePlaylistVideoTitle } from "@/lib/video-title-sort";
 
 export type CreateLearningTaskInput = {
   title: string;
@@ -402,6 +403,10 @@ export class LearningTaskService {
         title: v?.title ?? "(已刪除的影片)",
       });
     }
+    videosBase.sort((a, b) => {
+      if (a.dayIndex !== b.dayIndex) return a.dayIndex - b.dayIndex;
+      return comparePlaylistVideoTitle(a.title, b.title);
+    });
     const videos = await this.enrichTaskVideosMeta(videosBase);
 
     const classStudents = await this.resolveStudentsForTask(task);
@@ -628,7 +633,9 @@ export class LearningTaskService {
         .sort((a, b) => a - b)
         .map((dayIndex) => ({
           dayIndex,
-          videos: dayMap.get(dayIndex)!,
+          videos: [...dayMap.get(dayIndex)!].sort((a, b) =>
+            comparePlaylistVideoTitle(a.title, b.title),
+          ),
         }));
 
       const totalVideos = tvs.length;

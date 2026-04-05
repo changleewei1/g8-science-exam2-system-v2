@@ -1,6 +1,10 @@
 import type { VideoInsert, VideoRepository } from "@/domain/repositories";
 import { videoFromRow } from "@/infrastructure/mappers/entity-mappers";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import {
+  sortVideosByUnitThenPlaylistTitle,
+  sortVideosInUnitByPlaylistTitle,
+} from "@/lib/video-title-sort";
 import { throwIfPostgrestError } from "@/lib/supabase-user-message";
 import type { VideoRow } from "@/types/database";
 
@@ -20,31 +24,27 @@ export class SupabaseVideoRepository implements VideoRepository {
       .from("videos")
       .select("*")
       .eq("unit_id", unitId)
-      .eq("is_active", true)
-      .order("sort_order");
+      .eq("is_active", true);
     throwIfPostgrestError(error);
-    return (data as VideoRow[]).map(videoFromRow);
+    const list = (data as VideoRow[]).map(videoFromRow);
+    return sortVideosInUnitByPlaylistTitle(list);
   }
 
   async findAllActive() {
     const { data, error } = await getSupabaseAdmin()
       .from("videos")
       .select("*")
-      .eq("is_active", true)
-      .order("unit_id", { ascending: true })
-      .order("sort_order", { ascending: true });
+      .eq("is_active", true);
     throwIfPostgrestError(error);
-    return (data as VideoRow[]).map(videoFromRow);
+    const list = (data as VideoRow[]).map(videoFromRow);
+    return sortVideosByUnitThenPlaylistTitle(list);
   }
 
   async findAllForAdmin() {
-    const { data, error } = await getSupabaseAdmin()
-      .from("videos")
-      .select("*")
-      .order("unit_id", { ascending: true })
-      .order("sort_order", { ascending: true });
+    const { data, error } = await getSupabaseAdmin().from("videos").select("*");
     throwIfPostgrestError(error);
-    return (data as VideoRow[]).map(videoFromRow);
+    const list = (data as VideoRow[]).map(videoFromRow);
+    return sortVideosByUnitThenPlaylistTitle(list);
   }
 
   async insertMany(videos: VideoInsert[]) {
