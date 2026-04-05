@@ -36,7 +36,11 @@ export function resolvePublicOrigin(req: Request): string {
   );
 }
 
+/**
+ * 使用 /report?t=… 避免 token 在路徑內被截斷、編碼或 App /router 解析異常；家長無需登入即可開啟。
+ */
 export function publicReportPageUrl(req: Request, token: string): string {
   const base = resolvePublicOrigin(req);
-  return `${base}/report/${encodeURIComponent(token)}`;
+  const q = new URLSearchParams({ t: token });
+  return `${base}/report?${q.toString()}`;
 }

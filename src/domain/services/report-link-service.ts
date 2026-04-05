@@ -1,5 +1,6 @@
 import { randomBytes } from "crypto";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import { normalizeReportToken } from "@/lib/report-token";
 
 /**
  * 家長分享連結：建立 token、解析 token。
@@ -46,11 +47,13 @@ export class ReportLinkService {
   }
 
   async resolveToken(token: string): Promise<{ studentId: string; taskId: string | null } | null> {
+    const key = normalizeReportToken(token);
+    if (!key) return null;
     const supabase = getSupabaseAdmin();
     const { data } = await supabase
       .from("student_report_tokens")
       .select("student_id, task_id, expires_at")
-      .eq("token", token)
+      .eq("token", key)
       .maybeSingle();
     if (!data) return null;
     const row = data as {

@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 import { getPublicReportByTokenUseCase } from "@/infrastructure/composition";
+import { normalizeReportToken } from "@/lib/report-token";
 
 type Params = { token: string };
 
 export async function GET(_req: Request, ctx: { params: Promise<Params> }) {
-  const { token } = await ctx.params;
+  const { token: raw } = await ctx.params;
+  const token = normalizeReportToken(raw);
+  if (!token) {
+    return NextResponse.json({ error: "INVALID_TOKEN" }, { status: 400 });
+  }
   try {
     const uc = getPublicReportByTokenUseCase();
     const report = await uc.execute(token);
