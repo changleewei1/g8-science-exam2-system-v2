@@ -34,13 +34,10 @@ export default async function QuizResultPage({ params, searchParams }: Props) {
     : "/student/dashboard";
 
   let primaryHref = "/student/dashboard";
-  let primaryLabel = "回儀表板";
   if (fromTask) {
     primaryHref = `/student/tasks${taskId ? `?taskId=${encodeURIComponent(taskId)}` : ""}`;
-    primaryLabel = "返回學習任務";
   } else if (video) {
     primaryHref = `/student/unit/${video.unitId}`;
-    primaryLabel = "返回單元影片";
   }
 
   return (
@@ -96,7 +93,7 @@ export default async function QuizResultPage({ params, searchParams }: Props) {
         href={primaryHref}
         className="interactive-btn mt-8 inline-flex min-h-11 items-center rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-medium text-white"
       >
-        {primaryLabel}
+        回上一頁
       </Link>
     </main>
   );
