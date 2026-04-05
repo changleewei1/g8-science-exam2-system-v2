@@ -156,11 +156,42 @@ export class StudentReportService {
       }
     }
 
+    // 有指定學習任務時，任務完成狀況／圓餅／長條應只統計該任務的影片，而非整個段考範圍內全部影片
+    if (input.taskId) {
+      const { data: tvs } = await supabase
+        .from("task_videos")
+        .select("video_id")
+        .eq("task_id", input.taskId);
+      const taskVideoIds = [...new Set((tvs ?? []).map((x: { video_id: string }) => x.video_id))];
+      videoIdsInScope.length = 0;
+      unitsMeta.length = 0;
+      if (taskVideoIds.length > 0) {
+        videoIdsInScope.push(...taskVideoIds);
+        const { data: vrows } = await supabase
+          .from("videos")
+          .select("unit_id")
+          .in("id", taskVideoIds);
+        const unitIdsInTask = [...new Set((vrows ?? []).map((x: { unit_id: string }) => x.unit_id))];
+        if (unitIdsInTask.length > 0) {
+          const { data: urows } = await supabase
+            .from("scope_units")
+            .select("id, unit_title")
+            .in("id", unitIdsInTask)
+            .order("sort_order");
+          for (const u of urows ?? []) {
+            const row = u as { id: string; unit_title: string };
+            unitsMeta.push({ id: row.id, title: row.unit_title });
+          }
+        }
+      }
+    }
+
     const videoQuiz = await this.buildVideoQuizStats(
       supabase,
       student.id,
       unitsMeta,
       videoIdsInScope,
+      input.taskId ?? null,
     );
     const pieVideo = videoQuiz.progress;
     const barUnits = videoQuiz.barUnits;
@@ -268,6 +299,7 @@ export class StudentReportService {
     studentId: string,
     unitsMeta: { id: string; title: string }[],
     videoIdsInScope: string[],
+    taskId: string | null,
   ): Promise<{
     progress: { completed: number; incomplete: number };
     barUnits: UnitBarDatum[];
@@ -283,6 +315,8 @@ export class StudentReportService {
       };
     }
 
+    const scopeSet = new Set(videoIdsInScope);
+
     const { data: vp } = await supabase
       .from("student_video_progress")
       .select("video_id, is_completed")
@@ -292,9 +326,26 @@ export class StudentReportService {
     const doneSet = new Set<string>();
     for (const row of vp ?? []) {
       const r = row as { video_id: string; is_completed: boolean };
-      if (r.is_completed) doneSet.add(r.video_id);
+      if (r.is_completed && scopeSet.has(r.video_id)) doneSet.add(r.video_id);
     }
-    const completed = doneSet.size;
+
+    if (taskId) {
+      const { data: stp } = await supabase
+        .from("student_task_progress")
+        .select("video_id, is_completed")
+        .eq("student_id", studentId)
+        .eq("task_id", taskId)
+        .in("video_id", videoIdsInScope);
+      for (const row of stp ?? []) {
+        const r = row as { video_id: string; is_completed: boolean };
+        if (r.is_completed && scopeSet.has(r.video_id)) doneSet.add(r.video_id);
+      }
+    }
+
+    let completed = 0;
+    for (const vid of videoIdsInScope) {
+      if (doneSet.has(vid)) completed += 1;
+    }
     const incomplete = videoIdsInScope.length - completed;
 
     const { data: scopeQuizzes } = await supabase
@@ -325,7 +376,9 @@ export class StudentReportService {
         .select("id")
         .eq("unit_id", u.id)
         .order("sort_order");
-      const vidList = (vids ?? []).map((x: { id: string }) => x.id);
+      const vidList = (vids ?? [])
+        .map((x: { id: string }) => x.id)
+        .filter((id) => scopeSet.has(id));
       if (vidList.length === 0) {
         barUnits.push({ unitTitle: u.title, videoCompletionRate: 0, quizPassRate: 0 });
         continue;
