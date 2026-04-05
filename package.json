@@ -10,6 +10,7 @@
     "import:playlists": "tsx --tsconfig tsconfig.json scripts/import-playlists.ts",
     "seed:g8-question-bank": "tsx --tsconfig tsconfig.json scripts/seed-g8-question-bank.ts",
     "seed:g8-video-quiz": "tsx --tsconfig tsconfig.json scripts/seed-g8-video-quiz.ts",
+    "apply:g8-molar-quizzes": "tsx --tsconfig tsconfig.json scripts/apply-g8-molar-video-quizzes.ts",
     "seed:g8-students": "tsx --tsconfig tsconfig.json scripts/seed-g8-class-students.ts",
     "seed:g8-student": "tsx --tsconfig tsconfig.json scripts/seed-g8-class-students.ts"
   },

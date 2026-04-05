@@ -1,0 +1,356 @@
+{
+  "description": "酸鹼中和播放清單第 8～17 部（莫耳濃度主題）每部 3 題。可依實際教學修改後執行 npm run apply:g8-molar-quizzes。skill_code 須存在 skill_tags（建議 CO01–CO04、AB05 等）。",
+  "unitId": "b0000001-0000-4000-8000-000000000002",
+  "bySortOrder": {
+    "8": [
+      {
+        "question_text": "將 160 公克的 NaOH 溶於水，配成 20 公升的溶液，則莫耳濃度為多少 M？（NaOH 莫耳質量以 40 g／mol 計）",
+        "choice_a": "0.4",
+        "choice_b": "0.2",
+        "choice_c": "4",
+        "choice_d": "8",
+        "correct_answer": "B",
+        "explanation": "n = 160／40 = 4 mol；溶液體積 20 L；M = n／V = 4／20 = 0.2 M。",
+        "skill_code": "CO03",
+        "difficulty": "基礎"
+      },
+      {
+        "question_text": "將 12.6 公克的硝酸（HNO₃）溶於水中，配成 500 毫升的溶液，則溶液的莫耳濃度為多少 M？（HNO₃ 莫耳質量以 63 g／mol 計）",
+        "choice_a": "0.2",
+        "choice_b": "0.8",
+        "choice_c": "0.4",
+        "choice_d": "2",
+        "correct_answer": "C",
+        "explanation": "n = 12.6／63 = 0.2 mol；500 mL = 0.5 L；M = 0.2／0.5 = 0.4 M。",
+        "skill_code": "CO03",
+        "difficulty": "基礎"
+      },
+      {
+        "question_text": "將 49 公克的 H₂SO₄ 溶於水，配成 100 毫升的溶液，則莫耳濃度為多少 M？（H₂SO₄ 莫耳質量以 98 g／mol 計）",
+        "choice_a": "0.5",
+        "choice_b": "2.5",
+        "choice_c": "10",
+        "choice_d": "5",
+        "correct_answer": "D",
+        "explanation": "n = 49／98 = 0.5 mol；100 mL = 0.1 L；M = 0.5／0.1 = 5 M。",
+        "skill_code": "CO03",
+        "difficulty": "基礎"
+      }
+    ],
+    "9": [
+      {
+        "question_text": "在 25°C 純水中，氫離子濃度 [H⁺] 與氫氧根濃度 [OH⁻] 的關係為何？（不考慮其他溶質）",
+        "choice_a": "[H⁺][OH⁻] 為定值（離子積常數）",
+        "choice_b": "[H⁺] 必大於 [OH⁻]",
+        "choice_c": "[H⁺] 必小於 [OH⁻]",
+        "choice_d": "兩者無固定關係",
+        "correct_answer": "A",
+        "explanation": "純水中有離子積 Kw = [H⁺][OH⁻]（定溫下為常數）。",
+        "skill_code": "AB05",
+        "difficulty": "基礎"
+      },
+      {
+        "question_text": "25°C 時純水的 pH 約為多少？",
+        "choice_a": "7",
+        "choice_b": "0",
+        "choice_c": "14",
+        "choice_d": "1",
+        "correct_answer": "A",
+        "explanation": "常溫下純水 [H⁺]≈10⁻⁷ M，故 pH≈7。",
+        "skill_code": "AB05",
+        "difficulty": "基礎"
+      },
+      {
+        "question_text": "將少量酸加入純水中（不計體積變化），[H⁺] 與 pH 的變化趨勢為何？",
+        "choice_a": "[H⁺] 上升、pH 下降",
+        "choice_b": "[H⁺] 下降、pH 上升",
+        "choice_c": "兩者都不變",
+        "choice_d": "[H⁺] 下降、pH 下降",
+        "correct_answer": "A",
+        "explanation": "加酸使 [H⁺] 增大，pH = -log[H⁺] 變小。",
+        "skill_code": "AB05",
+        "difficulty": "進階"
+      }
+    ],
+    "10": [
+      {
+        "question_text": "pH 的定義可用下列何者表示？（以常用定義）",
+        "choice_a": "-log₁₀[H⁺]",
+        "choice_b": "log₁₀[OH⁻]",
+        "choice_c": "[H⁺]／[OH⁻]",
+        "choice_d": "10^[H⁺]",
+        "correct_answer": "A",
+        "explanation": "pH = -log[H⁺]（[] 為體積莫耳濃度，以 M 表示）。",
+        "skill_code": "AB05",
+        "difficulty": "基礎"
+      },
+      {
+        "question_text": "下列何者 pH 最小（酸性最強）？（同溫、同類型比較）",
+        "choice_a": "[H⁺] = 10⁻² M 的溶液",
+        "choice_b": "[H⁺] = 10⁻⁴ M 的溶液",
+        "choice_c": "[H⁺] = 10⁻⁷ M 的溶液",
+        "choice_d": "[H⁺] = 10⁻¹⁰ M 的溶液",
+        "correct_answer": "A",
+        "explanation": "[H⁺] 愈大酸性愈強，pH 愈小。",
+        "skill_code": "AB05",
+        "difficulty": "基礎"
+      },
+      {
+        "question_text": "將鹼性溶液稀釋（僅加水），[OH⁻] 與 pH 的變化何者較合理？",
+        "choice_a": "[OH⁻] 下降、pH 下降（往中性靠近）",
+        "choice_b": "[OH⁻] 上升、pH 上升",
+        "choice_c": "[OH⁻] 不變、pH 不變",
+        "choice_d": "[OH⁻] 下降、pH 上升",
+        "correct_answer": "A",
+        "explanation": "稀釋使 [OH⁻] 降低，鹼性變弱，pH 向 7 靠近（數值變小）。",
+        "skill_code": "CO04",
+        "difficulty": "進階"
+      }
+    ],
+    "11": [
+      {
+        "question_text": "以石蕊試紙檢驗未知溶液，呈紅色時，下列敘述何者較合理？",
+        "choice_a": "偏酸性",
+        "choice_b": "必為純水",
+        "choice_c": "必為強鹼",
+        "choice_d": "必為中性",
+        "correct_answer": "A",
+        "explanation": "石蕊在酸性常變紅（課內常見定性描述）。",
+        "skill_code": "AB05",
+        "difficulty": "基礎"
+      },
+      {
+        "question_text": "廣用試紙可協助判斷下列何種性質？",
+        "choice_a": "酸鹼性約略範圍",
+        "choice_b": "溶質的精確莫耳濃度",
+        "choice_c": "溶液的沸點",
+        "choice_d": "溶質分子量",
+        "correct_answer": "A",
+        "explanation": "廣用試紙用於粗估 pH／酸鹼性。",
+        "skill_code": "AB05",
+        "difficulty": "基礎"
+      },
+      {
+        "question_text": "下列何者「不適合」單靠嗅聞來辨識強酸強鹼？",
+        "choice_a": "為安全，避免直接近距離吸入揮發性酸鹼",
+        "choice_b": "弱酸的稀溶液",
+        "choice_c": "食鹽水",
+        "choice_d": "糖水",
+        "correct_answer": "A",
+        "explanation": "實驗安全：勿直接聞強酸、強鹼與不明化學品。",
+        "skill_code": "AB06",
+        "difficulty": "基礎"
+      }
+    ],
+    "12": [
+      {
+        "question_text": "將 80 公克的 NaOH 溶於水，配成 16 公升的溶液，則莫耳濃度為多少 M？（NaOH 莫耳質量以 40 g／mol 計）",
+        "choice_a": "0.2",
+        "choice_b": "0.25",
+        "choice_c": "0.125",
+        "choice_d": "2",
+        "correct_answer": "C",
+        "explanation": "n = 80／40 = 2 mol；M = 2／16 = 0.125 M。（題型與「質量→莫耳數→M」相同。）",
+        "skill_code": "CO03",
+        "difficulty": "基礎"
+      },
+      {
+        "question_text": "將 6.3 公克的 HNO₃ 溶於水，配成 250 毫升的溶液，則莫耳濃度為多少 M？（HNO₃ 莫耳質量以 63 g／mol 計）",
+        "choice_a": "1.6",
+        "choice_b": "0.4",
+        "choice_c": "0.8",
+        "choice_d": "0.2",
+        "correct_answer": "B",
+        "explanation": "n = 6.3／63 = 0.1 mol；250 mL = 0.25 L；M = 0.1／0.25 = 0.4 M。",
+        "skill_code": "CO03",
+        "difficulty": "基礎"
+      },
+      {
+        "question_text": "將 9.8 公克的 H₂SO₄ 溶於水，配成 20 毫升的溶液，則莫耳濃度為多少 M？（H₂SO₄ 莫耳質量以 98 g／mol 計）",
+        "choice_a": "10",
+        "choice_b": "0.5",
+        "choice_c": "2.5",
+        "choice_d": "5",
+        "correct_answer": "D",
+        "explanation": "n = 9.8／98 = 0.1 mol；20 mL = 0.02 L；M = 0.1／0.02 = 5 M。",
+        "skill_code": "CO03",
+        "difficulty": "基礎"
+      }
+    ],
+    "13": [
+      {
+        "question_text": "將 0.1 M 水溶液取 100 mL 稀釋至 500 mL（假設體積可加算），稀釋後濃度約為？",
+        "choice_a": "0.02 M",
+        "choice_b": "0.5 M",
+        "choice_c": "0.1 M",
+        "choice_d": "1 M",
+        "correct_answer": "A",
+        "explanation": "稀釋倍數 500／100 = 5，濃度變為 0.1／5 = 0.02 M。",
+        "skill_code": "CO04",
+        "difficulty": "進階"
+      },
+      {
+        "question_text": "溶液稀釋過程中，若不考慮揮發或反應，溶質總莫耳數如何變化？",
+        "choice_a": "不變",
+        "choice_b": "變多",
+        "choice_c": "變少",
+        "choice_d": "必變為零",
+        "correct_answer": "A",
+        "explanation": "只加溶劑稀釋，溶質莫耳數守恆。",
+        "skill_code": "CO04",
+        "difficulty": "基礎"
+      },
+      {
+        "question_text": "「將濃溶液加水稀釋」後，同一溶液的體積莫耳濃度通常？",
+        "choice_a": "變小",
+        "choice_b": "變大",
+        "choice_c": "一定不變",
+        "choice_d": "恒為 1 M",
+        "correct_answer": "A",
+        "explanation": "體積變大而溶質莫耳數不變，濃度下降。",
+        "skill_code": "CO04",
+        "difficulty": "基礎"
+      }
+    ],
+    "14": [
+      {
+        "question_text": "兩種同溶質、同溶劑的水溶液混合（假設體積可加算），混合後溶質總莫耳數為？",
+        "choice_a": "兩者莫耳數相加",
+        "choice_b": "取較稀者",
+        "choice_c": "取較濃者",
+        "choice_d": "必為零",
+        "correct_answer": "A",
+        "explanation": "未發生化學反應時，溶質莫耳數可加總。",
+        "skill_code": "CO03",
+        "difficulty": "基礎"
+      },
+      {
+        "question_text": "混合後濃度計算，下列何者為必要資訊？",
+        "choice_a": "各杯溶液體積與濃度（或莫耳數）",
+        "choice_b": "僅需顏色",
+        "choice_c": "僅需溫度",
+        "choice_d": "僅需 pH 試紙",
+        "correct_answer": "A",
+        "explanation": "需由體積與濃度（或莫耳數）求混合後總莫耳數與總體積。",
+        "skill_code": "CO03",
+        "difficulty": "進階"
+      },
+      {
+        "question_text": "同溶質兩溶液混合後總體積增大、溶質莫耳數不變，混合後濃度通常？",
+        "choice_a": "介於兩者之間或符合加權平均，且不會高於較濃者原濃度",
+        "choice_b": "必高於兩者",
+        "choice_c": "必為零",
+        "choice_d": "必等於兩者相加",
+        "correct_answer": "A",
+        "explanation": "濃度為總莫耳數除以總體積，一般介於兩者之間。",
+        "skill_code": "CO03",
+        "difficulty": "進階"
+      }
+    ],
+    "15": [
+      {
+        "question_text": "重量百分濃度敘述溶質所佔比例時，通常以何者為基準？",
+        "choice_a": "溶質質量佔全部溶液質量的百分比",
+        "choice_b": "溶質體積／溶劑體積",
+        "choice_c": "只有溶劑質量",
+        "choice_d": "只有溶質莫耳數",
+        "correct_answer": "A",
+        "explanation": "重量百分濃度 = 溶質質量／溶液總質量 ×100%。",
+        "skill_code": "CO01",
+        "difficulty": "基礎"
+      },
+      {
+        "question_text": "由重量百分濃度換算到莫耳濃度時，通常還需要？",
+        "choice_a": "溶液密度與溶質莫耳質量",
+        "choice_b": "僅 pH",
+        "choice_c": "僅溫度",
+        "choice_d": "不必任何額外數據",
+        "correct_answer": "A",
+        "explanation": "需由質量與密度得體積，再配合莫耳質量得莫耳數。",
+        "skill_code": "CO03",
+        "difficulty": "進階"
+      },
+      {
+        "question_text": "同一水溶液，以不同表示法描述「濃」的程度時，下列何者正確？",
+        "choice_a": "不同表示法之間可藉密度、莫耳質量等換算",
+        "choice_b": "重量百分與莫耳濃度永遠數值相同",
+        "choice_c": "莫耳濃度與溶液體積無關",
+        "choice_d": "重量百分與溶質種類無關",
+        "correct_answer": "A",
+        "explanation": "不同濃度標示可換算，但數值不一定相同。",
+        "skill_code": "CO01",
+        "difficulty": "進階"
+      }
+    ],
+    "16": [
+      {
+        "question_text": "欲由已知濃度的酸（鹼）進行滴定計算，下列何者概念最重要？",
+        "choice_a": "酸鹼當量關係與莫耳數對應",
+        "choice_b": "僅觀察顏色即可",
+        "choice_c": "溶液體積必須相等",
+        "choice_d": "溫度必須為 100℃",
+        "correct_answer": "A",
+        "explanation": "滴定計算常用莫耳數或當量關係建立方程式。",
+        "skill_code": "NE04",
+        "difficulty": "進階"
+      },
+      {
+        "question_text": "中和反應完成時（滴定終點），若為強酸強鹼，下列何者較常見？",
+        "choice_a": "pH≈7（水溶液、常溫近似）",
+        "choice_b": "pH 必為 0",
+        "choice_c": "pH 必為 14",
+        "choice_d": "與酸鹼種類無關必為 10",
+        "correct_answer": "A",
+        "explanation": "強酸強鹼中和生成鹽與水，稀水溶液近似中性。",
+        "skill_code": "NE02",
+        "difficulty": "基礎"
+      },
+      {
+        "question_text": "計算題中「由濃度與體積求莫耳數」應使用？",
+        "choice_a": "n = M × V（升的乘積）",
+        "choice_b": "n = M ÷ V",
+        "choice_c": "n = M + V",
+        "choice_d": "n 與 V 無關",
+        "correct_answer": "A",
+        "explanation": "莫耳數 = 體積莫耳濃度 × 體積（L）。",
+        "skill_code": "CO03",
+        "difficulty": "基礎"
+      }
+    ],
+    "17": [
+      {
+        "question_text": "將溶液連續多次「取部分再稀釋」時，每次稀釋後濃度變化總趨勢為？",
+        "choice_a": "較原濃溶液為低（每次稀釋通常變稀）",
+        "choice_b": "一定越來越濃",
+        "choice_c": "一定不變",
+        "choice_d": "必變為純水",
+        "correct_answer": "A",
+        "explanation": "多次稀釋等同重複降低濃度，最終遠低於原濃度。",
+        "skill_code": "CO04",
+        "difficulty": "進階"
+      },
+      {
+        "question_text": "原濃度 C₀，取固定比例稀釋 k 倍（體積變 k 倍），稀釋一次後濃度約為？",
+        "choice_a": "C₀／k",
+        "choice_b": "C₀×k",
+        "choice_c": "C₀",
+        "choice_d": "k／C₀",
+        "correct_answer": "A",
+        "explanation": "溶質莫耳數不變，體積變 k 倍則濃度變為 1／k 倍。",
+        "skill_code": "CO04",
+        "difficulty": "進階"
+      },
+      {
+        "question_text": "多次稀釋計算時，下列何者通常「守恆」？",
+        "choice_a": "每次稀釋步驟中，除非添加溶質，否則稀釋液內該溶質莫耳數不減（忽略取出帶走的量需另計）",
+        "choice_b": "濃度守恆",
+        "choice_c": "體積不變",
+        "choice_d": "pH 不變",
+        "correct_answer": "A",
+        "explanation": "教學題常強調：僅加水稀釋則留在容器內的溶質莫耳數不變；若「取出部分再稀釋」則取出量會帶走莫耳數。本題考「加水稀釋」核心觀念。",
+        "skill_code": "CO04",
+        "difficulty": "進階"
+      }
+    ]
+  }
+}

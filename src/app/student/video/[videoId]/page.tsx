@@ -1,16 +1,22 @@
 import { redirect, notFound } from "next/navigation";
 import { getVideoDetailUseCase } from "@/infrastructure/composition";
 import { getStudentSession } from "@/lib/session";
+import { parseStudentVideoSearchParams } from "@/lib/student-video-context";
 import { VideoPageClient } from "./VideoPageClient";
 
 export const dynamic = "force-dynamic";
 
-type Props = { params: Promise<{ videoId: string }> };
+type Props = {
+  params: Promise<{ videoId: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
 
-export default async function VideoPage({ params }: Props) {
+export default async function VideoPage({ params, searchParams }: Props) {
   const session = await getStudentSession();
   if (!session) redirect("/login");
   const { videoId } = await params;
+  const sp = await searchParams;
+  const { fromTask, taskId } = parseStudentVideoSearchParams(sp);
   const uc = getVideoDetailUseCase();
   const data = await uc.execute(videoId, session.studentId);
   if (!data?.video) notFound();
@@ -29,6 +35,8 @@ export default async function VideoPage({ params }: Props) {
         initialPosition={progress?.lastPositionSeconds ?? 0}
         quizId={quiz?.id ?? null}
         canTakeQuiz={progress?.canTakeQuiz() ?? false}
+        fromTask={fromTask}
+        taskId={taskId}
       />
     </main>
   );

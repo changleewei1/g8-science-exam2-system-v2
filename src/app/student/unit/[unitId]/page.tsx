@@ -51,7 +51,7 @@ export default async function UnitPage({ params }: Props) {
               </div>
               {r.quizId && (
                 <Link
-                  href={`/student/quiz/${r.quizId}`}
+                  href={`/student/quiz/${r.quizId}?unitId=${encodeURIComponent(unitId)}`}
                   className={`inline-flex min-h-9 items-center rounded-lg px-3 py-1.5 text-sm font-medium ${
                     r.canTakeQuiz
                       ? "interactive-btn bg-teal-600 text-white"

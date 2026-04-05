@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { StudentBackLink } from "@/components/student/StudentBackLink";
+import { TaskListScrollAnchor } from "@/components/student/TaskListScrollAnchor";
 import { getStudentLearningTasksUseCase } from "@/infrastructure/composition";
 import { getStudentSession } from "@/lib/session";
+import { buildVideoPageQuery } from "@/lib/student-video-context";
 import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -12,15 +14,22 @@ const phaseLabel: Record<string, string> = {
   ended: "已結束",
 };
 
-export default async function StudentTasksPage() {
+type PageProps = {
+  searchParams: Promise<{ taskId?: string }>;
+};
+
+export default async function StudentTasksPage({ searchParams }: PageProps) {
   const session = await getStudentSession();
   if (!session) redirect("/login");
+
+  const { taskId: focusTaskId } = await searchParams;
 
   const uc = getStudentLearningTasksUseCase();
   const tasks = await uc.execute(session.studentId);
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
+      <TaskListScrollAnchor taskId={focusTaskId} />
       <header className="mb-8 space-y-4">
         <div>
           <StudentBackLink href="/student/dashboard">返回學習總覽</StudentBackLink>
@@ -39,7 +48,8 @@ export default async function StudentTasksPage() {
           {tasks.map((task) => (
             <li
               key={task.id}
-              className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+              id={`learning-task-${task.id}`}
+              className="scroll-mt-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
             >
               <div className="mb-4 flex flex-wrap items-start justify-between gap-2">
                 <div>
@@ -79,7 +89,10 @@ export default async function StudentTasksPage() {
                               <span className="text-slate-500">未完成</span>
                             )}
                             <Link
-                              href={`/student/video/${v.videoId}`}
+                              href={`/student/video/${v.videoId}${buildVideoPageQuery({
+                                fromTask: true,
+                                taskId: task.id,
+                              })}`}
                               className="interactive-nav font-medium text-teal-700 underline decoration-teal-700/40 underline-offset-2"
                             >
                               前往觀看

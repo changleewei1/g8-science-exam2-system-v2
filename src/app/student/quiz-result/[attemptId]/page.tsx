@@ -3,26 +3,51 @@ import { redirect, notFound } from "next/navigation";
 import { StudentBackLink } from "@/components/student/StudentBackLink";
 import { getQuizAttemptDetailUseCase } from "@/infrastructure/composition";
 import { getStudentSession } from "@/lib/session";
+import { buildVideoPageQuery } from "@/lib/student-video-context";
 
 export const dynamic = "force-dynamic";
 
-type Props = { params: Promise<{ attemptId: string }> };
+type Props = {
+  params: Promise<{ attemptId: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
 
-export default async function QuizResultPage({ params }: Props) {
+export default async function QuizResultPage({ params, searchParams }: Props) {
   const session = await getStudentSession();
   if (!session) redirect("/login");
   const { attemptId } = await params;
+  const sp = await searchParams;
+  const fromRaw = typeof sp.from === "string" ? sp.from.toLowerCase() : "";
+  const fromTask = fromRaw === "task";
+  const taskIdParam = sp.taskId;
+  const taskId =
+    typeof taskIdParam === "string" && taskIdParam.length > 0 ? taskIdParam : null;
+
   const uc = getQuizAttemptDetailUseCase();
   const data = await uc.execute(attemptId, session.studentId);
   if (!data) notFound();
 
   const { attempt, quiz, video, questions } = data;
 
+  const videoBackHref = video
+    ? `/student/video/${video.id}${buildVideoPageQuery({ fromTask, taskId })}`
+    : "/student/dashboard";
+
+  let primaryHref = "/student/dashboard";
+  let primaryLabel = "回儀表板";
+  if (fromTask) {
+    primaryHref = `/student/tasks${taskId ? `?taskId=${encodeURIComponent(taskId)}` : ""}`;
+    primaryLabel = "返回學習任務";
+  } else if (video) {
+    primaryHref = `/student/unit/${video.unitId}`;
+    primaryLabel = "返回單元影片";
+  }
+
   return (
     <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
       <div className="mb-6">
         {video ? (
-          <StudentBackLink href={`/student/video/${video.id}`}>返回影片</StudentBackLink>
+          <StudentBackLink href={videoBackHref}>返回影片</StudentBackLink>
         ) : (
           <StudentBackLink href="/student/dashboard">返回學習總覽</StudentBackLink>
         )}
@@ -68,10 +93,10 @@ export default async function QuizResultPage({ params }: Props) {
         })}
       </ul>
       <Link
-        href="/student/dashboard"
+        href={primaryHref}
         className="interactive-btn mt-8 inline-flex min-h-11 items-center rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-medium text-white"
       >
-        回儀表板
+        {primaryLabel}
       </Link>
     </main>
   );
