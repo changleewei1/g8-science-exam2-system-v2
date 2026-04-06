@@ -81,3 +81,20 @@ export const createLearningTaskBodySchema = z
       });
     }
   });
+
+const adminQuizQuestionItemSchema = z.object({
+  question_text: z.string().min(1, "題幹不可為空"),
+  choice_a: z.string().min(1),
+  choice_b: z.string().min(1),
+  choice_c: z.string().min(1),
+  choice_d: z.string().min(1),
+  correct_answer: z.enum(["A", "B", "C", "D"]),
+  explanation: z.string().nullable().optional(),
+  difficulty: z.string().nullable().optional(),
+  skill_code: z.string().min(1, "請選擇技能代碼"),
+});
+
+/** 每部影片固定三題 */
+export const adminPutQuizQuestionsBodySchema = z.object({
+  questions: z.tuple([adminQuizQuestionItemSchema, adminQuizQuestionItemSchema, adminQuizQuestionItemSchema]),
+});

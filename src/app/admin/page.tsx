@@ -63,6 +63,15 @@ export default async function AdminHomePage() {
               <p className="mt-2 text-sm text-slate-600">捷徑進入圖表分析與學生學習報告</p>
             </Link>
           </li>
+          <li>
+            <Link
+              href="/admin/video-quizzes"
+              className="interactive-btn block min-h-[120px] rounded-2xl border border-slate-200 bg-white p-5 shadow-md sm:p-6"
+            >
+              <span className="font-medium text-slate-900">影片測驗題編輯</span>
+              <p className="mt-2 text-sm text-slate-600">依單元修改每部影片的 3 題與正解</p>
+            </Link>
+          </li>
         </ul>
         <p className="mt-8 text-center text-xs text-slate-500">
           登入網址：<span className="font-mono">/admin/login</span>

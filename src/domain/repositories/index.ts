@@ -8,7 +8,11 @@ export type {
   VideoProgressUpsert,
 } from "./video-progress-repository";
 export type { QuizRepository, QuizInsert } from "./quiz-repository";
-export type { QuizQuestionRepository, QuizQuestionInsert } from "./quiz-question-repository";
+export type {
+  QuizQuestionRepository,
+  QuizQuestionInsert,
+  QuizQuestionSyncPayload,
+} from "./quiz-question-repository";
 export type {
   QuizAttemptRepository,
   AttemptInsert,
