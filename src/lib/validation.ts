@@ -82,17 +82,81 @@ export const createLearningTaskBodySchema = z
     }
   });
 
-const adminQuizQuestionItemSchema = z.object({
-  question_text: z.string().min(1, "題幹不可為空"),
-  choice_a: z.string().min(1),
-  choice_b: z.string().min(1),
-  choice_c: z.string().min(1),
-  choice_d: z.string().min(1),
-  correct_answer: z.enum(["A", "B", "C", "D"]),
-  explanation: z.string().nullable().optional(),
-  difficulty: z.string().nullable().optional(),
-  skill_code: z.string().min(1, "請選擇技能代碼"),
-});
+function isValidHttpUrlOrEmpty(s: string): boolean {
+  const t = s.trim();
+  if (!t) return true;
+  try {
+    const u = new URL(t);
+    return u.protocol === "http:" || u.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+const urlField = z.preprocess(
+  (v) => (v === null || v === undefined ? "" : String(v)),
+  z.string().max(2048),
+);
+
+const adminQuizQuestionItemSchema = z
+  .object({
+    question_text: z.string().max(8000),
+    question_image_url: urlField,
+    reference_image_url: urlField,
+    choice_a: z.string().max(4000),
+    choice_a_image_url: urlField,
+    choice_b: z.string().max(4000),
+    choice_b_image_url: urlField,
+    choice_c: z.string().max(4000),
+    choice_c_image_url: urlField,
+    choice_d: z.string().max(4000),
+    choice_d_image_url: urlField,
+    correct_answer: z.enum(["A", "B", "C", "D"]),
+    explanation: z.string().nullable().optional(),
+    difficulty: z.string().nullable().optional(),
+    skill_code: z.string().min(1, "請選擇技能代碼"),
+  })
+  .superRefine((data, ctx) => {
+    const urlPaths = [
+      ["question_image_url", data.question_image_url],
+      ["reference_image_url", data.reference_image_url],
+      ["choice_a_image_url", data.choice_a_image_url],
+      ["choice_b_image_url", data.choice_b_image_url],
+      ["choice_c_image_url", data.choice_c_image_url],
+      ["choice_d_image_url", data.choice_d_image_url],
+    ] as const;
+    for (const [path, val] of urlPaths) {
+      if (!isValidHttpUrlOrEmpty(val)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "圖片網址須為有效的 http 或 https",
+          path: [path],
+        });
+      }
+    }
+    if (!data.question_text.trim() && !data.question_image_url.trim()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "題幹文字與題幹圖至少填一項",
+        path: ["question_text"],
+      });
+    }
+    const choiceRows = [
+      { text: data.choice_a, img: data.choice_a_image_url, path: "choice_a" as const },
+      { text: data.choice_b, img: data.choice_b_image_url, path: "choice_b" as const },
+      { text: data.choice_c, img: data.choice_c_image_url, path: "choice_c" as const },
+      { text: data.choice_d, img: data.choice_d_image_url, path: "choice_d" as const },
+    ];
+    for (const { text, img, path } of choiceRows) {
+      if (!text.trim() && !img.trim()) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "選項文字與選項圖至少填一項",
+          path: [path],
+        });
+      }
+    }
+  });
 
 /** 每部影片固定三題 */
 export const adminPutQuizQuestionsBodySchema = z.object({

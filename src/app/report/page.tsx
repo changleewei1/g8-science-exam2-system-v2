@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 type Props = { searchParams: Promise<{ t?: string; token?: string }> };
 
-/** 家長分享連結建議格式：/report?t={token}（無需登入；middleware 不攔截 /report） */
+/** 家長分享連結建議格式：/report?t={token}（無需登入；proxy 不攔截 /report） */
 export default async function PublicReportByQueryPage({ searchParams }: Props) {
   const sp = await searchParams;
   const raw = sp.t ?? sp.token ?? "";

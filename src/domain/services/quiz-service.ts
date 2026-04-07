@@ -26,10 +26,16 @@ export class QuizService {
     const sanitized = questions.map((q) => ({
       id: q.id,
       questionText: q.questionText,
+      questionImageUrl: q.questionImageUrl,
+      referenceImageUrl: q.referenceImageUrl,
       choiceA: q.choiceA,
       choiceB: q.choiceB,
       choiceC: q.choiceC,
       choiceD: q.choiceD,
+      choiceAImageUrl: q.choiceAImageUrl,
+      choiceBImageUrl: q.choiceBImageUrl,
+      choiceCImageUrl: q.choiceCImageUrl,
+      choiceDImageUrl: q.choiceDImageUrl,
       sortOrder: q.sortOrder,
       skillCode: q.skillCode,
     }));
@@ -47,10 +53,16 @@ export class QuizService {
     const sanitized = questions.map((q) => ({
       id: q.id,
       questionText: q.questionText,
+      questionImageUrl: q.questionImageUrl,
+      referenceImageUrl: q.referenceImageUrl,
       choiceA: q.choiceA,
       choiceB: q.choiceB,
       choiceC: q.choiceC,
       choiceD: q.choiceD,
+      choiceAImageUrl: q.choiceAImageUrl,
+      choiceBImageUrl: q.choiceBImageUrl,
+      choiceCImageUrl: q.choiceCImageUrl,
+      choiceDImageUrl: q.choiceDImageUrl,
       sortOrder: q.sortOrder,
       skillCode: q.skillCode,
     }));

@@ -15,10 +15,16 @@ function parseCorrect(raw: string): "A" | "B" | "C" | "D" {
 function emptyRow(skillCode: string): QuestionFormRow {
   return {
     questionText: "",
+    questionImageUrl: "",
+    referenceImageUrl: "",
     choiceA: "",
+    choiceAImageUrl: "",
     choiceB: "",
+    choiceBImageUrl: "",
     choiceC: "",
+    choiceCImageUrl: "",
     choiceD: "",
+    choiceDImageUrl: "",
     correctAnswer: "A",
     explanation: "",
     difficulty: "基礎",
@@ -34,10 +40,16 @@ function toFormRows(questions: QuizQuestion[], defaultSkill: string): QuestionFo
     if (q) {
       out.push({
         questionText: q.questionText,
+        questionImageUrl: q.questionImageUrl ?? "",
+        referenceImageUrl: q.referenceImageUrl ?? "",
         choiceA: q.choiceA,
+        choiceAImageUrl: q.choiceAImageUrl ?? "",
         choiceB: q.choiceB,
+        choiceBImageUrl: q.choiceBImageUrl ?? "",
         choiceC: q.choiceC,
+        choiceCImageUrl: q.choiceCImageUrl ?? "",
         choiceD: q.choiceD,
+        choiceDImageUrl: q.choiceDImageUrl ?? "",
         correctAnswer: parseCorrect(q.correctAnswer),
         explanation: q.explanation ?? "",
         difficulty: q.difficulty ?? "基礎",

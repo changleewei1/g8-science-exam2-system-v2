@@ -97,6 +97,12 @@ export type QuizQuestionRow = {
   sort_order: number;
   difficulty: string | null;
   skill_code: string;
+  question_image_url?: string | null;
+  reference_image_url?: string | null;
+  choice_a_image_url?: string | null;
+  choice_b_image_url?: string | null;
+  choice_c_image_url?: string | null;
+  choice_d_image_url?: string | null;
   created_at: string;
 };
 

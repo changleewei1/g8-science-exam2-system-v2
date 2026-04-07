@@ -42,10 +42,16 @@ export async function GET(_req: Request, ctx: { params: Promise<Params> }) {
     questions: sorted.map((q) => ({
       id: q.id,
       questionText: q.questionText,
+      questionImageUrl: q.questionImageUrl,
+      referenceImageUrl: q.referenceImageUrl,
       choiceA: q.choiceA,
       choiceB: q.choiceB,
       choiceC: q.choiceC,
       choiceD: q.choiceD,
+      choiceAImageUrl: q.choiceAImageUrl,
+      choiceBImageUrl: q.choiceBImageUrl,
+      choiceCImageUrl: q.choiceCImageUrl,
+      choiceDImageUrl: q.choiceDImageUrl,
       correctAnswer: q.correctAnswer,
       explanation: q.explanation,
       sortOrder: q.sortOrder,
@@ -94,6 +100,7 @@ export async function PUT(req: Request, ctx: { params: Promise<Params> }) {
     }
   }
 
+  const nu = (s: string) => (s.trim() ? s.trim() : null);
   const rows = parsed.data.questions.map((q) => ({
     question_text: q.question_text,
     choice_a: q.choice_a,
@@ -104,6 +111,12 @@ export async function PUT(req: Request, ctx: { params: Promise<Params> }) {
     explanation: q.explanation ?? null,
     difficulty: q.difficulty ?? null,
     skill_code: q.skill_code,
+    question_image_url: nu(q.question_image_url),
+    reference_image_url: nu(q.reference_image_url),
+    choice_a_image_url: nu(q.choice_a_image_url),
+    choice_b_image_url: nu(q.choice_b_image_url),
+    choice_c_image_url: nu(q.choice_c_image_url),
+    choice_d_image_url: nu(q.choice_d_image_url),
   }));
 
   try {

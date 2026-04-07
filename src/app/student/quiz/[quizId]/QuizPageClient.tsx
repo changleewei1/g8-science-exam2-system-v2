@@ -2,15 +2,22 @@
 
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { StudentBackLink } from "@/components/student/StudentBackLink";
+import { QuizMediaImage } from "@/components/student/QuizMediaImage";
 import { useEffect, useMemo, useState } from "react";
 
 type Q = {
   id: string;
   questionText: string;
+  questionImageUrl: string | null;
+  referenceImageUrl: string | null;
   choiceA: string;
   choiceB: string;
   choiceC: string;
   choiceD: string;
+  choiceAImageUrl: string | null;
+  choiceBImageUrl: string | null;
+  choiceCImageUrl: string | null;
+  choiceDImageUrl: string | null;
   sortOrder: number;
   skillCode: string;
 };
@@ -33,6 +40,36 @@ function useQuizReturnContext() {
     }
     return { fromTask, taskId, backHref, backLabel };
   }, [searchParams]);
+}
+
+function ChoiceRow({
+  letter,
+  text,
+  imageUrl,
+  name,
+  checked,
+  onSelect,
+}: {
+  letter: string;
+  text: string;
+  imageUrl: string | null;
+  name: string;
+  checked: boolean;
+  onSelect: () => void;
+}) {
+  const hasImage = Boolean(imageUrl?.trim());
+  const hasText = Boolean(text.trim());
+  return (
+    <label className="flex cursor-pointer gap-3 rounded-lg border border-slate-100 bg-slate-50/50 p-3 text-sm has-[:checked]:border-teal-400 has-[:checked]:bg-teal-50/40">
+      <input type="radio" name={name} value={letter} checked={checked} onChange={onSelect} className="mt-1" />
+      <div className="min-w-0 flex-1 space-y-2">
+        <span className="font-medium text-slate-900">{letter}.</span>
+        {hasImage ? <QuizMediaImage src={imageUrl!} alt="" /> : null}
+        {hasText ? <p className="text-slate-800">{text}</p> : null}
+        {!hasText && !hasImage ? <span className="text-slate-400">（未設定）</span> : null}
+      </div>
+    </label>
+  );
 }
 
 export default function QuizPageClient() {
@@ -105,31 +142,53 @@ export default function QuizPageClient() {
         {questions.map((q, idx) => (
           <li key={q.id} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <p className="font-medium text-slate-900">
-              {idx + 1}. {q.questionText}
+              {idx + 1}. {q.questionText?.trim() ? q.questionText : "（請依圖作答）"}
             </p>
             <p className="mt-1 text-xs text-slate-500">技能：{q.skillCode}</p>
-            <div className="mt-3 space-y-2">
-              {(
-                [
-                  ["A", q.choiceA],
-                  ["B", q.choiceB],
-                  ["C", q.choiceC],
-                  ["D", q.choiceD],
-                ] as const
-              ).map(([k, label]) => (
-                <label key={k} className="flex cursor-pointer items-center gap-2 text-sm">
-                  <input
-                    type="radio"
-                    name={q.id}
-                    value={k}
-                    checked={answers[q.id] === k}
-                    onChange={() => setAnswers((a) => ({ ...a, [q.id]: k }))}
-                  />
-                  <span>
-                    {k}. {label}
-                  </span>
-                </label>
-              ))}
+            {q.questionImageUrl?.trim() ? (
+              <div className="mt-3">
+                <QuizMediaImage src={q.questionImageUrl} alt="" />
+              </div>
+            ) : null}
+            {q.referenceImageUrl?.trim() ? (
+              <div className="mt-3">
+                <p className="mb-1 text-xs font-medium text-slate-600">參考圖</p>
+                <QuizMediaImage src={q.referenceImageUrl} alt="" />
+              </div>
+            ) : null}
+            <div className="mt-4 space-y-2">
+              <ChoiceRow
+                letter="A"
+                text={q.choiceA}
+                imageUrl={q.choiceAImageUrl}
+                name={q.id}
+                checked={answers[q.id] === "A"}
+                onSelect={() => setAnswers((a) => ({ ...a, [q.id]: "A" }))}
+              />
+              <ChoiceRow
+                letter="B"
+                text={q.choiceB}
+                imageUrl={q.choiceBImageUrl}
+                name={q.id}
+                checked={answers[q.id] === "B"}
+                onSelect={() => setAnswers((a) => ({ ...a, [q.id]: "B" }))}
+              />
+              <ChoiceRow
+                letter="C"
+                text={q.choiceC}
+                imageUrl={q.choiceCImageUrl}
+                name={q.id}
+                checked={answers[q.id] === "C"}
+                onSelect={() => setAnswers((a) => ({ ...a, [q.id]: "C" }))}
+              />
+              <ChoiceRow
+                letter="D"
+                text={q.choiceD}
+                imageUrl={q.choiceDImageUrl}
+                name={q.id}
+                checked={answers[q.id] === "D"}
+                onSelect={() => setAnswers((a) => ({ ...a, [q.id]: "D" }))}
+              />
             </div>
           </li>
         ))}

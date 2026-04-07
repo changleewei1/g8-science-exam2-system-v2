@@ -47,6 +47,12 @@ export class SupabaseQuizQuestionRepository implements QuizQuestionRepository {
         sort_order: i,
         difficulty: it.difficulty?.trim() ? it.difficulty.trim() : null,
         skill_code: it.skill_code.trim(),
+        question_image_url: it.question_image_url,
+        reference_image_url: it.reference_image_url,
+        choice_a_image_url: it.choice_a_image_url,
+        choice_b_image_url: it.choice_b_image_url,
+        choice_c_image_url: it.choice_c_image_url,
+        choice_d_image_url: it.choice_d_image_url,
       };
       const row = sorted[i];
       if (row) {

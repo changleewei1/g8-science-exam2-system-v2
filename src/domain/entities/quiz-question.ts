@@ -13,6 +13,12 @@ export class QuizQuestion {
     public readonly sortOrder: number,
     public readonly difficulty: string | null,
     public readonly skillCode: string,
+    public readonly questionImageUrl: string | null = null,
+    public readonly referenceImageUrl: string | null = null,
+    public readonly choiceAImageUrl: string | null = null,
+    public readonly choiceBImageUrl: string | null = null,
+    public readonly choiceCImageUrl: string | null = null,
+    public readonly choiceDImageUrl: string | null = null,
   ) {}
 
   isCorrect(answer: string): boolean {

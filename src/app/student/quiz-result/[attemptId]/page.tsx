@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect, notFound } from "next/navigation";
+import { QuizMediaImage } from "@/components/student/QuizMediaImage";
 import { StudentBackLink } from "@/components/student/StudentBackLink";
 import { getQuizAttemptDetailUseCase } from "@/infrastructure/composition";
 import { getStudentSession } from "@/lib/session";
@@ -74,9 +75,20 @@ export default async function QuizResultPage({ params, searchParams }: Props) {
               className="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm"
             >
               <p className="font-medium text-slate-900">
-                {idx + 1}. {q.questionText}
+                {idx + 1}. {q.questionText?.trim() ? q.questionText : "（請依圖作答）"}
               </p>
               <p className="mt-1 text-xs text-slate-500">技能：{q.skillCode}</p>
+              {q.questionImageUrl?.trim() ? (
+                <div className="mt-2">
+                  <QuizMediaImage src={q.questionImageUrl} alt="" />
+                </div>
+              ) : null}
+              {q.referenceImageUrl?.trim() ? (
+                <div className="mt-2">
+                  <p className="mb-1 text-xs text-slate-500">參考圖</p>
+                  <QuizMediaImage src={q.referenceImageUrl} alt="" />
+                </div>
+              ) : null}
               <p className="mt-2">
                 你的答案：{ans?.selected_answer ?? "—"}{" "}
                 {ok ? (

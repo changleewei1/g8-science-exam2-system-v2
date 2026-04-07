@@ -116,6 +116,12 @@ export function quizQuestionFromRow(r: QuizQuestionRow): QuizQuestion {
     r.sort_order,
     r.difficulty,
     r.skill_code,
+    r.question_image_url ?? null,
+    r.reference_image_url ?? null,
+    r.choice_a_image_url ?? null,
+    r.choice_b_image_url ?? null,
+    r.choice_c_image_url ?? null,
+    r.choice_d_image_url ?? null,
   );
 }
 
