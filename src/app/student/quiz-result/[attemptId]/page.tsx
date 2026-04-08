@@ -97,6 +97,20 @@ export default async function QuizResultPage({ params, searchParams }: Props) {
                   <span className="text-red-600">（錯誤，正解 {q.correctAnswer}）</span>
                 )}
               </p>
+              {!ok ? (
+                <div className="mt-4 rounded-xl border border-amber-200/90 bg-amber-50/90 px-4 py-3">
+                  <p className="text-sm font-semibold text-amber-950">詳解</p>
+                  {q.explanation?.trim() ? (
+                    <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-slate-800">
+                      {q.explanation.trim()}
+                    </p>
+                  ) : (
+                    <p className="mt-2 text-sm text-slate-600">
+                      本題目前沒有文字詳解，建議對照上方題目與課程影片再複習一次。
+                    </p>
+                  )}
+                </div>
+              ) : null}
             </li>
           );
         })}
