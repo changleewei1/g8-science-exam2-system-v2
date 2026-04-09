@@ -115,28 +115,29 @@ function rowsToBank(
     correct_answer: string;
     explanation: string | null;
     sort_order: number;
+    excluded_from_video_quiz_pool?: boolean | null;
   }>,
 ): BankQuestion[] {
-  return rows.map((r) => ({
-    unit: r.unit,
-    skill_code: r.skill_code,
-    difficulty: r.difficulty,
-    question_text: r.question_text,
-    choice_a: r.choice_a,
-    choice_b: r.choice_b,
-    choice_c: r.choice_c,
-    choice_d: r.choice_d,
-    correct_answer: r.correct_answer,
-    explanation: r.explanation ?? "",
-  }));
+  return rows
+    .filter((r) => !r.excluded_from_video_quiz_pool)
+    .map((r) => ({
+      unit: r.unit,
+      skill_code: r.skill_code,
+      difficulty: r.difficulty,
+      question_text: r.question_text,
+      choice_a: r.choice_a,
+      choice_b: r.choice_b,
+      choice_c: r.choice_c,
+      choice_d: r.choice_d,
+      correct_answer: r.correct_answer,
+      explanation: r.explanation ?? "",
+    }));
 }
 
 async function loadBank(supabase: ReturnType<typeof getSupabaseAdmin>): Promise<BankQuestion[]> {
   const { data: fromDb, error } = await supabase
     .from("question_bank_items")
-    .select(
-      "unit, skill_code, difficulty, question_text, choice_a, choice_b, choice_c, choice_d, correct_answer, explanation, sort_order",
-    )
+    .select("*")
     .order("sort_order", { ascending: true });
   if (error) throw error;
   if (fromDb?.length) {

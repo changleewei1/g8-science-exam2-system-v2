@@ -1,0 +1,3662 @@
+{
+  "meta": {
+    "scope": "acid_base",
+    "skill_codes": [
+      "AB01",
+      "AB02",
+      "AB03",
+      "AB04",
+      "AB05",
+      "AB06",
+      "CO01",
+      "CO02",
+      "CO03",
+      "CO04",
+      "CO05",
+      "EL01",
+      "EL02",
+      "EL03",
+      "EL04",
+      "EL05",
+      "EL06",
+      "NE01",
+      "NE02",
+      "NE03",
+      "NE04",
+      "NE05"
+    ],
+    "scope_unit_id": "b0000001-0000-4000-8000-000000000002",
+    "exported_at": "2026-04-08T03:52:19.959Z",
+    "counts": {
+      "question_bank_items": 44,
+      "quiz_questions": 81
+    }
+  },
+  "items": [
+    {
+      "id": "8573db36-355d-4712-b61a-e6207eb4daae",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "EL01",
+      "question": "下列何者最適合描述「電解質」在水溶液中的主要特徵？",
+      "choices": {
+        "A": "溶於水後可導電的物質",
+        "B": "不溶於水的物質",
+        "C": "必為金屬單質",
+        "D": "必為非金屬單質"
+      },
+      "answer": "A",
+      "explanation": "電解質溶於水可產生可自由移動的離子，因而能導電。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "b9182432-0ca9-41d5-9db7-1449a182e1e4",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "EL01",
+      "question": "關於電解質溶液的敘述，下列何者最適當？",
+      "choices": {
+        "A": "溶液中必存在可移動的離子才可能導電",
+        "B": "所有分子溶質皆能導電",
+        "C": "導電與溶質是否為分子無關",
+        "D": "只有固態才能導電"
+      },
+      "answer": "A",
+      "explanation": "水溶液導電與離子是否存在與可移動有關。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "fca46033-4c43-472c-b213-459b8be9200f",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "EL02",
+      "question": "下列何者屬於「電解質」？",
+      "choices": {
+        "A": "氯化鈉",
+        "B": "蔗糖",
+        "C": "酒精",
+        "D": "食用油"
+      },
+      "answer": "A",
+      "explanation": "氯化鈉溶於水可解離出離子，屬電解質。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "c57497a7-2b49-43c2-9bd6-70ffe60e6170",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "EL02",
+      "question": "下列何者最可能是「非電解質」？",
+      "choices": {
+        "A": "葡萄糖水溶液不導電且溶質為分子",
+        "B": "鹽酸溶液",
+        "C": "氫氧化鈉溶液",
+        "D": "氯化鈣溶液"
+      },
+      "answer": "A",
+      "explanation": "非電解質溶於水仍以分子形式存在，溶液通常不導電。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "302306fb-db00-41f2-8ee9-cd1e9d1348b7",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "EL03",
+      "question": "電解質水溶液能導電的主要原因為何？",
+      "choices": {
+        "A": "溶液中有可自由移動的離子",
+        "B": "只有水分子碰撞",
+        "C": "溶質皆為金屬",
+        "D": "與溫度無關"
+      },
+      "answer": "A",
+      "explanation": "離子在電場下移動形成電流。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "c57339c8-d99e-4893-a50e-ee08a54d702e",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "EL03",
+      "question": "純水導電性極弱，加入少量氯化鈉後導電性明顯上升，主因為何？",
+      "choices": {
+        "A": "產生可移動的鈉離子與氯離子",
+        "B": "水變成金屬",
+        "C": "氯化鈉阻斷電流",
+        "D": "僅水分子增加"
+      },
+      "answer": "A",
+      "explanation": "解離出離子使溶液可導電。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "ba538392-58b6-4cc3-979d-fd7eaeda9bcb",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "EL04",
+      "question": "欲判斷某固體溶於水後是否為電解質，實驗上常測量什麼？",
+      "choices": {
+        "A": "水溶液是否導電",
+        "B": "顏色深淺",
+        "C": "密度是否為 1",
+        "D": "沸點是否為 100℃"
+      },
+      "answer": "A",
+      "explanation": "導電性為常見判別方式之一。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "e8272423-8839-4dbb-8bd3-5bef1c657296",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "EL04",
+      "question": "下列敘述何者較合理？",
+      "choices": {
+        "A": "離子化合物溶於水若解離出離子，通常可導電",
+        "B": "所有分子化合物皆不導電",
+        "C": "導電與溶解度無關",
+        "D": "固態離子化合物必可導電"
+      },
+      "answer": "A",
+      "explanation": "須溶於水並解離出可移動離子才易導電。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "082d176f-8d92-4c8a-b890-4a338f5fc282",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "EL05",
+      "question": "強電解質在水溶液中的解離程度通常如何？",
+      "choices": {
+        "A": "幾乎完全解離",
+        "B": "幾乎不解離",
+        "C": "與弱電解質相同",
+        "D": "無法比較"
+      },
+      "answer": "A",
+      "explanation": "強電解質可視為幾乎完全解離。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "40b51981-b180-4a86-bfd9-db30bf1c9d98",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "EL05",
+      "question": "下列何者「通常」屬於弱電解質的特性？",
+      "choices": {
+        "A": "僅部分解離，溶液中仍有未解離的分子",
+        "B": "完全不解離",
+        "C": "必為金屬",
+        "D": "必不導電"
+      },
+      "answer": "A",
+      "explanation": "弱電解質僅部分解離。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "71cac439-6391-48c3-878c-b4b17bcc36c0",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "EL06",
+      "question": "下列何者與電解質在日常應用較有關？",
+      "choices": {
+        "A": "生理食鹽水與體液中的離子平衡",
+        "B": "玻璃透光",
+        "C": "塑膠絕緣",
+        "D": "鐵的導熱"
+      },
+      "answer": "A",
+      "explanation": "體液中含有多種電解質維持生理機能。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "b54feb40-fb94-4c12-a441-19de40f8a237",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "EL06",
+      "question": "運動飲料常強調補充電解質，主要目的為何？",
+      "choices": {
+        "A": "補充因流汗流失的鈉、鉀等離子",
+        "B": "增加脂肪吸收",
+        "C": "降低體溫至 0℃",
+        "D": "使血液變鹼至 pH=14"
+      },
+      "answer": "A",
+      "explanation": "流汗會流失水溶性離子。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "26dafa40-1ed4-41ce-b594-13b809549ecd",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "AB01",
+      "question": "酸性水溶液在 25℃ 時，pH 值通常如何？",
+      "choices": {
+        "A": "小於 7",
+        "B": "等於 7",
+        "C": "大於 7",
+        "D": "必為 14"
+      },
+      "answer": "A",
+      "explanation": "酸性溶液中氫離子濃度較高，pH 小於 7。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "a1d5828d-2f26-4ba0-bb5f-0f03b1f82da2",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "AB01",
+      "question": "下列何者為酸的通性之一？",
+      "choices": {
+        "A": "可使藍色石蕊試紙變紅",
+        "B": "使酚酞變紅",
+        "C": "pH 必大於 7",
+        "D": "與金屬反應必產生氫氣且無例外"
+      },
+      "answer": "A",
+      "explanation": "酸性可使藍色石蕊變紅（通性敘述依實驗條件）。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "6e21bc5d-bec9-4b7d-a75d-afd33f029985",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "AB02",
+      "question": "鹼性水溶液在 25℃ 時，pH 值通常如何？",
+      "choices": {
+        "A": "大於 7",
+        "B": "小於 7",
+        "C": "必為 0",
+        "D": "必為 7"
+      },
+      "answer": "A",
+      "explanation": "鹼性溶液 pH 大於 7。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "e78cd243-5f1b-4beb-b179-a9ccdcab37af",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "AB02",
+      "question": "下列何者較符合鹼的性質？",
+      "choices": {
+        "A": "水溶液中氫氧根離子濃度較高",
+        "B": "[H⁺] 大於 [OH⁻]",
+        "C": "必為非水溶液",
+        "D": "不能與酸反應"
+      },
+      "answer": "A",
+      "explanation": "鹼性與 OH⁻ 濃度相對較高有關。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "4173b28b-952b-4768-9aab-c410ebc1ecd4",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "AB03",
+      "question": "下列何者常見為酸性物質？",
+      "choices": {
+        "A": "檸檬汁中的檸檬酸",
+        "B": "肥皂水",
+        "C": "漂白水（討論常見情境時）",
+        "D": "小蘇打水（溶於水呈弱鹼性）"
+      },
+      "answer": "A",
+      "explanation": "檸檬酸為酸性物質。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "18356d52-a1bb-4470-aecf-ff94c0f05d9d",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "AB03",
+      "question": "實驗室常見的稀鹽酸，其水溶液性質下列何者最適當？",
+      "choices": {
+        "A": "呈酸性",
+        "B": "呈鹼性",
+        "C": "必為中性",
+        "D": "不溶於水"
+      },
+      "answer": "A",
+      "explanation": "鹽酸為強酸，水溶液呈酸性。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "f25bf17e-b047-446d-9d98-676e4fb6b60a",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "AB04",
+      "question": "下列何者常見為鹼性物質？",
+      "choices": {
+        "A": "氫氧化鈉水溶液",
+        "B": "食醋",
+        "C": "汽水",
+        "D": "檸檬汁"
+      },
+      "answer": "A",
+      "explanation": "氫氧化鈉為強鹼。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "522ee637-0a5f-47c6-91c9-dc1ba4af3371",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "AB04",
+      "question": "石灰水的主要溶質若為氫氧化鈣，其水溶液性質下列何者合理？",
+      "choices": {
+        "A": "呈鹼性",
+        "B": "呈強酸性 pH=0",
+        "C": "不與酸反應",
+        "D": "必為中性"
+      },
+      "answer": "A",
+      "explanation": "氫氧化鈣溶於水可釋出 OH⁻，呈鹼性。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "8a89453c-1e7d-413c-b8e3-19460c86395b",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "AB05",
+      "question": "下列何者最適合判斷某溶液為酸性？",
+      "choices": {
+        "A": "pH 計讀值小於 7（25℃）",
+        "B": "pH 計讀值大於 7",
+        "C": "溶液無色",
+        "D": "溶液有香味"
+      },
+      "answer": "A",
+      "explanation": "25℃ 時酸性溶液 pH 小於 7。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "b9b852c4-b968-46b9-a0e8-09568741aefa",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "AB05",
+      "question": "以廣用試紙檢測未知溶液，顯示偏紅，下列推論何者最合理？",
+      "choices": {
+        "A": "可能為酸性",
+        "B": "必為強鹼",
+        "C": "必為中性",
+        "D": "必無離子"
+      },
+      "answer": "A",
+      "explanation": "廣用試紙偏紅常對應酸性區間。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "cea2a868-99de-4fb7-970b-4f8438096307",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "AB06",
+      "question": "酸鹼在生活中的應用，下列何者較常見？",
+      "choices": {
+        "A": "利用醋去除水垢（酸與鹽類反應）",
+        "B": "用鹽酸洗傷口",
+        "C": "用濃硫酸直接飲用",
+        "D": "用強鹼當飲料"
+      },
+      "answer": "A",
+      "explanation": "醋酸可與部分鹽類作用，常用於清潔情境（需注意安全）。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "0a82e6ae-2e4c-446a-9ec4-0337464dd5f3",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "AB06",
+      "question": "下列何者屬於酸鹼「安全」使用概念？",
+      "choices": {
+        "A": "稀釋強酸強鹼時將酸緩慢加入水中並攪拌",
+        "B": "將水倒入濃硫酸中",
+        "C": "徒手抓取固體強鹼",
+        "D": "在密閉空間大量混合酸鹼不通風"
+      },
+      "answer": "A",
+      "explanation": "稀釋濃硫酸應將酸入水並小心操作。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "7947edf6-f3cc-4b44-a4f2-71fa7ff3e705",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "CO01",
+      "question": "在溶液中，「濃度」通常表示什麼意義？",
+      "choices": {
+        "A": "單位體積溶液中所含溶質的量（或莫耳數）多寡",
+        "B": "溶劑的總質量",
+        "C": "溶液的體積必為 1 L",
+        "D": "溫度的高低"
+      },
+      "answer": "A",
+      "explanation": "濃度描述溶質相對於溶液或溶劑的含量。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "cbc7d18f-d3b7-464c-bd10-99a41351f0ac",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "CO01",
+      "question": "下列何者屬於濃度的可能表示方式？",
+      "choices": {
+        "A": "莫耳濃度（M）",
+        "B": "只有長度單位",
+        "C": "只有時間單位",
+        "D": "只有面積單位"
+      },
+      "answer": "A",
+      "explanation": "莫耳濃度為常見表示法之一。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "5e826286-8526-434e-b941-9a42aa2edb51",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "CO02",
+      "question": "甲、乙兩杯糖水，甲杯較甜，通常表示什麼？",
+      "choices": {
+        "A": "甲杯糖濃度較高",
+        "B": "甲杯水比較多所以較甜",
+        "C": "甜度與濃度無關",
+        "D": "乙杯溫度較高"
+      },
+      "answer": "A",
+      "explanation": "較甜通常代表溶質（糖）相對較多即濃度較高。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "b8ab4d51-f9b4-4d33-b629-47173a2e5263",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "CO02",
+      "question": "相同體積下，哪一杯食鹽水較「濃」？",
+      "choices": {
+        "A": "溶解的食鹽較多者",
+        "B": "溶解的食鹽較少者",
+        "C": "兩杯水較多者",
+        "D": "無法判斷"
+      },
+      "answer": "A",
+      "explanation": "同體積時溶質愈多通常濃度愈大。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "5d82b324-3fa6-4536-944c-9cb6d0a907e2",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "CO03",
+      "question": "下列何者屬於「定性」判斷濃淡？",
+      "choices": {
+        "A": "品嚐鹹度高低（注意安全與衛生）",
+        "B": "精確滴定求濃度",
+        "C": "使用分析天平求莫耳濃度",
+        "D": "以分光光度計定量"
+      },
+      "answer": "A",
+      "explanation": "味覺或顏色深淺屬定性判斷（實驗室通常避免品嚐）。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "3d927b26-5f1b-4bb6-b6db-a98e5a9b4e1d",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "CO03",
+      "question": "已知兩杯相同體積的硝酸銀溶液，甲杯含溶質較多，下列何者正確？",
+      "choices": {
+        "A": "甲杯濃度較大",
+        "B": "甲杯濃度較小",
+        "C": "兩杯濃度必相等",
+        "D": "與溶質量無關"
+      },
+      "answer": "A",
+      "explanation": "同體積溶質愈多，濃度通常愈大。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "d1ed7590-75b8-4500-b4f2-8705fd6947c3",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "CO04",
+      "question": "將濃溶液加水稀釋，若不考慮體積非理想性，溶質莫耳數如何變化？",
+      "choices": {
+        "A": "不變",
+        "B": "變成兩倍",
+        "C": "變成零",
+        "D": "隨意變化"
+      },
+      "answer": "A",
+      "explanation": "稀釋只加溶劑，溶質總莫耳數不變。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "a0377a23-f8bb-4946-8eb4-47bbc643b5f8",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "CO04",
+      "question": "取定量稀釋後，溶液體積變大，溶質濃度通常如何變化？",
+      "choices": {
+        "A": "變小",
+        "B": "變大",
+        "C": "不變",
+        "D": "變成無限大"
+      },
+      "answer": "A",
+      "explanation": "溶質不變、體積變大，濃度下降。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "ca397667-27f0-4dc2-a415-50c7df5e30c8",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "CO05",
+      "question": "烹調時「加水調淡」主要改變什麼？",
+      "choices": {
+        "A": "降低溶質濃度",
+        "B": "增加溶質量",
+        "C": "移除所有溶質",
+        "D": "改變溶質種類"
+      },
+      "answer": "A",
+      "explanation": "加水稀釋使濃度降低。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "4814c01c-502f-491c-9f1e-b6d6943029e3",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "CO05",
+      "question": "沖泡飲品時，同量粉包沖入較多水，味道較淡的原因為何？",
+      "choices": {
+        "A": "濃度較低",
+        "B": "濃度較高",
+        "C": "溫度必變高",
+        "D": "溶質莫耳數變多"
+      },
+      "answer": "A",
+      "explanation": "同溶質、較多水 → 濃度較低。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "1131f20f-f9f1-49e3-aa73-12d8584c6498",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "NE01",
+      "question": "酸與鹼作用生成鹽和水，稱為什麼反應？",
+      "choices": {
+        "A": "中和反應",
+        "B": "化合反應",
+        "C": "核反應",
+        "D": "光合作用"
+      },
+      "answer": "A",
+      "explanation": "酸＋鹼→鹽＋水，為中和反應。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "1b85e877-4416-4307-b21a-0969f896a55c",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "NE01",
+      "question": "下列何者為中和反應的典型產物組合？",
+      "choices": {
+        "A": "鹽與水",
+        "B": "只有氫氣",
+        "C": "只有氧氣",
+        "D": "只有二氧化碳"
+      },
+      "answer": "A",
+      "explanation": "酸鹼中和主要生成鹽與水。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "660fcd71-228a-4012-a9a6-3d46da1a8f79",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "NE02",
+      "question": "強酸與強鹼中和後，若當量點且生成氯化鈉水溶液，溶液可能呈現？",
+      "choices": {
+        "A": "中性（約 pH 7，25℃）",
+        "B": "必為強酸性",
+        "C": "必為強鹼性",
+        "D": "必為 pH 0"
+      },
+      "answer": "A",
+      "explanation": "強酸強鹼生成強酸強鹼鹽溶液常近似中性。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "573cee53-b75e-4c75-aa43-fea511805e3c",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "NE02",
+      "question": "弱酸與強鹼達當量點時，溶液性質下列敘述何者較常成立？",
+      "choices": {
+        "A": "可能呈鹼性（共轭鹼水解）",
+        "B": "必為中性",
+        "C": "必為 pH=0",
+        "D": "必無離子"
+      },
+      "answer": "A",
+      "explanation": "弱酸鹽可能水解使溶液呈鹼性，需依題意判斷。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "49dcad10-61e0-4553-8526-646aa77703f2",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "NE03",
+      "question": "下列何者屬於酸與鹼的中和反應？",
+      "choices": {
+        "A": "硝酸與氫氧化鉀生成鹽與水",
+        "B": "鐵生鏽",
+        "C": "水蒸發",
+        "D": "碘昇華"
+      },
+      "answer": "A",
+      "explanation": "酸與鹼生成鹽與水。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "fa624f27-4aae-43ba-8316-9b1960b2e755",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "NE03",
+      "question": "下列何者「不屬於」酸與鹼的中和？",
+      "choices": {
+        "A": "鋅與稀硫酸反應產生氫氣",
+        "B": "鹽酸與氫氧化鈉",
+        "C": "硫酸與氫氧化鋇",
+        "D": "醋酸與氫氧化鈉"
+      },
+      "answer": "A",
+      "explanation": "金屬與酸反應屬氧化還原，非酸鹼中和。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "da0ecd71-6e8f-47ee-92c9-d24c0e8c8a0c",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "NE04",
+      "question": "中和反應的簡單分析中，若酸與鹼為「同當量」的強酸強鹼，產物水溶液可能？",
+      "choices": {
+        "A": "接近中性",
+        "B": "必為強酸性",
+        "C": "必為 pH=14",
+        "D": "必無水生成"
+      },
+      "answer": "A",
+      "explanation": "強酸強鹼當量中和常接近中性。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "1ce682bc-066a-426a-80f9-154a7aebfe55",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "NE04",
+      "question": "以滴定曲線判斷當量點附近 pH 突變，主要用於什麼？",
+      "choices": {
+        "A": "估算酸鹼反應的當量關係",
+        "B": "測量金屬密度",
+        "C": "測量光速",
+        "D": "測量聲速"
+      },
+      "answer": "A",
+      "explanation": "滴定曲線可協助判斷當量點。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "aa56d860-e14e-4dd7-9d62-c094cff558d6",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "NE05",
+      "question": "胃藥中常見抗酸劑的作用與下列何者最有關？",
+      "choices": {
+        "A": "中和過多胃酸",
+        "B": "增加胃酸",
+        "C": "使胃完全無酸",
+        "D": "與酸無關"
+      },
+      "answer": "A",
+      "explanation": "抗酸劑可中和部分胃酸舒緩不適。",
+      "difficulty": "基礎",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "79434fb3-d1ac-4c5f-b773-e96fe475d802",
+      "source_table": "question_bank_items",
+      "unit": "酸鹼中和",
+      "skill_code": "NE05",
+      "question": "被蚊蟲叮咬後塗抹弱鹼性藥膏，主要利用什麼概念？",
+      "choices": {
+        "A": "中和酸性分泌物",
+        "B": "增加酸性",
+        "C": "使皮膚完全乾燥",
+        "D": "與中和無關"
+      },
+      "answer": "A",
+      "explanation": "弱鹼可中和蟻酸等酸性物質。",
+      "difficulty": "進階",
+      "quiz_id": null,
+      "video_id": null,
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "6361bd97-63f9-4baa-8d8b-574af16d9042",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "下列何者最適合描述「電解質」在水溶液中的主要特徵？",
+      "choices": {
+        "A": "溶於水後可導電的物質",
+        "B": "不溶於水的物質",
+        "C": "必為金屬單質",
+        "D": "必為非金屬單質"
+      },
+      "answer": "A",
+      "explanation": "電解質溶於水可產生可自由移動的離子，因而能導電。",
+      "difficulty": "基礎",
+      "quiz_id": "7b0a5355-4683-4879-886e-b83d98fd9969",
+      "video_id": "a5ffefbc-fe00-4374-a5f3-9406525929e1",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "bbc452ec-020d-41bb-8fde-86532224bec8",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "NE04",
+      "question": "欲由已知濃度的酸（鹼）進行滴定計算，下列何者概念最重要？",
+      "choices": {
+        "A": "酸鹼當量關係與莫耳數對應",
+        "B": "僅觀察顏色即可",
+        "C": "溶液體積必須相等",
+        "D": "溫度必須為 100℃"
+      },
+      "answer": "A",
+      "explanation": "滴定計算常用莫耳數或當量關係建立方程式。",
+      "difficulty": "進階",
+      "quiz_id": "f11e2936-6665-4e42-99f7-d03f5e907881",
+      "video_id": "5ecb5aea-bb49-45ee-b0b9-9b3ca395d2c6",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "989b51c8-d76a-4ece-83fe-44eb18005cad",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "下列何者最適合描述「電解質」在水溶液中的主要特徵？",
+      "choices": {
+        "A": "溶於水後可導電的物質",
+        "B": "不溶於水的物質",
+        "C": "必為金屬單質",
+        "D": "必為非金屬單質"
+      },
+      "answer": "A",
+      "explanation": "電解質溶於水可產生可自由移動的離子，因而能導電。",
+      "difficulty": "基礎",
+      "quiz_id": "605598cb-6e43-4fe4-8172-a098ecf744a3",
+      "video_id": "d4c8635b-8a8c-47a4-b867-9c366f4f7533",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "014effe9-8271-4dd9-ac37-76abebf6fc30",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL03",
+      "question": "下列何者最適合描述「電解質」在水溶液中的主要特徵？",
+      "choices": {
+        "A": "溶於水後可導電的物質",
+        "B": "不溶於水的物質",
+        "C": "必為金屬單質",
+        "D": "必為非金屬單質"
+      },
+      "answer": "A",
+      "explanation": "電解質溶於水可產生可自由移動的離子，因而能導電。",
+      "difficulty": "基礎",
+      "quiz_id": "6e68f9c7-914f-49fe-a8bb-b2d81fed9a3d",
+      "video_id": "986f52e5-4567-4682-a60b-7ab15ab718ce",
+      "status": "revise",
+      "quality_note": "影片3–7題目對齊標題：電離說／酸的通性／常見的鹼／體積百分濃度；答案分佈調整",
+      "new_question": "關於電解質溶於水後發生「電離」的敘述，下列何者正確？",
+      "new_choices": {
+        "A": "電離後粒子仍為電中性原子，完全不帶電",
+        "B": "可產生能自由移動的陰離子與陽離子",
+        "C": "電離表示物質變成「非電解質」",
+        "D": "所有化合物溶於水都會 100% 完全電離"
+      },
+      "new_answer": "B",
+      "new_explanation": "電解質溶於水時會解離成可自由移動的離子，這就是「電離」；不是只剩中性原子，也未必完全解離（強／弱電解質有別）。"
+    },
+    {
+      "id": "5a6ce8e3-f16e-4627-a49c-367f250eef35",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO03",
+      "question": "將 160 公克的 NaOH 溶於水，配成 20 公升的溶液，則莫耳濃度為多少 M？（NaOH 莫耳質量以 40 g／mol 計）",
+      "choices": {
+        "A": "0.4",
+        "B": "0.2",
+        "C": "4",
+        "D": "8"
+      },
+      "answer": "B",
+      "explanation": "n = 160／40 = 4 mol；溶液體積 20 L；M = n／V = 4／20 = 0.2 M。",
+      "difficulty": "基礎",
+      "quiz_id": "d4ed55ef-607e-4edb-8285-44948b3a39ea",
+      "video_id": "73e73b7f-bf8c-426f-a564-23eea3163e9b",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "349816a5-acde-41ed-b52c-c1c6ada48290",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "下列何者最適合描述「電解質」在水溶液中的主要特徵？",
+      "choices": {
+        "A": "溶於水後可導電的物質",
+        "B": "不溶於水的物質",
+        "C": "必為金屬單質",
+        "D": "必為非金屬單質"
+      },
+      "answer": "A",
+      "explanation": "電解質溶於水可產生可自由移動的離子，因而能導電。",
+      "difficulty": "基礎",
+      "quiz_id": "37527b77-2a68-4c84-9262-ce10f0be294f",
+      "video_id": "ce2d1536-fabc-4f59-8634-26d319431191",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "f1b4c4c4-7859-487f-b56d-90864e0dbf73",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "AB01",
+      "question": "下列何者最適合描述「電解質」在水溶液中的主要特徵？",
+      "choices": {
+        "A": "溶於水後可導電的物質",
+        "B": "不溶於水的物質",
+        "C": "必為金屬單質",
+        "D": "必為非金屬單質"
+      },
+      "answer": "A",
+      "explanation": "電解質溶於水可產生可自由移動的離子，因而能導電。",
+      "difficulty": "基礎",
+      "quiz_id": "9dcc53ed-b2c1-41c4-994b-2c7f719c5a2c",
+      "video_id": "81065903-57eb-4271-a219-86218c749519",
+      "status": "revise",
+      "quality_note": "影片3–7題目對齊標題：電離說／酸的通性／常見的鹼／體積百分濃度；答案分佈調整",
+      "new_question": "關於「酸」的通性，下列敘述何者較適當？",
+      "new_choices": {
+        "A": "酸性溶液必使紅色石蕊試紙變藍",
+        "B": "其水溶液 pH 小於 7 時通常呈酸性",
+        "C": "水溶液嚐起來一定都是甜的",
+        "D": "所有金屬放入任何酸中都會立刻產生氫氣"
+      },
+      "new_answer": "B",
+      "new_explanation": "酸的水溶液常見性質包括 pH 小於 7（廣義酸性）、可使藍色石蕊變紅等；與金屬是否反應還須看活性順序與酸種類。"
+    },
+    {
+      "id": "5f21c4d3-d193-4672-901c-aa2a3175f6c9",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO03",
+      "question": "兩種同溶質、同溶劑的水溶液混合（假設體積可加算），混合後溶質總莫耳數為？",
+      "choices": {
+        "A": "兩者莫耳數相加",
+        "B": "取較稀者",
+        "C": "取較濃者",
+        "D": "必為零"
+      },
+      "answer": "A",
+      "explanation": "未發生化學反應時，溶質莫耳數可加總。",
+      "difficulty": "基礎",
+      "quiz_id": "aa6ddda4-80d3-4785-8393-68115a558019",
+      "video_id": "c86677de-9ea8-4d6e-8964-47ce536a62b8",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "086794eb-9921-48ec-a43e-4d1401ec128d",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "下列何者最適合描述「電解質」在水溶液中的主要特徵？",
+      "choices": {
+        "A": "溶於水後可導電的物質",
+        "B": "不溶於水的物質",
+        "C": "必為金屬單質",
+        "D": "必為非金屬單質"
+      },
+      "answer": "A",
+      "explanation": "電解質溶於水可產生可自由移動的離子，因而能導電。",
+      "difficulty": "基礎",
+      "quiz_id": "d15f08fd-25b3-4c39-8f4e-b7f8a4cf7cc2",
+      "video_id": "c5f121b5-a8a1-4b75-b011-bee9155d0fd0",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "f55c478c-ed66-473b-907e-a93de91f299b",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "AB03",
+      "question": "下列何者最適合描述「電解質」在水溶液中的主要特徵？",
+      "choices": {
+        "A": "溶於水後可導電的物質",
+        "B": "不溶於水的物質",
+        "C": "必為金屬單質",
+        "D": "必為非金屬單質"
+      },
+      "answer": "A",
+      "explanation": "電解質溶於水可產生可自由移動的離子，因而能導電。",
+      "difficulty": "基礎",
+      "quiz_id": "3bc128ad-2c68-476d-b4ad-9cb07cddcbef",
+      "video_id": "31cd7012-2fd8-4732-b116-48965c6822f1",
+      "status": "revise",
+      "quality_note": "影片3–7題目對齊標題：電離說／酸的通性／常見的鹼／體積百分濃度；答案分佈調整",
+      "new_question": "日常生活中，食醋與檸檬汁所含的酸性成分，下列配對何者較常見？",
+      "new_choices": {
+        "A": "兩者都以鹽酸為主",
+        "B": "兩者都以氫氧化鈉為主",
+        "C": "食醋多與醋酸有關；檸檬汁多與檸檬酸有關",
+        "D": "兩者都是典型的強鹼溶液"
+      },
+      "new_answer": "C",
+      "new_explanation": "食醋主要與醋酸（乙酸）有關；檸檬等酸味水果常含檸檬酸等有机酸，二者並非以鹽酸為主。"
+    },
+    {
+      "id": "03252de5-e39c-45ce-8863-7d97fd790d9f",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO03",
+      "question": "將 80 公克的 NaOH 溶於水，配成 16 公升的溶液，則莫耳濃度為多少 M？（NaOH 莫耳質量以 40 g／mol 計）",
+      "choices": {
+        "A": "0.2",
+        "B": "0.25",
+        "C": "0.125",
+        "D": "2"
+      },
+      "answer": "C",
+      "explanation": "n = 80／40 = 2 mol；M = 2／16 = 0.125 M。（題型與「質量→莫耳數→M」相同。）",
+      "difficulty": "基礎",
+      "quiz_id": "006e5ef6-d448-4b1e-a439-01a4116f7644",
+      "video_id": "c788459e-343b-4ff2-9d6b-14af4232947d",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "c7dc9ab6-8b43-4c35-abb4-a0f262875f94",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "下列何者最適合描述「電解質」在水溶液中的主要特徵？",
+      "choices": {
+        "A": "溶於水後可導電的物質",
+        "B": "不溶於水的物質",
+        "C": "必為金屬單質",
+        "D": "必為非金屬單質"
+      },
+      "answer": "A",
+      "explanation": "電解質溶於水可產生可自由移動的離子，因而能導電。",
+      "difficulty": "基礎",
+      "quiz_id": "42721aaf-a416-49cd-ba96-73c386254969",
+      "video_id": "696b1126-0dd7-474a-9619-832aadb2042e",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "edcd5f66-3d73-4bdf-824f-0713e2cfadea",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "AB02",
+      "question": "下列何者最適合描述「電解質」在水溶液中的主要特徵？",
+      "choices": {
+        "A": "溶於水後可導電的物質",
+        "B": "不溶於水的物質",
+        "C": "必為金屬單質",
+        "D": "必為非金屬單質"
+      },
+      "answer": "A",
+      "explanation": "電解質溶於水可產生可自由移動的離子，因而能導電。",
+      "difficulty": "基礎",
+      "quiz_id": "558a08df-1c45-47ff-902d-5c5faaa263db",
+      "video_id": "e72901bc-734f-4b63-9442-8c285c8b1c0b",
+      "status": "revise",
+      "quality_note": "影片3–7題目對齊標題：電離說／酸的通性／常見的鹼／體積百分濃度；答案分佈調整",
+      "new_question": "關於「鹼」的通性，下列敘述何者較適當？",
+      "new_choices": {
+        "A": "鹼性水溶液的 pH 通常小於 7",
+        "B": "鹼性溶液會使紅色石蕊試紙保持紅色",
+        "C": "鹼與油脂的作用在生活與工業上完全沒有用途",
+        "D": "鹼的水溶液中 OH⁻ 濃度相對較高而呈鹼性行為"
+      },
+      "new_answer": "D",
+      "new_explanation": "鹼的溶液通常 pH 大於 7，能使紅色石蕊變藍；與油脂皂化等反應在清潔劑等應用上很重要。"
+    },
+    {
+      "id": "915eb3e4-4d82-426e-a370-e642a18983a2",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "下列何者最適合描述「電解質」在水溶液中的主要特徵？",
+      "choices": {
+        "A": "溶於水後可導電的物質",
+        "B": "不溶於水的物質",
+        "C": "必為金屬單質",
+        "D": "必為非金屬單質"
+      },
+      "answer": "A",
+      "explanation": "電解質溶於水可產生可自由移動的離子，因而能導電。",
+      "difficulty": "基礎",
+      "quiz_id": "0b4216bf-4edc-4d55-a1de-6a52d4344c74",
+      "video_id": "92be7d5a-92f7-4a9a-85ea-35f5094ba94a",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "e5b92186-19ea-4a04-adee-f5a8c2823c2d",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO01",
+      "question": "下列何者最適合描述「電解質」在水溶液中的主要特徵？",
+      "choices": {
+        "A": "溶於水後可導電的物質",
+        "B": "不溶於水的物質",
+        "C": "必為金屬單質",
+        "D": "必為非金屬單質"
+      },
+      "answer": "A",
+      "explanation": "電解質溶於水可產生可自由移動的離子，因而能導電。",
+      "difficulty": "基礎",
+      "quiz_id": "4f4529c9-0321-485c-bb56-d6d450a79e5d",
+      "video_id": "cfe52ca6-0ab8-4d19-a585-c2647517a974",
+      "status": "revise",
+      "quality_note": "影片3–7題目對齊標題：電離說／酸的通性／常見的鹼／體積百分濃度；答案分佈調整",
+      "new_question": "「體積百分濃度」的定義，下列何者正確？（體積取用相同單位）",
+      "new_choices": {
+        "A": "溶質體積 ÷ 純溶劑體積 × 100%",
+        "B": "溶質體積 ÷ 溶液總體積 × 100%",
+        "C": "溶劑體積 ÷ 溶質體積 × 100%",
+        "D": "溶質質量 ÷ 溶液總體積 × 100%"
+      },
+      "new_answer": "B",
+      "new_explanation": "體積百分濃度為溶質體積占「全部溶液體積」的百分比（溶質體積／溶液總體積×100%），不是只除以溶劑體積。"
+    },
+    {
+      "id": "f0a32c6d-d78f-4528-b647-2b704d40a085",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "AB05",
+      "question": "pH 的定義可用下列何者表示？（以常用定義）",
+      "choices": {
+        "A": "-log₁₀[H⁺]",
+        "B": "log₁₀[OH⁻]",
+        "C": "[H⁺]／[OH⁻]",
+        "D": "10^[H⁺]"
+      },
+      "answer": "A",
+      "explanation": "pH = -log[H⁺]（[] 為體積莫耳濃度，以 M 表示）。",
+      "difficulty": "基礎",
+      "quiz_id": "33bfe191-7b4b-49c3-863f-70a453927d0c",
+      "video_id": "035b5867-0622-44d8-a819-a940755c5d74",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "5eba957a-b064-4ba5-9b35-65947be793a7",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO04",
+      "question": "將溶液連續多次「取部分再稀釋」時，每次稀釋後濃度變化總趨勢為？",
+      "choices": {
+        "A": "較原濃溶液為低（每次稀釋通常變稀）",
+        "B": "一定越來越濃",
+        "C": "一定不變",
+        "D": "必變為純水"
+      },
+      "answer": "A",
+      "explanation": "多次稀釋等同重複降低濃度，最終遠低於原濃度。",
+      "difficulty": "進階",
+      "quiz_id": "5edcf285-7748-41fb-b154-fa490b2f31f8",
+      "video_id": "86c746c5-8f0c-4985-8f21-3a5ec19ee928",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "491a0193-2b9b-494f-aaa6-55470168b5e0",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "下列何者最適合描述「電解質」在水溶液中的主要特徵？",
+      "choices": {
+        "A": "溶於水後可導電的物質",
+        "B": "不溶於水的物質",
+        "C": "必為金屬單質",
+        "D": "必為非金屬單質"
+      },
+      "answer": "A",
+      "explanation": "電解質溶於水可產生可自由移動的離子，因而能導電。",
+      "difficulty": "基礎",
+      "quiz_id": "7e431ffa-217f-49d1-a5af-8e1f0e8d5aaa",
+      "video_id": "3f9ec9f6-9b42-4801-a362-f9f55b4c91fc",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "ae82775d-eddc-456e-bbf7-fbb52017039c",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO01",
+      "question": "重量百分濃度敘述溶質所佔比例時，通常以何者為基準？",
+      "choices": {
+        "A": "溶質質量佔全部溶液質量的百分比",
+        "B": "溶質體積／溶劑體積",
+        "C": "只有溶劑質量",
+        "D": "只有溶質莫耳數"
+      },
+      "answer": "A",
+      "explanation": "重量百分濃度 = 溶質質量／溶液總質量 ×100%。",
+      "difficulty": "基礎",
+      "quiz_id": "fd2c374b-9d96-4d0d-a6d4-f541674755c1",
+      "video_id": "a174d9f5-adf5-4ced-a9bf-235a4d922a91",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "f8857143-1377-418a-8383-1d2f62701cc4",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO04",
+      "question": "將 0.1 M 水溶液取 100 mL 稀釋至 500 mL（假設體積可加算），稀釋後濃度約為？",
+      "choices": {
+        "A": "0.02 M",
+        "B": "0.5 M",
+        "C": "0.1 M",
+        "D": "1 M"
+      },
+      "answer": "A",
+      "explanation": "稀釋倍數 500／100 = 5，濃度變為 0.1／5 = 0.02 M。",
+      "difficulty": "進階",
+      "quiz_id": "a81939c0-ee8d-47d2-9508-f17c298b1abd",
+      "video_id": "89a95fb9-42ed-4581-a4e2-a94a55e0de78",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "ad20a91d-7209-4636-8a77-5b8e84a58cd5",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "下列何者最適合描述「電解質」在水溶液中的主要特徵？",
+      "choices": {
+        "A": "溶於水後可導電的物質",
+        "B": "不溶於水的物質",
+        "C": "必為金屬單質",
+        "D": "必為非金屬單質"
+      },
+      "answer": "A",
+      "explanation": "電解質溶於水可產生可自由移動的離子，因而能導電。",
+      "difficulty": "基礎",
+      "quiz_id": "99b71d06-6ff3-4bbb-bfde-7ec853ff2485",
+      "video_id": "00d86262-5ab3-4d47-be63-414c64622b2c",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "d90d8960-24ec-4d53-9da5-752c0706d626",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "AB05",
+      "question": "以石蕊試紙檢驗未知溶液，呈紅色時，下列敘述何者較合理？",
+      "choices": {
+        "A": "偏酸性",
+        "B": "必為純水",
+        "C": "必為強鹼",
+        "D": "必為中性"
+      },
+      "answer": "A",
+      "explanation": "石蕊在酸性常變紅（課內常見定性描述）。",
+      "difficulty": "基礎",
+      "quiz_id": "f5dd7f66-41d9-48cd-a85e-cdbee8021404",
+      "video_id": "d4d2742f-3012-4165-8453-7a5967a985ad",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "10d3f8d7-b3de-470a-9652-9c430c714870",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "下列何者最適合描述「電解質」在水溶液中的主要特徵？",
+      "choices": {
+        "A": "溶於水後可導電的物質",
+        "B": "不溶於水的物質",
+        "C": "必為金屬單質",
+        "D": "必為非金屬單質"
+      },
+      "answer": "A",
+      "explanation": "電解質溶於水可產生可自由移動的離子，因而能導電。",
+      "difficulty": "基礎",
+      "quiz_id": "a3672a70-c702-4c90-8ce8-957985e2716c",
+      "video_id": "f9991b85-ad15-431c-8146-f079c9c33453",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "09c37344-2073-477a-8c4d-08aa135468a2",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "關於電解質溶液的敘述，下列何者最適當？",
+      "choices": {
+        "A": "溶液中必存在可移動的離子才可能導電",
+        "B": "所有分子溶質皆能導電",
+        "C": "導電與溶質是否為分子無關",
+        "D": "只有固態才能導電"
+      },
+      "answer": "A",
+      "explanation": "水溶液導電與離子是否存在與可移動有關。",
+      "difficulty": "進階",
+      "quiz_id": "f04a3c96-f43f-4bc7-bae5-464a0c5ff737",
+      "video_id": "17ec85fe-b723-4c98-aa6f-8d1135729788",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "9e198a50-ed79-4816-81f2-f4d0178cc949",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "下列何者最適合描述「電解質」在水溶液中的主要特徵？",
+      "choices": {
+        "A": "溶於水後可導電的物質",
+        "B": "不溶於水的物質",
+        "C": "必為金屬單質",
+        "D": "必為非金屬單質"
+      },
+      "answer": "A",
+      "explanation": "電解質溶於水可產生可自由移動的離子，因而能導電。",
+      "difficulty": "基礎",
+      "quiz_id": "89fb0c6a-1c0a-4fbf-a4f4-ec6887fe18b2",
+      "video_id": "5c687384-0f52-4c08-b3ff-416c15049f97",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "7d027c81-070f-41b2-b7ea-dcacb3983d96",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "AB05",
+      "question": "在 25°C 純水中，氫離子濃度 [H⁺] 與氫氧根濃度 [OH⁻] 的關係為何？（不考慮其他溶質）",
+      "choices": {
+        "A": "[H⁺][OH⁻] 為定值（離子積常數）",
+        "B": "[H⁺] 必大於 [OH⁻]",
+        "C": "[H⁺] 必小於 [OH⁻]",
+        "D": "兩者無固定關係"
+      },
+      "answer": "A",
+      "explanation": "純水中有離子積 Kw = [H⁺][OH⁻]（定溫下為常數）。",
+      "difficulty": "基礎",
+      "quiz_id": "f3ef8be3-a960-454f-9a8e-b3a04da2296f",
+      "video_id": "e30aa374-025f-4938-9265-f35d8bab37f0",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "03950a29-2a3b-477e-a760-63042adc8224",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "下列何者最適合描述「電解質」在水溶液中的主要特徵？",
+      "choices": {
+        "A": "溶於水後可導電的物質",
+        "B": "不溶於水的物質",
+        "C": "必為金屬單質",
+        "D": "必為非金屬單質"
+      },
+      "answer": "A",
+      "explanation": "電解質溶於水可產生可自由移動的離子，因而能導電。",
+      "difficulty": "基礎",
+      "quiz_id": "3a30e87c-b1a7-411e-b2c4-99b401339284",
+      "video_id": "5ef092a9-4d7a-4cb9-94dc-80356cd1cc62",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "0dd7d816-8170-4b46-aa42-2a5b60b902e1",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL03",
+      "question": "電解質水溶液能導電的主要原因為何？",
+      "choices": {
+        "A": "溶液中有可自由移動的離子",
+        "B": "只有水分子碰撞",
+        "C": "溶質皆為金屬",
+        "D": "與溫度無關"
+      },
+      "answer": "A",
+      "explanation": "離子在電場下移動形成電流。",
+      "difficulty": "基礎",
+      "quiz_id": "0b4216bf-4edc-4d55-a1de-6a52d4344c74",
+      "video_id": "92be7d5a-92f7-4a9a-85ea-35f5094ba94a",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "9b64487a-c0cf-4bfd-b91a-0a9d458e8a73",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO03",
+      "question": "將 12.6 公克的硝酸（HNO₃）溶於水中，配成 500 毫升的溶液，則溶液的莫耳濃度為多少 M？（HNO₃ 莫耳質量以 63 g／mol 計）",
+      "choices": {
+        "A": "0.2",
+        "B": "0.8",
+        "C": "0.4",
+        "D": "2"
+      },
+      "answer": "C",
+      "explanation": "n = 12.6／63 = 0.2 mol；500 mL = 0.5 L；M = 0.2／0.5 = 0.4 M。",
+      "difficulty": "基礎",
+      "quiz_id": "d4ed55ef-607e-4edb-8285-44948b3a39ea",
+      "video_id": "73e73b7f-bf8c-426f-a564-23eea3163e9b",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "6b73746e-0df7-4046-b416-330b16fa4ab4",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO04",
+      "question": "溶液稀釋過程中，若不考慮揮發或反應，溶質總莫耳數如何變化？",
+      "choices": {
+        "A": "不變",
+        "B": "變多",
+        "C": "變少",
+        "D": "必變為零"
+      },
+      "answer": "A",
+      "explanation": "只加溶劑稀釋，溶質莫耳數守恆。",
+      "difficulty": "基礎",
+      "quiz_id": "a81939c0-ee8d-47d2-9508-f17c298b1abd",
+      "video_id": "89a95fb9-42ed-4581-a4e2-a94a55e0de78",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "3f754552-52d1-4cff-be26-032e3b57301c",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO04",
+      "question": "原濃度 C₀，取固定比例稀釋 k 倍（體積變 k 倍），稀釋一次後濃度約為？",
+      "choices": {
+        "A": "C₀／k",
+        "B": "C₀×k",
+        "C": "C₀",
+        "D": "k／C₀"
+      },
+      "answer": "A",
+      "explanation": "溶質莫耳數不變，體積變 k 倍則濃度變為 1／k 倍。",
+      "difficulty": "進階",
+      "quiz_id": "5edcf285-7748-41fb-b154-fa490b2f31f8",
+      "video_id": "86c746c5-8f0c-4985-8f21-3a5ec19ee928",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "392c2089-0478-4ba7-8eb6-e588b37bafdf",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "AB05",
+      "question": "25°C 時純水的 pH 約為多少？",
+      "choices": {
+        "A": "7",
+        "B": "0",
+        "C": "14",
+        "D": "1"
+      },
+      "answer": "A",
+      "explanation": "常溫下純水 [H⁺]≈10⁻⁷ M，故 pH≈7。",
+      "difficulty": "基礎",
+      "quiz_id": "f3ef8be3-a960-454f-9a8e-b3a04da2296f",
+      "video_id": "e30aa374-025f-4938-9265-f35d8bab37f0",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "e87ca33e-39f1-4367-862a-fb030d6260f0",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO03",
+      "question": "混合後濃度計算，下列何者為必要資訊？",
+      "choices": {
+        "A": "各杯溶液體積與濃度（或莫耳數）",
+        "B": "僅需顏色",
+        "C": "僅需溫度",
+        "D": "僅需 pH 試紙"
+      },
+      "answer": "A",
+      "explanation": "需由體積與濃度（或莫耳數）求混合後總莫耳數與總體積。",
+      "difficulty": "進階",
+      "quiz_id": "aa6ddda4-80d3-4785-8393-68115a558019",
+      "video_id": "c86677de-9ea8-4d6e-8964-47ce536a62b8",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "49c800b7-eec3-4b4d-bed7-abc680669b7b",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "AB05",
+      "question": "下列何者 pH 最小（酸性最強）？（同溫、同類型比較）",
+      "choices": {
+        "A": "[H⁺] = 10⁻² M 的溶液",
+        "B": "[H⁺] = 10⁻⁴ M 的溶液",
+        "C": "[H⁺] = 10⁻⁷ M 的溶液",
+        "D": "[H⁺] = 10⁻¹⁰ M 的溶液"
+      },
+      "answer": "A",
+      "explanation": "[H⁺] 愈大酸性愈強，pH 愈小。",
+      "difficulty": "基礎",
+      "quiz_id": "33bfe191-7b4b-49c3-863f-70a453927d0c",
+      "video_id": "035b5867-0622-44d8-a819-a940755c5d74",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "61139758-4ecf-4d5f-83ab-412e26ab9b1e",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO03",
+      "question": "由重量百分濃度換算到莫耳濃度時，通常還需要？",
+      "choices": {
+        "A": "溶液密度與溶質莫耳質量",
+        "B": "僅 pH",
+        "C": "僅溫度",
+        "D": "不必任何額外數據"
+      },
+      "answer": "A",
+      "explanation": "需由質量與密度得體積，再配合莫耳質量得莫耳數。",
+      "difficulty": "進階",
+      "quiz_id": "fd2c374b-9d96-4d0d-a6d4-f541674755c1",
+      "video_id": "a174d9f5-adf5-4ced-a9bf-235a4d922a91",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "b9252962-4b40-43f4-990d-d926f31f393c",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "AB05",
+      "question": "廣用試紙可協助判斷下列何種性質？",
+      "choices": {
+        "A": "酸鹼性約略範圍",
+        "B": "溶質的精確莫耳濃度",
+        "C": "溶液的沸點",
+        "D": "溶質分子量"
+      },
+      "answer": "A",
+      "explanation": "廣用試紙用於粗估 pH／酸鹼性。",
+      "difficulty": "基礎",
+      "quiz_id": "f5dd7f66-41d9-48cd-a85e-cdbee8021404",
+      "video_id": "d4d2742f-3012-4165-8453-7a5967a985ad",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "73b468d9-452d-47de-b8f7-f8b74647be83",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "關於電解質溶液的敘述，下列何者最適當？",
+      "choices": {
+        "A": "溶液中必存在可移動的離子才可能導電",
+        "B": "所有分子溶質皆能導電",
+        "C": "導電與溶質是否為分子無關",
+        "D": "只有固態才能導電"
+      },
+      "answer": "A",
+      "explanation": "水溶液導電與離子是否存在與可移動有關。",
+      "difficulty": "進階",
+      "quiz_id": "89fb0c6a-1c0a-4fbf-a4f4-ec6887fe18b2",
+      "video_id": "5c687384-0f52-4c08-b3ff-416c15049f97",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "78416780-3e72-451e-93e9-cc63e2bbae47",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "關於電解質溶液的敘述，下列何者最適當？",
+      "choices": {
+        "A": "溶液中必存在可移動的離子才可能導電",
+        "B": "所有分子溶質皆能導電",
+        "C": "導電與溶質是否為分子無關",
+        "D": "只有固態才能導電"
+      },
+      "answer": "A",
+      "explanation": "水溶液導電與離子是否存在與可移動有關。",
+      "difficulty": "進階",
+      "quiz_id": "7b0a5355-4683-4879-886e-b83d98fd9969",
+      "video_id": "a5ffefbc-fe00-4374-a5f3-9406525929e1",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "76c46bc1-52bc-4e26-9872-2faa855b4039",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL04",
+      "question": "關於電解質溶液的敘述，下列何者最適當？",
+      "choices": {
+        "A": "溶液中必存在可移動的離子才可能導電",
+        "B": "所有分子溶質皆能導電",
+        "C": "導電與溶質是否為分子無關",
+        "D": "只有固態才能導電"
+      },
+      "answer": "A",
+      "explanation": "水溶液導電與離子是否存在與可移動有關。",
+      "difficulty": "進階",
+      "quiz_id": "6e68f9c7-914f-49fe-a8bb-b2d81fed9a3d",
+      "video_id": "986f52e5-4567-4682-a60b-7ab15ab718ce",
+      "status": "revise",
+      "quality_note": "影片3–7題目對齊標題：電離說／酸的通性／常見的鹼／體積百分濃度；答案分佈調整",
+      "new_question": "同濃度下，通常為什麼「強電解質」水溶液的導電能力明顯優於「弱電解質」？",
+      "new_choices": {
+        "A": "強電解質溶於水後完全不產生離子",
+        "B": "弱電解質一定不含離子",
+        "C": "強電解質幾乎完全解離，溶液中可移動離子濃度較高",
+        "D": "導電只靠電子移動，與離子無關"
+      },
+      "new_answer": "C",
+      "new_explanation": "水溶液導電主要靠離子移動；強電解質幾乎完全電離，單位體積內離子多，導電較佳；弱電解質僅部分電離，離子濃度較低。"
+    },
+    {
+      "id": "91ca2c47-1e19-4cb5-b5e1-30039f2f8730",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "AB01",
+      "question": "關於電解質溶液的敘述，下列何者最適當？",
+      "choices": {
+        "A": "溶液中必存在可移動的離子才可能導電",
+        "B": "所有分子溶質皆能導電",
+        "C": "導電與溶質是否為分子無關",
+        "D": "只有固態才能導電"
+      },
+      "answer": "A",
+      "explanation": "水溶液導電與離子是否存在與可移動有關。",
+      "difficulty": "進階",
+      "quiz_id": "9dcc53ed-b2c1-41c4-994b-2c7f719c5a2c",
+      "video_id": "81065903-57eb-4271-a219-86218c749519",
+      "status": "revise",
+      "quality_note": "影片3–7題目對齊標題：電離說／酸的通性／常見的鹼／體積百分濃度；答案分佈調整",
+      "new_question": "將藍色石蕊試紙浸入某酸性水溶液，試紙通常會如何變化？",
+      "new_choices": {
+        "A": "仍維持藍色",
+        "B": "變成綠色",
+        "C": "變成黃色",
+        "D": "變成紅色"
+      },
+      "new_answer": "D",
+      "new_explanation": "酸性溶液會使藍色石蕊試紙變成紅色，這是國中常見的酸鹼檢驗方式之一。"
+    },
+    {
+      "id": "ae59916e-d00b-42e8-b909-6553c909b842",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "AB03",
+      "question": "關於電解質溶液的敘述，下列何者最適當？",
+      "choices": {
+        "A": "溶液中必存在可移動的離子才可能導電",
+        "B": "所有分子溶質皆能導電",
+        "C": "導電與溶質是否為分子無關",
+        "D": "只有固態才能導電"
+      },
+      "answer": "A",
+      "explanation": "水溶液導電與離子是否存在與可移動有關。",
+      "difficulty": "進階",
+      "quiz_id": "3bc128ad-2c68-476d-b4ad-9cb07cddcbef",
+      "video_id": "31cd7012-2fd8-4732-b116-48965c6822f1",
+      "status": "revise",
+      "quality_note": "影片3–7題目對齊標題：電離說／酸的通性／常見的鹼／體積百分濃度；答案分佈調整",
+      "new_question": "實驗室中常見的鹽酸、硫酸、硝酸，下列敘述何者較適當？（強酸具腐蝕性，須依安全規範操作）",
+      "new_choices": {
+        "A": "三者都是常見的鹼類",
+        "B": "皆可視為常用的強酸（依濃度與用途操作）",
+        "C": "三者溶於水後都不產生離子",
+        "D": "僅能用在料理調味，不可用於實驗"
+      },
+      "new_answer": "B",
+      "new_explanation": "鹽酸、硫酸、硝酸均為常見無機強酸（濃稀與危险性不同），溶於水可高度解離；絕非鹼類，實務上也用於多種化學實驗。"
+    },
+    {
+      "id": "25b5585c-da66-47ca-aa2e-358e18a463c4",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "AB04",
+      "question": "關於電解質溶液的敘述，下列何者最適當？",
+      "choices": {
+        "A": "溶液中必存在可移動的離子才可能導電",
+        "B": "所有分子溶質皆能導電",
+        "C": "導電與溶質是否為分子無關",
+        "D": "只有固態才能導電"
+      },
+      "answer": "A",
+      "explanation": "水溶液導電與離子是否存在與可移動有關。",
+      "difficulty": "進階",
+      "quiz_id": "558a08df-1c45-47ff-902d-5c5faaa263db",
+      "video_id": "e72901bc-734f-4b63-9442-8c285c8b1c0b",
+      "status": "revise",
+      "quality_note": "影片3–7題目對齊標題：電離說／酸的通性／常見的鹼／體積百分濃度；答案分佈調整",
+      "new_question": "下列何者較屬於「常見的鹼」之例？（強鹼濃溶液具腐蝕性）",
+      "new_choices": {
+        "A": "食醋",
+        "B": "氫氧化鈉（苛性鈉）溶液",
+        "C": "檸檬汁",
+        "D": "稀鹽酸"
+      },
+      "new_answer": "B",
+      "new_explanation": "氫氧化鈉是常見強鹼；食醋、檸檬汁為酸性，稀鹽酸為酸類。"
+    },
+    {
+      "id": "1121d9fc-5387-42ef-9a1a-75d312c9f3b9",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO02",
+      "question": "關於電解質溶液的敘述，下列何者最適當？",
+      "choices": {
+        "A": "溶液中必存在可移動的離子才可能導電",
+        "B": "所有分子溶質皆能導電",
+        "C": "導電與溶質是否為分子無關",
+        "D": "只有固態才能導電"
+      },
+      "answer": "A",
+      "explanation": "水溶液導電與離子是否存在與可移動有關。",
+      "difficulty": "進階",
+      "quiz_id": "4f4529c9-0321-485c-bb56-d6d450a79e5d",
+      "video_id": "cfe52ca6-0ab8-4d19-a585-c2647517a974",
+      "status": "revise",
+      "quality_note": "影片3–7題目對齊標題：電離說／酸的通性／常見的鹼／體積百分濃度；答案分佈調整",
+      "new_question": "取 20 mL 酒精與 80 mL 水混合成 100 mL 溶液（假設體積可加算），酒精的體積百分濃度約為多少？",
+      "new_choices": {
+        "A": "10%",
+        "B": "40%",
+        "C": "20%",
+        "D": "80%"
+      },
+      "new_answer": "C",
+      "new_explanation": "體積百分濃度 = 溶質體積／溶液總體積 × 100% = 20／100 × 100% = 20%。"
+    },
+    {
+      "id": "5801adc5-05e9-4fbd-94d3-f7374ef1991e",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "關於電解質溶液的敘述，下列何者最適當？",
+      "choices": {
+        "A": "溶液中必存在可移動的離子才可能導電",
+        "B": "所有分子溶質皆能導電",
+        "C": "導電與溶質是否為分子無關",
+        "D": "只有固態才能導電"
+      },
+      "answer": "A",
+      "explanation": "水溶液導電與離子是否存在與可移動有關。",
+      "difficulty": "進階",
+      "quiz_id": "42721aaf-a416-49cd-ba96-73c386254969",
+      "video_id": "696b1126-0dd7-474a-9619-832aadb2042e",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "34b09751-12e8-4cfc-9c26-6ace10dfea6d",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "關於電解質溶液的敘述，下列何者最適當？",
+      "choices": {
+        "A": "溶液中必存在可移動的離子才可能導電",
+        "B": "所有分子溶質皆能導電",
+        "C": "導電與溶質是否為分子無關",
+        "D": "只有固態才能導電"
+      },
+      "answer": "A",
+      "explanation": "水溶液導電與離子是否存在與可移動有關。",
+      "difficulty": "進階",
+      "quiz_id": "d15f08fd-25b3-4c39-8f4e-b7f8a4cf7cc2",
+      "video_id": "c5f121b5-a8a1-4b75-b011-bee9155d0fd0",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "4f407cfd-8975-4be6-aff5-d5ce0454663b",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "關於電解質溶液的敘述，下列何者最適當？",
+      "choices": {
+        "A": "溶液中必存在可移動的離子才可能導電",
+        "B": "所有分子溶質皆能導電",
+        "C": "導電與溶質是否為分子無關",
+        "D": "只有固態才能導電"
+      },
+      "answer": "A",
+      "explanation": "水溶液導電與離子是否存在與可移動有關。",
+      "difficulty": "進階",
+      "quiz_id": "37527b77-2a68-4c84-9262-ce10f0be294f",
+      "video_id": "ce2d1536-fabc-4f59-8634-26d319431191",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "6f461c63-fa97-4f12-8dfc-0d583a3c01a3",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "關於電解質溶液的敘述，下列何者最適當？",
+      "choices": {
+        "A": "溶液中必存在可移動的離子才可能導電",
+        "B": "所有分子溶質皆能導電",
+        "C": "導電與溶質是否為分子無關",
+        "D": "只有固態才能導電"
+      },
+      "answer": "A",
+      "explanation": "水溶液導電與離子是否存在與可移動有關。",
+      "difficulty": "進階",
+      "quiz_id": "605598cb-6e43-4fe4-8172-a098ecf744a3",
+      "video_id": "d4c8635b-8a8c-47a4-b867-9c366f4f7533",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "4f5a757a-a96d-40f4-b380-2d8460ba8330",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL01",
+      "question": "關於電解質溶液的敘述，下列何者最適當？",
+      "choices": {
+        "A": "溶液中必存在可移動的離子才可能導電",
+        "B": "所有分子溶質皆能導電",
+        "C": "導電與溶質是否為分子無關",
+        "D": "只有固態才能導電"
+      },
+      "answer": "A",
+      "explanation": "水溶液導電與離子是否存在與可移動有關。",
+      "difficulty": "進階",
+      "quiz_id": "3a30e87c-b1a7-411e-b2c4-99b401339284",
+      "video_id": "5ef092a9-4d7a-4cb9-94dc-80356cd1cc62",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "008fe8cb-cd21-4466-aed3-a7c1829a88cb",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL02",
+      "question": "下列何者屬於「電解質」？",
+      "choices": {
+        "A": "氯化鈉",
+        "B": "蔗糖",
+        "C": "酒精",
+        "D": "食用油"
+      },
+      "answer": "A",
+      "explanation": "氯化鈉溶於水可解離出離子，屬電解質。",
+      "difficulty": "基礎",
+      "quiz_id": "f04a3c96-f43f-4bc7-bae5-464a0c5ff737",
+      "video_id": "17ec85fe-b723-4c98-aa6f-8d1135729788",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "7aef95b7-d5c9-49dc-a867-330dc48d4b9c",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL02",
+      "question": "下列何者屬於「電解質」？",
+      "choices": {
+        "A": "氯化鈉",
+        "B": "蔗糖",
+        "C": "酒精",
+        "D": "食用油"
+      },
+      "answer": "A",
+      "explanation": "氯化鈉溶於水可解離出離子，屬電解質。",
+      "difficulty": "基礎",
+      "quiz_id": "99b71d06-6ff3-4bbb-bfde-7ec853ff2485",
+      "video_id": "00d86262-5ab3-4d47-be63-414c64622b2c",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "d61d433a-ec89-49f3-8825-db6d6ad6d8bc",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL02",
+      "question": "下列何者最可能是「非電解質」？",
+      "choices": {
+        "A": "葡萄糖水溶液不導電且溶質為分子",
+        "B": "鹽酸溶液",
+        "C": "氫氧化鈉溶液",
+        "D": "氯化鈣溶液"
+      },
+      "answer": "A",
+      "explanation": "非電解質溶於水仍以分子形式存在，溶液通常不導電。",
+      "difficulty": "進階",
+      "quiz_id": "7e431ffa-217f-49d1-a5af-8e1f0e8d5aaa",
+      "video_id": "3f9ec9f6-9b42-4801-a362-f9f55b4c91fc",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "4f550fe7-11f3-4b5e-9a91-e8f4e6043565",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL03",
+      "question": "純水導電性極弱，加入少量氯化鈉後導電性明顯上升，主因為何？",
+      "choices": {
+        "A": "產生可移動的鈉離子與氯離子",
+        "B": "水變成金屬",
+        "C": "氯化鈉阻斷電流",
+        "D": "僅水分子增加"
+      },
+      "answer": "A",
+      "explanation": "解離出離子使溶液可導電。",
+      "difficulty": "進階",
+      "quiz_id": "a3672a70-c702-4c90-8ce8-957985e2716c",
+      "video_id": "f9991b85-ad15-431c-8146-f079c9c33453",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "b7d5612c-a17c-412c-9d43-7fb2be57b3be",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO03",
+      "question": "將 6.3 公克的 HNO₃ 溶於水，配成 250 毫升的溶液，則莫耳濃度為多少 M？（HNO₃ 莫耳質量以 63 g／mol 計）",
+      "choices": {
+        "A": "1.6",
+        "B": "0.4",
+        "C": "0.8",
+        "D": "0.2"
+      },
+      "answer": "B",
+      "explanation": "n = 6.3／63 = 0.1 mol；250 mL = 0.25 L；M = 0.1／0.25 = 0.4 M。",
+      "difficulty": "基礎",
+      "quiz_id": "006e5ef6-d448-4b1e-a439-01a4116f7644",
+      "video_id": "c788459e-343b-4ff2-9d6b-14af4232947d",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "f23f3bf4-28a5-45d8-83f2-7aa7195c13ac",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "NE02",
+      "question": "中和反應完成時（滴定終點），若為強酸強鹼，下列何者較常見？",
+      "choices": {
+        "A": "pH≈7（水溶液、常溫近似）",
+        "B": "pH 必為 0",
+        "C": "pH 必為 14",
+        "D": "與酸鹼種類無關必為 10"
+      },
+      "answer": "A",
+      "explanation": "強酸強鹼中和生成鹽與水，稀水溶液近似中性。",
+      "difficulty": "基礎",
+      "quiz_id": "f11e2936-6665-4e42-99f7-d03f5e907881",
+      "video_id": "5ecb5aea-bb49-45ee-b0b9-9b3ca395d2c6",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "5cb8e479-1ca5-45f8-ba03-3ccf0010a397",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL02",
+      "question": "下列何者屬於「電解質」？",
+      "choices": {
+        "A": "氯化鈉",
+        "B": "蔗糖",
+        "C": "酒精",
+        "D": "食用油"
+      },
+      "answer": "A",
+      "explanation": "氯化鈉溶於水可解離出離子，屬電解質。",
+      "difficulty": "基礎",
+      "quiz_id": "37527b77-2a68-4c84-9262-ce10f0be294f",
+      "video_id": "ce2d1536-fabc-4f59-8634-26d319431191",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "693142af-3e43-4d4b-90cb-c7f4a48bb7b6",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL02",
+      "question": "下列何者屬於「電解質」？",
+      "choices": {
+        "A": "氯化鈉",
+        "B": "蔗糖",
+        "C": "酒精",
+        "D": "食用油"
+      },
+      "answer": "A",
+      "explanation": "氯化鈉溶於水可解離出離子，屬電解質。",
+      "difficulty": "基礎",
+      "quiz_id": "7b0a5355-4683-4879-886e-b83d98fd9969",
+      "video_id": "a5ffefbc-fe00-4374-a5f3-9406525929e1",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "e8d641b1-0453-4718-8206-0ebcde9115f8",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO03",
+      "question": "將 49 公克的 H₂SO₄ 溶於水，配成 100 毫升的溶液，則莫耳濃度為多少 M？（H₂SO₄ 莫耳質量以 98 g／mol 計）",
+      "choices": {
+        "A": "0.5",
+        "B": "2.5",
+        "C": "10",
+        "D": "5"
+      },
+      "answer": "D",
+      "explanation": "n = 49／98 = 0.5 mol；100 mL = 0.1 L；M = 0.5／0.1 = 5 M。",
+      "difficulty": "基礎",
+      "quiz_id": "d4ed55ef-607e-4edb-8285-44948b3a39ea",
+      "video_id": "73e73b7f-bf8c-426f-a564-23eea3163e9b",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "f262fa15-41e6-4182-a36b-01627f77759d",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL02",
+      "question": "下列何者屬於「電解質」？",
+      "choices": {
+        "A": "氯化鈉",
+        "B": "蔗糖",
+        "C": "酒精",
+        "D": "食用油"
+      },
+      "answer": "A",
+      "explanation": "氯化鈉溶於水可解離出離子，屬電解質。",
+      "difficulty": "基礎",
+      "quiz_id": "89fb0c6a-1c0a-4fbf-a4f4-ec6887fe18b2",
+      "video_id": "5c687384-0f52-4c08-b3ff-416c15049f97",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "25d6da95-8dfe-41a7-920f-612588b18bc9",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL04",
+      "question": "欲判斷某固體溶於水後是否為電解質，實驗上常測量什麼？",
+      "choices": {
+        "A": "水溶液是否導電",
+        "B": "顏色深淺",
+        "C": "密度是否為 1",
+        "D": "沸點是否為 100℃"
+      },
+      "answer": "A",
+      "explanation": "導電性為常見判別方式之一。",
+      "difficulty": "基礎",
+      "quiz_id": "a3672a70-c702-4c90-8ce8-957985e2716c",
+      "video_id": "f9991b85-ad15-431c-8146-f079c9c33453",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "73f09d38-7e3e-4c42-987e-0c8054e02778",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL02",
+      "question": "下列何者屬於「電解質」？",
+      "choices": {
+        "A": "氯化鈉",
+        "B": "蔗糖",
+        "C": "酒精",
+        "D": "食用油"
+      },
+      "answer": "A",
+      "explanation": "氯化鈉溶於水可解離出離子，屬電解質。",
+      "difficulty": "基礎",
+      "quiz_id": "3a30e87c-b1a7-411e-b2c4-99b401339284",
+      "video_id": "5ef092a9-4d7a-4cb9-94dc-80356cd1cc62",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "68ed698b-3c16-47cc-b4f9-2e8b78a1565e",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "AB06",
+      "question": "下列何者「不適合」單靠嗅聞來辨識強酸強鹼？",
+      "choices": {
+        "A": "為安全，避免直接近距離吸入揮發性酸鹼",
+        "B": "弱酸的稀溶液",
+        "C": "食鹽水",
+        "D": "糖水"
+      },
+      "answer": "A",
+      "explanation": "實驗安全：勿直接聞強酸、強鹼與不明化學品。",
+      "difficulty": "基礎",
+      "quiz_id": "f5dd7f66-41d9-48cd-a85e-cdbee8021404",
+      "video_id": "d4d2742f-3012-4165-8453-7a5967a985ad",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "a55ff2d2-8a33-4503-915a-5626d77d57d3",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO04",
+      "question": "「將濃溶液加水稀釋」後，同一溶液的體積莫耳濃度通常？",
+      "choices": {
+        "A": "變小",
+        "B": "變大",
+        "C": "一定不變",
+        "D": "恒為 1 M"
+      },
+      "answer": "A",
+      "explanation": "體積變大而溶質莫耳數不變，濃度下降。",
+      "difficulty": "基礎",
+      "quiz_id": "a81939c0-ee8d-47d2-9508-f17c298b1abd",
+      "video_id": "89a95fb9-42ed-4581-a4e2-a94a55e0de78",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "2ba0a67b-3ee3-4abd-901b-bdfdd364d3d7",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL02",
+      "question": "下列何者最可能是「非電解質」？",
+      "choices": {
+        "A": "葡萄糖水溶液不導電且溶質為分子",
+        "B": "鹽酸溶液",
+        "C": "氫氧化鈉溶液",
+        "D": "氯化鈣溶液"
+      },
+      "answer": "A",
+      "explanation": "非電解質溶於水仍以分子形式存在，溶液通常不導電。",
+      "difficulty": "進階",
+      "quiz_id": "f04a3c96-f43f-4bc7-bae5-464a0c5ff737",
+      "video_id": "17ec85fe-b723-4c98-aa6f-8d1135729788",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "1ec3cbae-3b47-4328-a6b7-7c7439061b0a",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO01",
+      "question": "同一水溶液，以不同表示法描述「濃」的程度時，下列何者正確？",
+      "choices": {
+        "A": "不同表示法之間可藉密度、莫耳質量等換算",
+        "B": "重量百分與莫耳濃度永遠數值相同",
+        "C": "莫耳濃度與溶液體積無關",
+        "D": "重量百分與溶質種類無關"
+      },
+      "answer": "A",
+      "explanation": "不同濃度標示可換算，但數值不一定相同。",
+      "difficulty": "進階",
+      "quiz_id": "fd2c374b-9d96-4d0d-a6d4-f541674755c1",
+      "video_id": "a174d9f5-adf5-4ced-a9bf-235a4d922a91",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "62536bbd-fca4-409d-baa0-3ddb05716b75",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO03",
+      "question": "計算題中「由濃度與體積求莫耳數」應使用？",
+      "choices": {
+        "A": "n = M × V（升的乘積）",
+        "B": "n = M ÷ V",
+        "C": "n = M + V",
+        "D": "n 與 V 無關"
+      },
+      "answer": "A",
+      "explanation": "莫耳數 = 體積莫耳濃度 × 體積（L）。",
+      "difficulty": "基礎",
+      "quiz_id": "f11e2936-6665-4e42-99f7-d03f5e907881",
+      "video_id": "5ecb5aea-bb49-45ee-b0b9-9b3ca395d2c6",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "c6b1d760-7272-4524-a9a9-835a6cb1d1dc",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL02",
+      "question": "下列何者最可能是「非電解質」？",
+      "choices": {
+        "A": "葡萄糖水溶液不導電且溶質為分子",
+        "B": "鹽酸溶液",
+        "C": "氫氧化鈉溶液",
+        "D": "氯化鈣溶液"
+      },
+      "answer": "A",
+      "explanation": "非電解質溶於水仍以分子形式存在，溶液通常不導電。",
+      "difficulty": "進階",
+      "quiz_id": "99b71d06-6ff3-4bbb-bfde-7ec853ff2485",
+      "video_id": "00d86262-5ab3-4d47-be63-414c64622b2c",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "7c07db7e-cb00-492c-98e2-7b36d8b958b5",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO04",
+      "question": "將鹼性溶液稀釋（僅加水），[OH⁻] 與 pH 的變化何者較合理？",
+      "choices": {
+        "A": "[OH⁻] 下降、pH 下降（往中性靠近）",
+        "B": "[OH⁻] 上升、pH 上升",
+        "C": "[OH⁻] 不變、pH 不變",
+        "D": "[OH⁻] 下降、pH 上升"
+      },
+      "answer": "A",
+      "explanation": "稀釋使 [OH⁻] 降低，鹼性變弱，pH 向 7 靠近（數值變小）。",
+      "difficulty": "進階",
+      "quiz_id": "33bfe191-7b4b-49c3-863f-70a453927d0c",
+      "video_id": "035b5867-0622-44d8-a819-a940755c5d74",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "87fa6fe6-e1da-4b1e-8d21-0cb6e1cd92b2",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO03",
+      "question": "將 9.8 公克的 H₂SO₄ 溶於水，配成 20 毫升的溶液，則莫耳濃度為多少 M？（H₂SO₄ 莫耳質量以 98 g／mol 計）",
+      "choices": {
+        "A": "10",
+        "B": "0.5",
+        "C": "2.5",
+        "D": "5"
+      },
+      "answer": "D",
+      "explanation": "n = 9.8／98 = 0.1 mol；20 mL = 0.02 L；M = 0.1／0.02 = 5 M。",
+      "difficulty": "基礎",
+      "quiz_id": "006e5ef6-d448-4b1e-a439-01a4116f7644",
+      "video_id": "c788459e-343b-4ff2-9d6b-14af4232947d",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "60258dac-f437-433e-9d97-c0965b9639f3",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL03",
+      "question": "電解質水溶液能導電的主要原因為何？",
+      "choices": {
+        "A": "溶液中有可自由移動的離子",
+        "B": "只有水分子碰撞",
+        "C": "溶質皆為金屬",
+        "D": "與溫度無關"
+      },
+      "answer": "A",
+      "explanation": "離子在電場下移動形成電流。",
+      "difficulty": "基礎",
+      "quiz_id": "7e431ffa-217f-49d1-a5af-8e1f0e8d5aaa",
+      "video_id": "3f9ec9f6-9b42-4801-a362-f9f55b4c91fc",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "aef65ecd-58fc-4599-ad12-a970fd80a87d",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "AB02",
+      "question": "下列何者屬於「電解質」？",
+      "choices": {
+        "A": "氯化鈉",
+        "B": "蔗糖",
+        "C": "酒精",
+        "D": "食用油"
+      },
+      "answer": "A",
+      "explanation": "氯化鈉溶於水可解離出離子，屬電解質。",
+      "difficulty": "基礎",
+      "quiz_id": "558a08df-1c45-47ff-902d-5c5faaa263db",
+      "video_id": "e72901bc-734f-4b63-9442-8c285c8b1c0b",
+      "status": "revise",
+      "quality_note": "影片3–7題目對齊標題：電離說／酸的通性／常見的鹼／體積百分濃度；答案分佈調整",
+      "new_question": "將紅色石蕊試紙浸入某鹼性水溶液，試紙通常會如何變化？",
+      "new_choices": {
+        "A": "變藍",
+        "B": "變黃",
+        "C": "維持紅色不變",
+        "D": "變綠"
+      },
+      "new_answer": "A",
+      "new_explanation": "鹼性溶液會使紅色石蕊試紙變藍，與酸使藍色石蕊變紅相對。"
+    },
+    {
+      "id": "12679627-cf5f-479e-8776-907bbad0659e",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO03",
+      "question": "同溶質兩溶液混合後總體積增大、溶質莫耳數不變，混合後濃度通常？",
+      "choices": {
+        "A": "介於兩者之間或符合加權平均，且不會高於較濃者原濃度",
+        "B": "必高於兩者",
+        "C": "必為零",
+        "D": "必等於兩者相加"
+      },
+      "answer": "A",
+      "explanation": "濃度為總莫耳數除以總體積，一般介於兩者之間。",
+      "difficulty": "進階",
+      "quiz_id": "aa6ddda4-80d3-4785-8393-68115a558019",
+      "video_id": "c86677de-9ea8-4d6e-8964-47ce536a62b8",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "294d2d18-24d1-41ee-a49b-876e28e226be",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO01",
+      "question": "下列何者屬於「電解質」？",
+      "choices": {
+        "A": "氯化鈉",
+        "B": "蔗糖",
+        "C": "酒精",
+        "D": "食用油"
+      },
+      "answer": "A",
+      "explanation": "氯化鈉溶於水可解離出離子，屬電解質。",
+      "difficulty": "基礎",
+      "quiz_id": "4f4529c9-0321-485c-bb56-d6d450a79e5d",
+      "video_id": "cfe52ca6-0ab8-4d19-a585-c2647517a974",
+      "status": "revise",
+      "quality_note": "影片3–7題目對齊標題：電離說／酸的通性／常見的鹼／體積百分濃度；答案分佈調整",
+      "new_question": "下列敘述何者較符合「體積百分濃度變高」的意義？",
+      "new_choices": {
+        "A": "同一杯溶液中，溶質體積變少、溶劑體積變多",
+        "B": "溶質與溶劑體積比永遠固定不變",
+        "C": "溶液總體積變大而溶質體積為零",
+        "D": "在相同溶液体積下，所含溶質體積占的比例上升"
+      },
+      "new_answer": "D",
+      "new_explanation": "濃度升高代表溶質在溶液中所占比例增加；通常是溶質相對變多或溶劑相對變少，使同一體積內溶質體積分率上升。"
+    },
+    {
+      "id": "a54f204f-239e-47b2-8a61-317cda287652",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL02",
+      "question": "下列何者屬於「電解質」？",
+      "choices": {
+        "A": "氯化鈉",
+        "B": "蔗糖",
+        "C": "酒精",
+        "D": "食用油"
+      },
+      "answer": "A",
+      "explanation": "氯化鈉溶於水可解離出離子，屬電解質。",
+      "difficulty": "基礎",
+      "quiz_id": "605598cb-6e43-4fe4-8172-a098ecf744a3",
+      "video_id": "d4c8635b-8a8c-47a4-b867-9c366f4f7533",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "13c9a1c2-88e5-41ce-a9db-d95966293e79",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "AB03",
+      "question": "下列何者屬於「電解質」？",
+      "choices": {
+        "A": "氯化鈉",
+        "B": "蔗糖",
+        "C": "酒精",
+        "D": "食用油"
+      },
+      "answer": "A",
+      "explanation": "氯化鈉溶於水可解離出離子，屬電解質。",
+      "difficulty": "基礎",
+      "quiz_id": "3bc128ad-2c68-476d-b4ad-9cb07cddcbef",
+      "video_id": "31cd7012-2fd8-4732-b116-48965c6822f1",
+      "status": "revise",
+      "quality_note": "影片3–7題目對齊標題：電離說／酸的通性／常見的鹼／體積百分濃度；答案分佈調整",
+      "new_question": "碳酸飲料溶有二氧化碳與水作用生成的碳酸。開瓶後壓力降低，氣泡變多，主要與下列何者最有關？",
+      "new_choices": {
+        "A": "壓力降低，氣體溶解度下降，CO₂ 較易逸出",
+        "B": "純水在常溫會自動變成濃硫酸",
+        "C": "碳酸在常壓下完全不能存在",
+        "D": "與體積百分濃度定義無關就代表與溶解無關"
+      },
+      "new_answer": "A",
+      "new_explanation": "氣體溶解度隨壓力升高而增加；開瓶後壓力驟降，過飽和的 CO₂ 容易逸出形成氣泡，與溶質／酸性來源之平衡也有關聯。"
+    },
+    {
+      "id": "51efaac8-99c0-42a6-8b95-9725abb3f643",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "AB05",
+      "question": "將少量酸加入純水中（不計體積變化），[H⁺] 與 pH 的變化趨勢為何？",
+      "choices": {
+        "A": "[H⁺] 上升、pH 下降",
+        "B": "[H⁺] 下降、pH 上升",
+        "C": "兩者都不變",
+        "D": "[H⁺] 下降、pH 下降"
+      },
+      "answer": "A",
+      "explanation": "加酸使 [H⁺] 增大，pH = -log[H⁺] 變小。",
+      "difficulty": "進階",
+      "quiz_id": "f3ef8be3-a960-454f-9a8e-b3a04da2296f",
+      "video_id": "e30aa374-025f-4938-9265-f35d8bab37f0",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "06974569-d4f4-45b2-9f2d-d7f809e80c1c",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL02",
+      "question": "下列何者屬於「電解質」？",
+      "choices": {
+        "A": "氯化鈉",
+        "B": "蔗糖",
+        "C": "酒精",
+        "D": "食用油"
+      },
+      "answer": "A",
+      "explanation": "氯化鈉溶於水可解離出離子，屬電解質。",
+      "difficulty": "基礎",
+      "quiz_id": "42721aaf-a416-49cd-ba96-73c386254969",
+      "video_id": "696b1126-0dd7-474a-9619-832aadb2042e",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "6b23f7ea-ad2a-49c2-b0e0-0c2d907eedb4",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "AB01",
+      "question": "下列何者屬於「電解質」？",
+      "choices": {
+        "A": "氯化鈉",
+        "B": "蔗糖",
+        "C": "酒精",
+        "D": "食用油"
+      },
+      "answer": "A",
+      "explanation": "氯化鈉溶於水可解離出離子，屬電解質。",
+      "difficulty": "基礎",
+      "quiz_id": "9dcc53ed-b2c1-41c4-994b-2c7f719c5a2c",
+      "video_id": "81065903-57eb-4271-a219-86218c749519",
+      "status": "revise",
+      "quality_note": "影片3–7題目對齊標題：電離說／酸的通性／常見的鹼／體積百分濃度；答案分佈調整",
+      "new_question": "下列何者較屬於許多酸類水溶液的共通特徵？",
+      "new_choices": {
+        "A": "使酚酞在酸中呈紅色",
+        "B": "水溶液必為鹼性",
+        "C": "含有較多 H⁺（以水中型態呈現）而表現酸性",
+        "D": "與所有鹽類混合都一定發生中和"
+      },
+      "new_answer": "C",
+      "new_explanation": "酸的共通性可用 H⁺／酸性行為來理解；酚酞在酸性溶液中通常無色，酸也不與「所有」鹽類都中和。"
+    },
+    {
+      "id": "d38f3434-fe22-45b4-a4ff-f431e443a37a",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL03",
+      "question": "純水導電性極弱，加入少量氯化鈉後導電性明顯上升，主因為何？",
+      "choices": {
+        "A": "產生可移動的鈉離子與氯離子",
+        "B": "水變成金屬",
+        "C": "氯化鈉阻斷電流",
+        "D": "僅水分子增加"
+      },
+      "answer": "A",
+      "explanation": "解離出離子使溶液可導電。",
+      "difficulty": "進階",
+      "quiz_id": "0b4216bf-4edc-4d55-a1de-6a52d4344c74",
+      "video_id": "92be7d5a-92f7-4a9a-85ea-35f5094ba94a",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "311b9c56-9af6-48c2-8118-f75c66fee84b",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL02",
+      "question": "下列何者屬於「電解質」？",
+      "choices": {
+        "A": "氯化鈉",
+        "B": "蔗糖",
+        "C": "酒精",
+        "D": "食用油"
+      },
+      "answer": "A",
+      "explanation": "氯化鈉溶於水可解離出離子，屬電解質。",
+      "difficulty": "基礎",
+      "quiz_id": "d15f08fd-25b3-4c39-8f4e-b7f8a4cf7cc2",
+      "video_id": "c5f121b5-a8a1-4b75-b011-bee9155d0fd0",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    },
+    {
+      "id": "b73adc77-e042-4ed1-922c-4e373bf30931",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "EL05",
+      "question": "下列何者屬於「電解質」？",
+      "choices": {
+        "A": "氯化鈉",
+        "B": "蔗糖",
+        "C": "酒精",
+        "D": "食用油"
+      },
+      "answer": "A",
+      "explanation": "氯化鈉溶於水可解離出離子，屬電解質。",
+      "difficulty": "基礎",
+      "quiz_id": "6e68f9c7-914f-49fe-a8bb-b2d81fed9a3d",
+      "video_id": "986f52e5-4567-4682-a60b-7ab15ab718ce",
+      "status": "revise",
+      "quality_note": "影片3–7題目對齊標題：電離說／酸的通性／常見的鹼／體積百分濃度；答案分佈調整",
+      "new_question": "下列何者較符合「弱電解質」在水溶液中的行為？",
+      "new_choices": {
+        "A": "在水中完全不產生任何離子",
+        "B": "在水中必定 100% 解離成離子",
+        "C": "水溶液絕對無法導電",
+        "D": "僅部分解離，溶液中同時存在未解離分子與離子"
+      },
+      "new_answer": "D",
+      "new_explanation": "弱電解質在水中只部分電離，平衡時仍有分子與離子共存；因仍有離子，溶液可能微弱導電，但不如強電解質明顯。"
+    },
+    {
+      "id": "8f042cae-6883-4a1a-9632-582d40b5e3cd",
+      "source_table": "quiz_questions",
+      "unit": "acid_base",
+      "skill_code": "CO04",
+      "question": "多次稀釋計算時，下列何者通常「守恆」？",
+      "choices": {
+        "A": "每次稀釋步驟中，除非添加溶質，否則稀釋液內該溶質莫耳數不減（忽略取出帶走的量需另計）",
+        "B": "濃度守恆",
+        "C": "體積不變",
+        "D": "pH 不變"
+      },
+      "answer": "A",
+      "explanation": "教學題常強調：僅加水稀釋則留在容器內的溶質莫耳數不變；若「取出部分再稀釋」則取出量會帶走莫耳數。本題考「加水稀釋」核心觀念。",
+      "difficulty": "進階",
+      "quiz_id": "5edcf285-7748-41fb-b154-fa490b2f31f8",
+      "video_id": "86c746c5-8f0c-4985-8f21-3a5ec19ee928",
+      "status": "keep",
+      "quality_note": "",
+      "new_question": "",
+      "new_choices": {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": ""
+      },
+      "new_answer": "",
+      "new_explanation": ""
+    }
+  ]
+}

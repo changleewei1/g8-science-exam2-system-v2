@@ -150,6 +150,26 @@ export type QuestionBankItemRow = {
   explanation: string | null;
   sort_order: number;
   source_key: string | null;
+  /** migration 20260409120000；未套用前可能為 undefined */
+  excluded_from_video_quiz_pool?: boolean;
+  created_at: string;
+};
+
+export type ReactionRateQuestionCandidateRow = {
+  id: string;
+  skill_code: string;
+  difficulty: string;
+  question_text: string;
+  choice_a: string;
+  choice_b: string;
+  choice_c: string;
+  choice_d: string;
+  correct_answer: string;
+  explanation: string | null;
+  sort_order: number;
+  source_key: string | null;
+  review_status: "pending" | "promoted" | "rejected";
+  promoted_bank_item_id: string | null;
   created_at: string;
 };
 

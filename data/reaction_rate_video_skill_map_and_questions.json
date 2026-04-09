@@ -1,0 +1,932 @@
+{
+  "meta": {
+    "purpose": "反應速率單元：依影片標題／教學脈絡建議 skill_code（RS01–RS11），並附題庫對照與三題範例（可貼入 ai-question-generator 再請 AI 改寫）。",
+    "source_repo": "g8-science-exam2-system-v2",
+    "unit_title": "反應速率",
+    "unit_scope_note": "v2 skill_tags 僅定義 RS01–RS11；第二節「可逆反應與化學平衡」目前無獨立 EQ 代碼，下列以 RS11／RS04 等做過渡對照，並標註 schema_gap_EQ。",
+    "lecture_pdf_note": "專案目錄內未包含講義 PDF；若你有電子講義，請以講義章節再校對以下 skill 建議。",
+    "generated_at": "2026-04-09",
+    "lecture_pdf_path": "~/Desktop/ai-question-generator/docs/反應速率(教師版).pdf",
+    "lecture_note": "講義與 YouTube 支數對齊：第 1–5 支對應 Ch3-1；第 6–14 支對應 Ch3-2。skill 仍用 RS01–RS11；平衡細部若要獨立追蹤建議日後增 EQ 類代碼。"
+  },
+  "skill_tags_reaction_rate": [
+    {
+      "code": "RS01",
+      "name": "反應速率的意義"
+    },
+    {
+      "code": "RS02",
+      "name": "影響反應速率的因素"
+    },
+    {
+      "code": "RS03",
+      "name": "溫度對反應速率的影響"
+    },
+    {
+      "code": "RS04",
+      "name": "濃度對反應速率的影響"
+    },
+    {
+      "code": "RS05",
+      "name": "比較反應快慢"
+    },
+    {
+      "code": "RS06",
+      "name": "控制變因的判斷"
+    },
+    {
+      "code": "RS07",
+      "name": "生活中的反應速率"
+    },
+    {
+      "code": "RS08",
+      "name": "反應速率的定量比較"
+    },
+    {
+      "code": "RS09",
+      "name": "平均反應速率計算"
+    },
+    {
+      "code": "RS10",
+      "name": "反應速率圖表判讀"
+    },
+    {
+      "code": "RS11",
+      "name": "條件改變下的速率比較"
+    }
+  ],
+  "videos": [
+    {
+      "sort_order": 1,
+      "youtube_url": "https://www.youtube.com/watch?v=sdu-MKCW8pM",
+      "video_title": "1理化-國中-反應速率-第一節-反應速率-重點一-反應速率的快慢",
+      "recommended_skill_code": "RS01",
+      "skill_rationale_zh": "標題為「反應速率的快慢」，對應課程起手式：速率的意義（單位時間內反應物消耗或生成物生成）。",
+      "flags": [],
+      "existing_question_bank_items_for_skill": [
+        {
+          "skill_code": "RS01",
+          "difficulty": "基礎",
+          "question_text": "反應速率表示什麼？",
+          "correct_answer": "A"
+        },
+        {
+          "skill_code": "RS01",
+          "difficulty": "進階",
+          "question_text": "下列何者為反應速率的常用描述？",
+          "correct_answer": "A"
+        }
+      ],
+      "generated_questions_sample": [
+        {
+          "unit": "反應速率",
+          "skill_code": "RS01",
+          "difficulty": "基礎理解",
+          "question_text": "下列敘述何者最適合用來說明「反應速率」的意義？",
+          "choice_a": "單位時間內反應物減少或生成物增加的量",
+          "choice_b": "反應的平衡常數大小",
+          "choice_c": "活化能的總和",
+          "choice_d": "反應物總莫耳數不變",
+          "correct_answer": "A",
+          "explanation": "反應速率描述「多快」發生化學變化，常以單位時間內濃度或量變化表示。常見錯誤提醒：不要把它和平衡常數混成一樣的觀念。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS01",
+          "difficulty": "概念應用",
+          "question_text": "已知某反應在某時間內生成物濃度增加，下列何者最能代表「有反應速率」？",
+          "choice_a": "濃度隨時間改變",
+          "choice_b": "濃度永遠為零",
+          "choice_c": "溫度必為 0K",
+          "choice_d": "系統無粒子運動",
+          "correct_answer": "A",
+          "explanation": "只要有濃度（或量）隨時間變化，代表化學變化正在進行，才有速率可談。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS01",
+          "difficulty": "常見錯誤診斷",
+          "question_text": "有同學說：「反應速率就是反應物的總質量。」此說法主要的錯誤是？",
+          "choice_a": "把「總量」當成「快慢」；速率強調的是變化率",
+          "choice_b": "質量守恆不成立",
+          "choice_c": "生成物沒有質量",
+          "choice_d": "時間與速率無關",
+          "correct_answer": "A",
+          "explanation": "總質量守恆與速率無直接等同；速率關心「每單位時間變化多少」。"
+        }
+      ],
+      "lecture_reference_zh": "教師版 B4 Ch3-1 第一節「反應速率」重點一（P1）：反應速率的快慢；單位時間內反應物／生成物變化量。"
+    },
+    {
+      "sort_order": 2,
+      "youtube_url": "https://www.youtube.com/watch?v=x57sqaTu8og",
+      "video_title": "2理化-國中-反應速率-第一節-反應速率-重點二-影響反應速率的因素1.3＋碰撞學說",
+      "recommended_skill_code": "RS02",
+      "skill_rationale_zh": "前半段影響因素與碰撞學說（溫度、濃度、催化劑、接觸面積等），對應 RS02。",
+      "flags": [],
+      "existing_question_bank_items_for_skill": [
+        {
+          "skill_code": "RS02",
+          "difficulty": "基礎",
+          "question_text": "影響反應速率的常見因素不包含下列何者？",
+          "correct_answer": "A"
+        },
+        {
+          "skill_code": "RS02",
+          "difficulty": "進階",
+          "question_text": "下列何者「通常」會使反應變快？",
+          "correct_answer": "A"
+        }
+      ],
+      "generated_questions_sample": [
+        {
+          "unit": "反應速率",
+          "skill_code": "RS02",
+          "difficulty": "基礎理解",
+          "question_text": "下列何者「通常」會使化學反應速率變快？",
+          "choice_a": "升高溫度（其他條件相近）",
+          "choice_b": "降低反應物濃度",
+          "choice_c": "減少接觸面積",
+          "choice_d": "拿掉催化劑（若原本有）",
+          "correct_answer": "A",
+          "explanation": "升温使粒子動能增加、有效碰撞增加，速率通常變快。常見錯誤提醒：不是「溫度越高產物愈多（平衡）」——升溫同時改變速率與平衡方向，題幹若只問速率，要分開想。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS02",
+          "difficulty": "概念應用",
+          "question_text": "從碰撞學說來看，增加反應物濃度（體積不變）為何可能變快？",
+          "choice_a": "單位體積內粒子數增加，碰撞次數增加",
+          "choice_b": "粒子變大",
+          "choice_c": "活化能必變成零",
+          "choice_d": "反應不再碰撞",
+          "correct_answer": "A",
+          "explanation": "濃度上升使單位體積內粒子更多，碰撞更頻繁。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS02",
+          "difficulty": "常見錯誤診斷",
+          "question_text": "小華認為：「加入催化劑一定讓平衡向右，產物變多。」下列何者正確？",
+          "choice_a": "催化劑主要縮短達平衡的時間，不必然改變平衡位置",
+          "choice_b": "催化劑只影響逆反應",
+          "choice_c": "催化劑會改變反應熱",
+          "choice_d": "催化劑使平衡常數必為 1",
+          "correct_answer": "A",
+          "explanation": "催化劑同等加速正逆反應途徑，通常不改變平衡常數與最終平衡位置。"
+        }
+      ],
+      "lecture_reference_zh": "Ch3-1 重點二（P2–P4）：活性、溫度與碰撞學說相關敘述（因素 1–3）。"
+    },
+    {
+      "sort_order": 3,
+      "youtube_url": "https://www.youtube.com/watch?v=Lef8gc4NRD0",
+      "video_title": "3理化-國中-反應速率-第一節-反應速率-重點二-影響反應速率的因素4.5＋碰撞學說",
+      "recommended_skill_code": "RS02",
+      "skill_rationale_zh": "同「影響因素」重點二延續（題組 4、5），仍屬因素與碰撞學說主軸；實作配題可再細拆 RS03／RS04。",
+      "flags": [],
+      "existing_question_bank_items_for_skill": [
+        {
+          "skill_code": "RS02",
+          "difficulty": "基礎",
+          "question_text": "影響反應速率的常見因素不包含下列何者？",
+          "correct_answer": "A"
+        },
+        {
+          "skill_code": "RS02",
+          "difficulty": "進階",
+          "question_text": "下列何者「通常」會使反應變快？",
+          "correct_answer": "A"
+        }
+      ],
+      "generated_questions_sample": [
+        {
+          "unit": "反應速率",
+          "skill_code": "RS02",
+          "difficulty": "基礎理解",
+          "question_text": "大理石粉末與塊狀大理石在相同鹽酸濃度下，下列何者通常反應較快？",
+          "choice_a": "粉末（接觸面積較大）",
+          "choice_b": "塊狀較快",
+          "choice_c": "兩者一定一樣快",
+          "choice_d": "與面積無關",
+          "correct_answer": "A",
+          "explanation": "接觸面積愈大，表面可反應位置愈多，速率通常愈快。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS02",
+          "difficulty": "概念應用",
+          "question_text": "在討論「濃度對速率」的實驗中，若將酸液濃度加倍、其餘條件固定，下列敘述何者較合理？",
+          "choice_a": "反應通常變快",
+          "choice_b": "反應必停止",
+          "choice_c": "速率必不變",
+          "choice_d": "與碰撞無關",
+          "correct_answer": "A",
+          "explanation": "濃度提高增加碰撞頻率，速率常變快（仍要注意實際測量）。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS02",
+          "difficulty": "常見錯誤診斷",
+          "question_text": "有同學說：「反應物顆粒顏色較深，所以反應一定較快。」這個推論問題在？",
+          "choice_a": "顏色深淺通常不是決定速率的直接因素",
+          "choice_b": "顏色決定活化能",
+          "choice_c": "顏色代表濃度一定較高",
+          "choice_d": "顏色愈深溫度愈低",
+          "correct_answer": "A",
+          "explanation": "顏色多半是觀察線索，不能直接當成速率的因果；要看濃度、溫度、接觸面積、催化劑等。"
+        }
+      ],
+      "lecture_reference_zh": "Ch3-1 重點二（P4–P7）：表面積、濃度、催化劑；碰撞與灰石／硫代硫酸鈉實驗（因素 4–5）。"
+    },
+    {
+      "sort_order": 4,
+      "youtube_url": "https://www.youtube.com/watch?v=H7eivEq8daI",
+      "video_title": "4理化-國中-反應速率-第一節-反應速率-課後練習9",
+      "recommended_skill_code": "RS05",
+      "skill_rationale_zh": "課後練習多為情境比較快慢或判讀何者較快，對應「比較反應快慢」。",
+      "flags": [],
+      "existing_question_bank_items_for_skill": [
+        {
+          "skill_code": "RS05",
+          "difficulty": "基礎",
+          "question_text": "下列何者屬於「定性」比較反應快慢？",
+          "correct_answer": "A"
+        },
+        {
+          "skill_code": "RS05",
+          "difficulty": "進階",
+          "question_text": "相同條件下，粉末狀大理石比塊狀與鹽酸反應更快，主因為何？",
+          "correct_answer": "A"
+        }
+      ],
+      "generated_questions_sample": [
+        {
+          "unit": "反應速率",
+          "skill_code": "RS05",
+          "difficulty": "基礎理解",
+          "question_text": "下列何者屬於「定性」比較反應快慢的常用做法？",
+          "choice_a": "觀察產生氣泡或顏色變化的快慢",
+          "choice_b": "不量測、不比較",
+          "choice_c": "只比較容器顏色而忽略反應本身",
+          "choice_d": "必須先量到活化能才能比較",
+          "correct_answer": "A",
+          "explanation": "課堂常用氣泡、混濁、顏色變化等觀察來比快慢。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS05",
+          "difficulty": "概念應用",
+          "question_text": "兩組實驗要公平比較「大理石與鹽酸」的速率，下列何者必須盡量一致？",
+          "choice_a": "酸濃度、溫度與大理石總質量（或酸體積等條件）",
+          "choice_b": "只統一試管顏色即可",
+          "choice_c": "故意改變溫度與濃度一起變",
+          "choice_d": "不必控制變因",
+          "correct_answer": "A",
+          "explanation": "比較快慢要控制其他變因，只改你想探討的那一项。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS05",
+          "difficulty": "常見錯誤診斷",
+          "question_text": "下列何者「不是」在比較兩組速率時常見的錯誤？",
+          "choice_a": "保持其他條件相同，只改變一個因素",
+          "choice_b": "酸液體積不同卻直接比時間",
+          "choice_c": "溫度不同卻只歸因於濃度",
+          "choice_d": "固體形狀不同卻只說濃度影響",
+          "correct_answer": "A",
+          "explanation": "「控制變因」才是合理作法；B–D 都是常見疏忽。"
+        }
+      ],
+      "lecture_reference_zh": "Ch3-1 課後練習（約 P8）：題 1–10 與因素判斷、課本例題脈絡。"
+    },
+    {
+      "sort_order": 5,
+      "youtube_url": "https://www.youtube.com/watch?v=DphayyMuZbg",
+      "video_title": "5理化-國中-反應速率-第一節-反應速率-課後練習10",
+      "recommended_skill_code": "RS06",
+      "skill_rationale_zh": "練習題常出實驗設計與「控制變因」，對應 RS06。",
+      "flags": [],
+      "existing_question_bank_items_for_skill": [
+        {
+          "skill_code": "RS06",
+          "difficulty": "基礎",
+          "question_text": "探討溫度對速率影響時，應保持下列何者「相同」？",
+          "correct_answer": "A"
+        },
+        {
+          "skill_code": "RS06",
+          "difficulty": "進階",
+          "question_text": "下列何者屬於「操作型定義」的控制變因？",
+          "correct_answer": "A"
+        }
+      ],
+      "generated_questions_sample": [
+        {
+          "unit": "反應速率",
+          "skill_code": "RS06",
+          "difficulty": "基礎理解",
+          "question_text": "想探討「溫度對硫代硫酸鈉與酸反應速率」的影響，下列何者最適合當控制變因策？",
+          "choice_a": "固定濃度與體積，只改變水浴溫度",
+          "choice_b": "同時改變濃度與溫度",
+          "choice_c": "每次換不同酸種類但不說明",
+          "choice_d": "不依用量配方重現實驗",
+          "correct_answer": "A",
+          "explanation": "一次只改溫度，其餘配方固定，才能歸因於溫度。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS06",
+          "difficulty": "概念應用",
+          "question_text": "若要比較兩杯雙氧水分解快慢，但一杯多加二氧化錳、另一杯不加，此實驗主要可比較什麼？",
+          "choice_a": "催化劑的有無對速率之影響",
+          "choice_b": "只有溫度影響",
+          "choice_c": "只有體積影響",
+          "choice_d": "不能比較",
+          "correct_answer": "A",
+          "explanation": "兩杯條件差在催化劑，可比催化劑效應（其餘須盡量相同）。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS06",
+          "difficulty": "常見錯誤診斷",
+          "question_text": "下列何者是「控制變因」最容易出錯的地方？",
+          "choice_a": "同時改變兩個以上因素，卻只下結論怪某一因素",
+          "choice_b": "固定溫度與濃度",
+          "choice_c": "重複實驗取平均",
+          "choice_d": "記錄開始與結束時間",
+          "correct_answer": "A",
+          "explanation": "常見錯誤提醒：實驗結論要對應到「到底改了什麼」。"
+        }
+      ],
+      "lecture_reference_zh": "Ch3-1 課後練習（約 P8–P9）：題 8–13 實驗設計、控制變因、濃度／顆粒／圖表題。"
+    },
+    {
+      "sort_order": 6,
+      "youtube_url": "https://www.youtube.com/watch?v=F7ELlJAQ8Gg",
+      "video_title": "6理化-國中-反應速率-第二節-可逆反應與平衡-重點一-可逆反應",
+      "recommended_skill_code": "RS11",
+      "skill_rationale_zh": "第二節引入可逆與平衡前置。v2 僅有 RS01–RS11，無獨立「化學平衡／EQ」代碼；此影片在教學上銜接「正逆反應同時、最終宏觀濃度看似不變」，與 RS11「條件改變下與速率相關的比較」同一章節脈絡。若產品後續新增 EQ 系列，建議改標 EQ01「可逆反應與動態平衡」。",
+      "flags": [
+        "schema_gap_EQ"
+      ],
+      "existing_question_bank_items_for_skill": [
+        {
+          "skill_code": "RS11",
+          "difficulty": "基礎",
+          "question_text": "在相同起始濃度下，甲組溫度較乙組高，通常甲組初始速率可能？",
+          "correct_answer": "A"
+        },
+        {
+          "skill_code": "RS11",
+          "difficulty": "進階",
+          "question_text": "比較有無催化劑的兩條速率曲線，催化劑通常如何影響路徑？",
+          "correct_answer": "A"
+        }
+      ],
+      "generated_questions_sample": [
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "基礎理解",
+          "question_text": "有關「可逆反應」的敘述，下列何者正確？",
+          "choice_a": "正反應與逆反應可同時進行",
+          "choice_b": "只能正反應發生、逆反應不可能",
+          "choice_c": "逆反應只在高溫才存在",
+          "choice_d": "可逆反應沒有生成物",
+          "correct_answer": "A",
+          "explanation": "可逆表示兩個方向都能發生，微觀上同時進行。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "概念應用",
+          "question_text": "在密閉系統中，某可逆反應達到「化學平衡」時，下列何者正確？",
+          "choice_a": "巨觀上濃度可能不再改變，但微觀上反應仍在進行",
+          "choice_b": "所有粒子停止運動",
+          "choice_c": "正反應停止、只剩逆反應",
+          "choice_d": "逆反應停止、只剩正反應",
+          "correct_answer": "A",
+          "explanation": "動態平衡：v正與 v逆 可能相等，所以巨觀看起來像「停住」。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "常見錯誤診斷",
+          "question_text": "同學說：「平衡就是反應停止了。」錯在？",
+          "choice_a": "巨觀不變≠微觀停止；仍為動態",
+          "choice_b": "平衡時溫度必為 0",
+          "choice_c": "平衡時濃度必為零",
+          "choice_d": "平衡只發生在氣體",
+          "correct_answer": "A",
+          "explanation": "易把「看不見變化」誤會成「沒有反應」。"
+        }
+      ],
+      "lecture_reference_zh": "Ch3-2 第二節「可逆反應與平衡」重點一（P1）：可逆反應；水蒸發／凝結；正逆反應速率相等＝平衡。"
+    },
+    {
+      "sort_order": 7,
+      "youtube_url": "https://www.youtube.com/watch?v=NAVp1dNa0q8",
+      "video_title": "7理化-國中-反應速率-第二節-可逆反應與平衡-重點二-溶解平衡",
+      "recommended_skill_code": "RS04",
+      "skill_rationale_zh": "未溶溶質與溶液間之動態平衡，與濃度／飽和概念密切，過渡期以 RS04「濃度對反應速率的影響」涵蓋溶解─沉澱動態最贴近；若新增 EQ 可改標「溶解平衡」專用碼。",
+      "flags": [
+        "schema_gap_EQ"
+      ],
+      "existing_question_bank_items_for_skill": [
+        {
+          "skill_code": "RS04",
+          "difficulty": "基礎",
+          "question_text": "增加反應物濃度（其他條件相同）通常如何影響速率？",
+          "correct_answer": "A"
+        },
+        {
+          "skill_code": "RS04",
+          "difficulty": "進階",
+          "question_text": "在氣體反應中，縮小容器體積使壓力上升，速率通常？",
+          "correct_answer": "A"
+        }
+      ],
+      "generated_questions_sample": [
+        {
+          "unit": "反應速率",
+          "skill_code": "RS04",
+          "difficulty": "基礎理解",
+          "question_text": "在定溫下，未溶的氯化鈉與飽和溶液並存時，溶解與析出可能達到動態平衡，此時下列何者較合理？",
+          "choice_a": "溶解速率等於析出速率時，固體量可能看似不變",
+          "choice_b": "溶解速率必為零",
+          "choice_c": "析出必停止",
+          "choice_d": "濃度必低於飽和",
+          "correct_answer": "A",
+          "explanation": "飽和與固體共存時，微觀上溶解與析出可同時進行且速率可相等。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS04",
+          "difficulty": "概念應用",
+          "question_text": "定溫時若溶液已飽和，通常再加入少量溶質（不改變溫度），下列何者較常見？",
+          "choice_a": "多餘溶質不再溶解，維持飽和濃度",
+          "choice_b": "濃度無限上升",
+          "choice_c": "必立刻變成不飽和",
+          "choice_d": "與溶解無關",
+          "correct_answer": "A",
+          "explanation": "飽和濃度是該溫度上限；多出的溶質常以固體存在。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS04",
+          "difficulty": "常見錯誤診斷",
+          "question_text": "下列何者「不是」溶質溶解與沉澱動態平衡的合理概念？",
+          "choice_a": "巨觀上溶質量不變就代表沒有任何溶解或析出",
+          "choice_b": "微觀上可能同時溶解與析出",
+          "choice_c": "固液共存時可能達平衡",
+          "choice_d": "溫度改變可能改變飽和度",
+          "correct_answer": "A",
+          "explanation": "巨觀不變仍可能是動態平衡。"
+        }
+      ],
+      "lecture_reference_zh": "Ch3-2 重點二（P1–P2）：溶解平衡、飽和溶液、解離與結晶速率相等。"
+    },
+    {
+      "sort_order": 8,
+      "youtube_url": "https://www.youtube.com/watch?v=OPFk8UMmMAo",
+      "video_title": "8理化-國中-反應速率-第二節-可逆反應與平衡-重點三-鉻酸根離子的可逆反應",
+      "recommended_skill_code": "RS11",
+      "skill_rationale_zh": "酸鹼條件改變造成平衡偏移、顏色變化，屬條件改變下的平衡／速率脈絡，過渡期用 RS11。",
+      "flags": [
+        "schema_gap_EQ"
+      ],
+      "existing_question_bank_items_for_skill": [
+        {
+          "skill_code": "RS11",
+          "difficulty": "基礎",
+          "question_text": "在相同起始濃度下，甲組溫度較乙組高，通常甲組初始速率可能？",
+          "correct_answer": "A"
+        },
+        {
+          "skill_code": "RS11",
+          "difficulty": "進階",
+          "question_text": "比較有無催化劑的兩條速率曲線，催化劑通常如何影響路徑？",
+          "correct_answer": "A"
+        }
+      ],
+      "generated_questions_sample": [
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "基礎理解",
+          "question_text": "鉻酸根／鉻酸氫根等體系中，改變酸鹼条件可能使平衡移動而顏色改變，此現象主要說明什麼？",
+          "choice_a": "條件改變可造成平衡位置改變",
+          "choice_b": "顏色與平衡無關",
+          "choice_c": "酸性必使反應停止",
+          "choice_d": "只有溫度能改變顏色",
+          "correct_answer": "A",
+          "explanation": "離子濃度分佔比改變，溶液顏色跟著變，是平衡移動常見的觀察。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "概念應用",
+          "question_text": "對一已達平衡的可逆反應，下列何者「可能」使平衡狀態改變？",
+          "choice_a": "改變生成物或反應物濃度（其他條件固定下）",
+          "choice_b": "什麼都不能改",
+          "choice_c": "只做巨觀觀察不做推論",
+          "choice_d": "平衡不受任何因素影響",
+          "correct_answer": "A",
+          "explanation": "勒沙特列概念：條件改變時，系統傾向緩和該改變。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "常見錯誤診斷",
+          "question_text": "看到「加酸後顏色變了」就斷言「反應停止」，此說法有何問題？",
+          "choice_a": "顏色變化多半代表平衡移動，正在建立新的動態平衡",
+          "choice_b": "顏色變化代表沒有生成物",
+          "choice_c": "顏色變化代表溫度為絕對零度",
+          "choice_d": "顏色變化只與光無關",
+          "correct_answer": "A",
+          "explanation": "常見錯誤提醒：不要把平衡移動誤以為「反應結束」。"
+        }
+      ],
+      "lecture_reference_zh": "Ch3-2 重點三（P2–P3）：鉻酸根／二鉻酸根、加酸鹼顏色變化、動態平衡。"
+    },
+    {
+      "sort_order": 9,
+      "youtube_url": "https://www.youtube.com/watch?v=yn3xRF-Bsb0",
+      "video_title": "9理化-國中-反應速率-第二節-可逆反應與平衡-重點四-溴水的可逆反應",
+      "recommended_skill_code": "RS11",
+      "skill_rationale_zh": "同為可逆反應與條件控制之示範，建議 RS11；若新增 EQ 可細分。",
+      "flags": [
+        "schema_gap_EQ"
+      ],
+      "existing_question_bank_items_for_skill": [
+        {
+          "skill_code": "RS11",
+          "difficulty": "基礎",
+          "question_text": "在相同起始濃度下，甲組溫度較乙組高，通常甲組初始速率可能？",
+          "correct_answer": "A"
+        },
+        {
+          "skill_code": "RS11",
+          "difficulty": "進階",
+          "question_text": "比較有無催化劑的兩條速率曲線，催化劑通常如何影響路徑？",
+          "correct_answer": "A"
+        }
+      ],
+      "generated_questions_sample": [
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "基礎理解",
+          "question_text": "溴水中存在 Br₂ 與 Br⁻／BrO⁻ 等相關平衡（依教材而定），加入某離子或改變條件後顏色改變，下列敘述何者較合理？",
+          "choice_a": "平衡組成改變，價態分布可能跟著改變",
+          "choice_b": "溴永遠只以 Br₂ 存在",
+          "choice_c": "顏色與物種分佈無關",
+          "choice_d": "加水平衡必不變",
+          "correct_answer": "A",
+          "explanation": "不同價態或物種濃度比改變，會影響顏色與吸收。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "概念應用",
+          "question_text": "若系統達化學平衡後，瞬間加入大量生成物之一（定溫），下列何者較符合勒沙特列的直覺描述？",
+          "choice_a": "系統傾向抵消加入生成物的影響",
+          "choice_b": "平衡完全不被影響",
+          "choice_c": "反應永遠停止",
+          "choice_d": "濃度項不影響平衡",
+          "correct_answer": "A",
+          "explanation": "生成物濃度增大，逆反應傾向增強，使平衡移動。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "常見錯誤診斷",
+          "question_text": "有人說：「把溴水稀釋顏色變淡，代表反應完了。」較正確的看法是？",
+          "choice_a": "稀釋會改變濃度與顏色深淺，不一定是「反應完了」",
+          "choice_b": "顏色淡必無 Br₂",
+          "choice_c": "稀釋必不影響平衡",
+          "choice_d": "只有加深顏色才是平衡",
+          "correct_answer": "A",
+          "explanation": "顏色深淺受濃度影響；要區分「濃度變薄」與「物種消失」。"
+        }
+      ],
+      "lecture_reference_zh": "Ch3-2 重點四（P3–P4）：溴水可逆、Br2＋H2OH^＋＋Br^－＋HBrO；加酸鹼顏色。"
+    },
+    {
+      "sort_order": 10,
+      "youtube_url": "https://www.youtube.com/watch?v=gUjBSSN07S0",
+      "video_title": "10理化-國中-反應速率-第二節-可逆反應與平衡-重點五-平衡移動",
+      "recommended_skill_code": "RS11",
+      "skill_rationale_zh": "勒沙特列／平衡移動主題，v2 以 RS11 統括「條件改變』之教學；若新增 EQ 建議獨立 EQ 碼。",
+      "flags": [
+        "schema_gap_EQ"
+      ],
+      "existing_question_bank_items_for_skill": [
+        {
+          "skill_code": "RS11",
+          "difficulty": "基礎",
+          "question_text": "在相同起始濃度下，甲組溫度較乙組高，通常甲組初始速率可能？",
+          "correct_answer": "A"
+        },
+        {
+          "skill_code": "RS11",
+          "difficulty": "進階",
+          "question_text": "比較有無催化劑的兩條速率曲線，催化劑通常如何影響路徑？",
+          "correct_answer": "A"
+        }
+      ],
+      "generated_questions_sample": [
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "基礎理解",
+          "question_text": "勒沙特列原理可用來定性描述：`當平衡系統受到外力改變時，平衡會往減輕該改變的方向移動`。下列何者屬於「改變條件」的例子？",
+          "choice_a": "定溫下增加某反應物濃度",
+          "choice_b": "完全不改變任何條件",
+          "choice_c": "固定溫度與濃度只做觀察",
+          "choice_d": "系統不存在可逆反應",
+          "correct_answer": "A",
+          "explanation": "濃度、溫度、壓力（氣體）等改變都可能驅動平衡移動。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "概念應用",
+          "question_text": "某氣體可逆反應達平衡後，在定溫下「縮小容器體積」使總壓上升，下列敘述何者較合理？",
+          "choice_a": "氣體總莫耳數較少的一側可能較受影響（依反應式係數判斷）",
+          "choice_b": "壓力永遠不影響平衡",
+          "choice_c": "體積變小必不改變濃度",
+          "choice_d": "平衡必不移動",
+          "correct_answer": "A",
+          "explanation": "國中階段重點是「濃度／分壓改變」與方向判斷的直覺；實例係數需看題目。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "常見錯誤診斷",
+          "question_text": "同學記成：「勒沙特列說改變後平衡會完全抵消。」錯在？",
+          "choice_a": "原理是「緩和」，通常不代表完全回到原狀",
+          "choice_b": "平衡移動必停止所有反應",
+          "choice_c": "改變條件必然無效",
+          "choice_d": "平衡與溫度無關",
+          "correct_answer": "A",
+          "explanation": "常見錯誤提醒：是「趨向緩和」，不是「百分之一百補救回原狀」。"
+        }
+      ],
+      "lecture_reference_zh": "Ch3-2 重點五（P4）：平衡移動；改變濃度／溫度／壓力；新平衡。"
+    },
+    {
+      "sort_order": 11,
+      "youtube_url": "https://www.youtube.com/watch?v=bNN07cyxodg",
+      "video_title": "11理化-國中-反應速率-第二節-可逆反應與平衡-重點五-平衡移動-即時演練12",
+      "recommended_skill_code": "RS11",
+      "skill_rationale_zh": "平衡移動演練，RS11（或未來 EQ）。",
+      "flags": [
+        "schema_gap_EQ"
+      ],
+      "existing_question_bank_items_for_skill": [
+        {
+          "skill_code": "RS11",
+          "difficulty": "基礎",
+          "question_text": "在相同起始濃度下，甲組溫度較乙組高，通常甲組初始速率可能？",
+          "correct_answer": "A"
+        },
+        {
+          "skill_code": "RS11",
+          "difficulty": "進階",
+          "question_text": "比較有無催化劑的兩條速率曲線，催化劑通常如何影響路徑？",
+          "correct_answer": "A"
+        }
+      ],
+      "generated_questions_sample": [
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "基礎理解",
+          "question_text": "關於化學平衡移動，下列何者正確？",
+          "choice_a": "改變濃度或溫度等條件，可能使平衡位置改變",
+          "choice_b": "平衡一旦形成就再也不能改變",
+          "choice_c": "改變條件不影響正逆反應速率",
+          "choice_d": "平衡時 v正 必為 0",
+          "correct_answer": "A",
+          "explanation": "條件改變會改變正逆反應速率相對大小，導致平衡移動。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "概念應用",
+          "question_text": "定溫下若移除部分生成物（連續抽走），在可逆反應中通常會促進什麼？",
+          "choice_a": "正反應方向產生更多生成物以「部分」補回被移走的影響",
+          "choice_b": "逆反應立即停止永不恢復",
+          "choice_c": "系統必不再達平衡",
+          "choice_d": "生成物濃度必永遠為零",
+          "correct_answer": "A",
+          "explanation": "勒沙特列：減少生成物，系統傾向再生成生成物。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "常見錯誤診斷",
+          "question_text": "演練題常見錯誤：把「吸熱／放熱」與「升溫必使產率變多」劃上等號。下列提醒何者較適當？",
+          "choice_a": "升溫會改變正逆反應速率，但是否「產物變多」要看反應吸放熱與平衡位置",
+          "choice_b": "升溫必定使產物莫耳數變多",
+          "choice_c": "升溫只影響逆反應",
+          "choice_d": "溫度與平衡無關",
+          "correct_answer": "A",
+          "explanation": "常見錯誤提醒：速率變快 ≠ 平衡必往產物多那一側。"
+        }
+      ],
+      "lecture_reference_zh": "Ch3-2 即時演練（P4–P5）：題 1–7 等，與鉻酸／溴水／平衡概念。"
+    },
+    {
+      "sort_order": 12,
+      "youtube_url": "https://www.youtube.com/watch?v=rvczJif1toA",
+      "video_title": "12理化-國中-反應速率-第二節-可逆反應與平衡-重點五-平衡移動-即時演練14",
+      "recommended_skill_code": "RS11",
+      "skill_rationale_zh": "演練題，RS11。",
+      "flags": [
+        "schema_gap_EQ"
+      ],
+      "existing_question_bank_items_for_skill": [
+        {
+          "skill_code": "RS11",
+          "difficulty": "基礎",
+          "question_text": "在相同起始濃度下，甲組溫度較乙組高，通常甲組初始速率可能？",
+          "correct_answer": "A"
+        },
+        {
+          "skill_code": "RS11",
+          "difficulty": "進階",
+          "question_text": "比較有無催化劑的兩條速率曲線，催化劑通常如何影響路徑？",
+          "correct_answer": "A"
+        }
+      ],
+      "generated_questions_sample": [
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "基礎理解",
+          "question_text": "關於化學平衡移動，下列何者正確？",
+          "choice_a": "改變濃度或溫度等條件，可能使平衡位置改變",
+          "choice_b": "平衡一旦形成就再也不能改變",
+          "choice_c": "改變條件不影響正逆反應速率",
+          "choice_d": "平衡時 v正 必為 0",
+          "correct_answer": "A",
+          "explanation": "條件改變會改變正逆反應速率相對大小，導致平衡移動。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "概念應用",
+          "question_text": "定溫下若移除部分生成物（連續抽走），在可逆反應中通常會促進什麼？",
+          "choice_a": "正反應方向產生更多生成物以「部分」補回被移走的影響",
+          "choice_b": "逆反應立即停止永不恢復",
+          "choice_c": "系統必不再達平衡",
+          "choice_d": "生成物濃度必永遠為零",
+          "correct_answer": "A",
+          "explanation": "勒沙特列：減少生成物，系統傾向再生成生成物。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "常見錯誤診斷",
+          "question_text": "演練題常見錯誤：把「吸熱／放熱」與「升溫必使產率變多」劃上等號。下列提醒何者較適當？",
+          "choice_a": "升溫會改變正逆反應速率，但是否「產物變多」要看反應吸放熱與平衡位置",
+          "choice_b": "升溫必定使產物莫耳數變多",
+          "choice_c": "升溫只影響逆反應",
+          "choice_d": "溫度與平衡無關",
+          "correct_answer": "A",
+          "explanation": "常見錯誤提醒：速率變快 ≠ 平衡必往產物多那一側。"
+        }
+      ],
+      "lecture_reference_zh": "Ch3-2 即時演練（P5–P6）：題 8–20。"
+    },
+    {
+      "sort_order": 13,
+      "youtube_url": "https://www.youtube.com/watch?v=vKHA-Iv6g3U",
+      "video_title": "13理化-國中-反應速率-第二節-可逆反應與平衡-重點五-平衡移動-即時演練15",
+      "recommended_skill_code": "RS11",
+      "skill_rationale_zh": "演練題，RS11。",
+      "flags": [
+        "schema_gap_EQ"
+      ],
+      "existing_question_bank_items_for_skill": [
+        {
+          "skill_code": "RS11",
+          "difficulty": "基礎",
+          "question_text": "在相同起始濃度下，甲組溫度較乙組高，通常甲組初始速率可能？",
+          "correct_answer": "A"
+        },
+        {
+          "skill_code": "RS11",
+          "difficulty": "進階",
+          "question_text": "比較有無催化劑的兩條速率曲線，催化劑通常如何影響路徑？",
+          "correct_answer": "A"
+        }
+      ],
+      "generated_questions_sample": [
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "基礎理解",
+          "question_text": "關於化學平衡移動，下列何者正確？",
+          "choice_a": "改變濃度或溫度等條件，可能使平衡位置改變",
+          "choice_b": "平衡一旦形成就再也不能改變",
+          "choice_c": "改變條件不影響正逆反應速率",
+          "choice_d": "平衡時 v正 必為 0",
+          "correct_answer": "A",
+          "explanation": "條件改變會改變正逆反應速率相對大小，導致平衡移動。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "概念應用",
+          "question_text": "定溫下若移除部分生成物（連續抽走），在可逆反應中通常會促進什麼？",
+          "choice_a": "正反應方向產生更多生成物以「部分」補回被移走的影響",
+          "choice_b": "逆反應立即停止永不恢復",
+          "choice_c": "系統必不再達平衡",
+          "choice_d": "生成物濃度必永遠為零",
+          "correct_answer": "A",
+          "explanation": "勒沙特列：減少生成物，系統傾向再生成生成物。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "常見錯誤診斷",
+          "question_text": "演練題常見錯誤：把「吸熱／放熱」與「升溫必使產率變多」劃上等號。下列提醒何者較適當？",
+          "choice_a": "升溫會改變正逆反應速率，但是否「產物變多」要看反應吸放熱與平衡位置",
+          "choice_b": "升溫必定使產物莫耳數變多",
+          "choice_c": "升溫只影響逆反應",
+          "choice_d": "溫度與平衡無關",
+          "correct_answer": "A",
+          "explanation": "常見錯誤提醒：速率變快 ≠ 平衡必往產物多那一側。"
+        }
+      ],
+      "lecture_reference_zh": "Ch3-2 課後練習／綜合（P6–P8）：可逆反應與平衡選擇題。"
+    },
+    {
+      "sort_order": 14,
+      "youtube_url": "https://www.youtube.com/watch?v=vRpCMCtV_7g",
+      "video_title": "14理化-國中-反應速率-第二節-可逆反應與平衡-重點五-平衡移動-即時演練17",
+      "recommended_skill_code": "RS11",
+      "skill_rationale_zh": "演練題，RS11。",
+      "flags": [
+        "schema_gap_EQ"
+      ],
+      "existing_question_bank_items_for_skill": [
+        {
+          "skill_code": "RS11",
+          "difficulty": "基礎",
+          "question_text": "在相同起始濃度下，甲組溫度較乙組高，通常甲組初始速率可能？",
+          "correct_answer": "A"
+        },
+        {
+          "skill_code": "RS11",
+          "difficulty": "進階",
+          "question_text": "比較有無催化劑的兩條速率曲線，催化劑通常如何影響路徑？",
+          "correct_answer": "A"
+        }
+      ],
+      "generated_questions_sample": [
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "基礎理解",
+          "question_text": "關於化學平衡移動，下列何者正確？",
+          "choice_a": "改變濃度或溫度等條件，可能使平衡位置改變",
+          "choice_b": "平衡一旦形成就再也不能改變",
+          "choice_c": "改變條件不影響正逆反應速率",
+          "choice_d": "平衡時 v正 必為 0",
+          "correct_answer": "A",
+          "explanation": "條件改變會改變正逆反應速率相對大小，導致平衡移動。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "概念應用",
+          "question_text": "定溫下若移除部分生成物（連續抽走），在可逆反應中通常會促進什麼？",
+          "choice_a": "正反應方向產生更多生成物以「部分」補回被移走的影響",
+          "choice_b": "逆反應立即停止永不恢復",
+          "choice_c": "系統必不再達平衡",
+          "choice_d": "生成物濃度必永遠為零",
+          "correct_answer": "A",
+          "explanation": "勒沙特列：減少生成物，系統傾向再生成生成物。"
+        },
+        {
+          "unit": "反應速率",
+          "skill_code": "RS11",
+          "difficulty": "常見錯誤診斷",
+          "question_text": "演練題常見錯誤：把「吸熱／放熱」與「升溫必使產率變多」劃上等號。下列提醒何者較適當？",
+          "choice_a": "升溫會改變正逆反應速率，但是否「產物變多」要看反應吸放熱與平衡位置",
+          "choice_b": "升溫必定使產物莫耳數變多",
+          "choice_c": "升溫只影響逆反應",
+          "choice_d": "溫度與平衡無關",
+          "correct_answer": "A",
+          "explanation": "常見錯誤提醒：速率變快 ≠ 平衡必往產物多那一側。"
+        }
+      ],
+      "lecture_reference_zh": "Ch3-2 課後練習（P8–P11）：綜合題與圖表、生活情境。"
+    }
+  ]
+}

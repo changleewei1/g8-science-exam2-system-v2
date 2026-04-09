@@ -5,6 +5,8 @@ import { StudentBackLink } from "@/components/student/StudentBackLink";
 import { getQuizAttemptDetailUseCase } from "@/infrastructure/composition";
 import { getStudentSession } from "@/lib/session";
 import { buildVideoPageQuery } from "@/lib/student-video-context";
+import { isAcidBaseSkillCode } from "@/lib/acid-base-skills";
+import { isReactionRateSkillCode } from "@/lib/reaction-rate-skills";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +30,8 @@ export default async function QuizResultPage({ params, searchParams }: Props) {
   const data = await uc.execute(attemptId, session.studentId);
   if (!data) notFound();
 
-  const { attempt, quiz, video, questions } = data;
+  const { attempt, quiz, video, questions: rawQuestions } = data;
+  const questions = [...rawQuestions].sort((a, b) => a.sortOrder - b.sortOrder);
 
   const videoBackHref = video
     ? `/student/video/${video.id}${buildVideoPageQuery({ fromTask, taskId })}`
@@ -69,6 +72,8 @@ export default async function QuizResultPage({ params, searchParams }: Props) {
         {questions.map((q, idx) => {
           const ans = data.answers.get(q.id);
           const ok = ans?.is_correct ?? false;
+          const showWrongExplanation =
+            !ok && (isAcidBaseSkillCode(q.skillCode) || isReactionRateSkillCode(q.skillCode));
           return (
             <li
               key={q.id}
@@ -93,23 +98,35 @@ export default async function QuizResultPage({ params, searchParams }: Props) {
                 你的答案：{ans?.selected_answer ?? "—"}{" "}
                 {ok ? (
                   <span className="text-teal-600">（正確）</span>
+                ) : showWrongExplanation ? (
+                  <span className="text-red-600">（答錯）</span>
                 ) : (
                   <span className="text-red-600">（錯誤，正解 {q.correctAnswer}）</span>
                 )}
               </p>
-              {!ok ? (
-                <div className="mt-4 rounded-xl border border-amber-200/90 bg-amber-50/90 px-4 py-3">
-                  <p className="text-sm font-semibold text-amber-950">詳解</p>
-                  {q.explanation?.trim() ? (
-                    <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-slate-800">
-                      {q.explanation.trim()}
-                    </p>
-                  ) : (
-                    <p className="mt-2 text-sm text-slate-600">
-                      本題目前沒有文字詳解，建議對照上方題目與課程影片再複習一次。
-                    </p>
-                  )}
+              {showWrongExplanation ? (
+                <div className="mt-4 space-y-3 rounded-xl border border-amber-200/90 bg-amber-50/90 px-4 py-3">
+                  <p className="text-sm font-semibold text-red-800">本題答錯了</p>
+                  <p className="text-sm text-slate-800">
+                    <span className="font-semibold text-slate-900">正確答案：</span>
+                    {q.correctAnswer}
+                  </p>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">詳解說明</p>
+                    {q.explanation?.trim() ? (
+                      <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-slate-800">
+                        {q.explanation.trim()}
+                      </p>
+                    ) : (
+                      <p className="mt-2 text-sm text-slate-600">本題尚未提供詳解</p>
+                    )}
+                  </div>
                 </div>
+              ) : !ok &&
+                !isAcidBaseSkillCode(q.skillCode) &&
+                !isReactionRateSkillCode(q.skillCode) &&
+                q.explanation?.trim() ? (
+                <p className="mt-3 whitespace-pre-wrap text-sm text-slate-700">{q.explanation.trim()}</p>
               ) : null}
             </li>
           );
