@@ -3,6 +3,11 @@ import type { Video } from "@/domain/entities";
 export interface VideoRepository {
   findById(id: string): Promise<Video | null>;
   findByUnitId(unitId: string): Promise<Video[]>;
+  /** 同一單元＋YouTube 影片 id（若重複匯入可能多筆；取最早建立） */
+  findEarliestByUnitIdAndYoutubeVideoId(
+    unitId: string,
+    youtubeVideoId: string,
+  ): Promise<Video | null>;
   /** 建立任務時選片用 */
   findAllActive(): Promise<Video[]>;
   /** 後台任務指派：含停用影片，避免清單為空或編輯時選項遺失 */

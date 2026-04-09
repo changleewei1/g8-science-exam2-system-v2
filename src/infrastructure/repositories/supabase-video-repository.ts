@@ -19,6 +19,19 @@ export class SupabaseVideoRepository implements VideoRepository {
     return data ? videoFromRow(data as VideoRow) : null;
   }
 
+  async findEarliestByUnitIdAndYoutubeVideoId(unitId: string, youtubeVideoId: string) {
+    const { data, error } = await getSupabaseAdmin()
+      .from("videos")
+      .select("*")
+      .eq("unit_id", unitId)
+      .eq("youtube_video_id", youtubeVideoId)
+      .order("created_at", { ascending: true })
+      .limit(1);
+    throwIfPostgrestError(error);
+    const row = (data as VideoRow[] | null)?.[0];
+    return row ? videoFromRow(row) : null;
+  }
+
   async findByUnitId(unitId: string) {
     const { data, error } = await getSupabaseAdmin()
       .from("videos")

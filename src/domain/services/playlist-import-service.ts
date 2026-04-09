@@ -147,9 +147,16 @@ export class PlaylistImportService {
     );
     await this.enrichDurations(items, input.youtubeApiKey);
 
-    let sort = 0;
+    let imported = 0;
     for (const item of items) {
-      sort += 1;
+      const existing = await this.videoRepo.findEarliestByUnitIdAndYoutubeVideoId(
+        input.unitId,
+        item.youtubeVideoId,
+      );
+      if (existing) {
+        continue;
+      }
+      imported += 1;
       const videoRow: VideoInsert = {
         unit_id: input.unitId,
         youtube_video_id: item.youtubeVideoId,
@@ -160,7 +167,7 @@ export class PlaylistImportService {
         duration_seconds: item.durationSeconds,
         thumbnail_url: item.thumbnailUrl,
         subtitle_text: null,
-        sort_order: sort,
+        sort_order: item.playlistPosition,
         is_active: true,
       };
       const videoId = await this.videoRepo.insertReturningId(videoRow);
@@ -202,7 +209,7 @@ export class PlaylistImportService {
       await this.quizQuestionRepo.insertMany(questions);
     }
 
-    return { imported: items.length };
+    return { imported };
   }
 }
 

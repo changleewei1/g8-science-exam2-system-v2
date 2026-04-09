@@ -2,41 +2,21 @@
  * 依 video_skill_tags 的 skill_code 優先匹配，為每個 quiz 寫入 3 題。
  * 題目來源：優先 public.question_bank_items；若為空則讀取 data/g8_science_exam2_question_bank.json
  * 使用：npm run seed:g8-video-quiz
+ *
+ * 僅處理指定單元（逗號分隔 UUID）：
+ *   SEED_VIDEO_QUIZ_ONLY_UNIT_IDS=b0000001-0000-4000-8000-000000000003 npm run seed:g8-video-quiz
  */
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { config } from "dotenv";
 
 config({ path: ".env.local" });
 config();
 
 import { getSupabaseAdmin } from "../src/infrastructure/supabase/admin-client";
-
-type BankQuestion = {
-  unit: string;
-  skill_code: string;
-  difficulty: string;
-  question_text: string;
-  choice_a: string;
-  choice_b: string;
-  choice_c: string;
-  choice_d: string;
-  correct_answer: string;
-  explanation: string;
-};
-
-const JSON_PATH = "data/g8_science_exam2_question_bank.json";
-
-function loadBankFromFile(): BankQuestion[] {
-  const path = join(process.cwd(), JSON_PATH);
-  const raw = readFileSync(path, "utf8");
-  return JSON.parse(raw) as BankQuestion[];
-}
+import { loadQuestionBank, pickQuestionsForQuiz } from "./lib/g8-video-quiz-bank";
 
 function rowVideosEmbed(quiz: unknown): { sort_order: number } | null {
   if (!quiz || typeof quiz !== "object") return null;
   const v = (quiz as { videos?: unknown }).videos;
-  if (!v) return null;
   if (Array.isArray(v) && v[0] && typeof v[0] === "object" && v[0] !== null && "sort_order" in v[0]) {
     return { sort_order: Number((v[0] as { sort_order: number }).sort_order) };
   }
@@ -46,123 +26,46 @@ function rowVideosEmbed(quiz: unknown): { sort_order: number } | null {
   return null;
 }
 
-function pickQuestionsForQuiz(
-  bank: BankQuestion[],
-  skillCodesPriority: string[],
-  count: number,
-  rotation: number,
-): BankQuestion[] {
-  const n = bank.length;
-  const used = new Set<number>();
-  const result: BankQuestion[] = [];
-  const rot = ((rotation % n) + n) % n;
-
-  for (const code of skillCodesPriority) {
-    if (result.length >= count) break;
-    let idx = -1;
-    for (let k = 0; k < n; k++) {
-      const i = (rot + k) % n;
-      if (!used.has(i) && bank[i].skill_code === code) {
-        idx = i;
-        break;
-      }
-    }
-    if (idx >= 0) {
-      used.add(idx);
-      result.push(bank[idx]);
-    }
-  }
-
-  const primaryUnit = result[0]?.unit;
-  let scan = rot;
-  while (result.length < count) {
-    let found = -1;
-    for (let k = 0; k < n; k++) {
-      const i = (scan + k) % n;
-      if (used.has(i)) continue;
-      const q = bank[i];
-      if (primaryUnit && q.unit !== primaryUnit) continue;
-      found = i;
-      break;
-    }
-    if (found < 0) {
-      for (let k = 0; k < n; k++) {
-        const i = (scan + k) % n;
-        if (!used.has(i)) {
-          found = i;
-          break;
-        }
-      }
-    }
-    if (found < 0) break;
-    used.add(found);
-    result.push(bank[found]);
-  }
-
-  return result;
-}
-
-function rowsToBank(
-  rows: Array<{
-    unit: string;
-    skill_code: string;
-    difficulty: string;
-    question_text: string;
-    choice_a: string;
-    choice_b: string;
-    choice_c: string;
-    choice_d: string;
-    correct_answer: string;
-    explanation: string | null;
-    sort_order: number;
-    excluded_from_video_quiz_pool?: boolean | null;
-  }>,
-): BankQuestion[] {
-  return rows
-    .filter((r) => !r.excluded_from_video_quiz_pool)
-    .map((r) => ({
-      unit: r.unit,
-      skill_code: r.skill_code,
-      difficulty: r.difficulty,
-      question_text: r.question_text,
-      choice_a: r.choice_a,
-      choice_b: r.choice_b,
-      choice_c: r.choice_c,
-      choice_d: r.choice_d,
-      correct_answer: r.correct_answer,
-      explanation: r.explanation ?? "",
-    }));
-}
-
-async function loadBank(supabase: ReturnType<typeof getSupabaseAdmin>): Promise<BankQuestion[]> {
-  const { data: fromDb, error } = await supabase
-    .from("question_bank_items")
-    .select("*")
-    .order("sort_order", { ascending: true });
-  if (error) throw error;
-  if (fromDb?.length) {
-    console.log(`題目來源：question_bank_items（${fromDb.length} 筆）`);
-    return rowsToBank(fromDb);
-  }
-  console.log(`question_bank_items 為空，改讀 ${JSON_PATH}`);
-  return loadBankFromFile();
+function parseOnlyUnitIds(): string[] | null {
+  const raw = process.env.SEED_VIDEO_QUIZ_ONLY_UNIT_IDS?.trim();
+  if (!raw) return null;
+  const ids = raw.split(",").map((s) => s.trim()).filter(Boolean);
+  return ids.length ? ids : null;
 }
 
 async function main() {
   const supabase = getSupabaseAdmin();
-  const bank = await loadBank(supabase);
+  const bank = await loadQuestionBank(supabase);
   if (bank.length === 0) {
     console.error("題庫為空，請先執行 npm run seed:g8-question-bank 或檢查 JSON。");
     process.exit(1);
   }
 
-  const { data: quizzes, error: qErr } = await supabase
+  let { data: quizzes, error: qErr } = await supabase
     .from("quizzes")
     .select("id, video_id, title, videos(sort_order)");
   if (qErr) throw qErr;
   if (!quizzes?.length) {
     console.log("沒有 quiz 資料，請先 npm run import:playlists。");
     return;
+  }
+
+  const onlyUnits = parseOnlyUnitIds();
+  if (onlyUnits?.length) {
+    const videoIds = [...new Set(quizzes.map((q) => q.video_id))];
+    const { data: vrows, error: vErr } = await supabase
+      .from("videos")
+      .select("id, unit_id")
+      .in("id", videoIds);
+    if (vErr) throw vErr;
+    const allow = new Set(
+      (vrows ?? []).filter((v) => onlyUnits.includes(v.unit_id)).map((v) => v.id),
+    );
+    quizzes = quizzes.filter((q) => allow.has(q.video_id));
+    console.log(
+      `僅處理單元 ${onlyUnits.join(", ")}：${quizzes.length} 份測驗`,
+    );
+    if (quizzes.length === 0) return;
   }
 
   let updated = 0;

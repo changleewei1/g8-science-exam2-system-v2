@@ -10,6 +10,8 @@
     "import:playlists": "tsx --tsconfig tsconfig.json scripts/import-playlists.ts",
     "seed:g8-question-bank": "tsx --tsconfig tsconfig.json scripts/seed-g8-question-bank.ts",
     "seed:g8-video-quiz": "tsx --tsconfig tsconfig.json scripts/seed-g8-video-quiz.ts",
+    "dedupe:playlist-videos": "tsx --tsconfig tsconfig.json scripts/dedupe-playlist-videos.ts",
+    "restore:acid-video-quizzes": "tsx --tsconfig tsconfig.json scripts/restore-acid-video-quizzes.ts",
     "apply:g8-molar-quizzes": "tsx --tsconfig tsconfig.json scripts/apply-g8-molar-video-quizzes.ts",
     "export:acid-base-review": "tsx --tsconfig tsconfig.json scripts/export-acid-base-question-bank.ts",
     "sync:acid-base-review": "tsx --tsconfig tsconfig.json scripts/sync-acid-base-question-bank.ts",
