@@ -19,7 +19,11 @@ export const PLAYLIST_IMPORT_CONFIG = [
     defaultSkillName: "電解質的基本概念",
   },
   {
-    /** 反應速率單元（reaction_rate） */
+    /**
+     * 反應速率單元（reaction_rate）
+     * 播放清單：理化-國中-化學反應速率
+     * https://www.youtube.com/playlist?list=PLE4eQs8dZrfRkacWcR80zWae-negWNdrH
+     */
     unitId: "b0000001-0000-4000-8000-000000000003",
     playlistId: "PLE4eQs8dZrfRkacWcR80zWae-negWNdrH",
     includeRule: { type: "all" as const },

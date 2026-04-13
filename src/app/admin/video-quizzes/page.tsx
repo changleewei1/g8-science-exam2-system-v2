@@ -51,9 +51,11 @@ export default async function AdminVideoQuizzesIndexPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold text-slate-900">影片測驗題（每部 3 題）</h1>
+        <h1 className="text-2xl font-semibold text-slate-900">影片測驗題</h1>
         <p className="mt-2 text-sm text-slate-600">
-          依學習單元與播放順序列出影片；若有測驗即可編輯題目與正解。儲存後學生端立即套用。
+          依學習單元與播放順序列出影片；若有測驗即可編輯題目與正解（表單或頁面上方{" "}
+          <strong className="text-slate-800">JSON 批次編輯</strong>
+          ，可增減題數）。儲存後學生端立即套用。
         </p>
         {scopeTitle ? (
           <p className="mt-2 text-xs text-slate-500">

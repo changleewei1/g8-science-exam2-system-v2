@@ -120,14 +120,15 @@ export async function PUT(req: Request, ctx: { params: Promise<Params> }) {
   }));
 
   try {
-    await quizQuestions.syncExactlyThreeForQuiz(quizId, rows);
+    await quizQuestions.syncQuestionsForQuiz(quizId, rows);
+    await quizzes.syncQuestionCountMeta(quizId, rows.length);
   } catch (e) {
     const msg = e instanceof Error ? e.message : getSupabaseErrorMessage(e);
-    if (msg === "THREE_QUESTIONS_REQUIRED") {
+    if (msg === "AT_LEAST_ONE_QUESTION_REQUIRED") {
       return NextResponse.json({ error: msg }, { status: 400 });
     }
     return NextResponse.json({ error: msg }, { status: 500 });
   }
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, questionCount: rows.length });
 }

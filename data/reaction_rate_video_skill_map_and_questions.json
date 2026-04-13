@@ -5,9 +5,16 @@
     "unit_title": "反應速率",
     "unit_scope_note": "v2 skill_tags 僅定義 RS01–RS11；第二節「可逆反應與化學平衡」目前無獨立 EQ 代碼，下列以 RS11／RS04 等做過渡對照，並標註 schema_gap_EQ。",
     "lecture_pdf_note": "專案目錄內未包含講義 PDF；若你有電子講義，請以講義章節再校對以下 skill 建議。",
-    "generated_at": "2026-04-09",
+    "generated_at": "2026-04-11",
     "lecture_pdf_path": "~/Desktop/ai-question-generator/docs/反應速率(教師版).pdf",
-    "lecture_note": "講義與 YouTube 支數對齊：第 1–5 支對應 Ch3-1；第 6–14 支對應 Ch3-2。skill 仍用 RS01–RS11；平衡細部若要獨立追蹤建議日後增 EQ 類代碼。"
+    "lecture_note": "講義與 YouTube 支數對齊：第 1–5 支對應 Ch3-1；第 6–14 支對應 Ch3-2。skill 仍用 RS01–RS11；平衡細部若要獨立追蹤建議日後增 EQ 類代碼。",
+    "playlist_id": "PLE4eQs8dZrfRkacWcR80zWae-negWNdrH",
+    "playlist_url": "https://www.youtube.com/playlist?list=PLE4eQs8dZrfRkacWcR80zWae-negWNdrH",
+    "playlist_title": "理化-國中-化學反應速率",
+    "import_playlists_config": "src/seed/playlist-config.ts（反應速率 unitId b0000001-0000-4000-8000-000000000003，playlistId 同 playlist_id）",
+    "question_bank_file": "data/g8_science_exam2_question_bank.json",
+    "question_bank_source_key_note": "反應速率單元正式題於題庫中以 source_key rs_v01a–rs_v14c（每支影片 3 題）及 rs_sup08a–rs_sup10b（RS08–RS10 補充）標示；配題仍依 video_skill_tags 之 skill_code。",
+    "playlist_verified_note": "與 yt-dlp 擷取播放清單順序一致（14 支影片）；watch 連結含 list= 與 index= 便於在清單內開啟。"
   },
   "skill_tags_reaction_rate": [
     {
@@ -65,16 +72,25 @@
       "flags": [],
       "existing_question_bank_items_for_skill": [
         {
-          "skill_code": "RS01",
+          "skill_code": "RS07",
           "difficulty": "基礎",
-          "question_text": "反應速率表示什麼？",
-          "correct_answer": "A"
+          "question_text": "下列哪一個現象的化學反應速率最快？",
+          "correct_answer": "C",
+          "source_key": "rs_v01a"
         },
         {
           "skill_code": "RS01",
           "difficulty": "進階",
-          "question_text": "下列何者為反應速率的常用描述？",
-          "correct_answer": "A"
+          "question_text": "化學反應速率通常是用什麼來表示？",
+          "correct_answer": "C",
+          "source_key": "rs_v01b"
+        },
+        {
+          "skill_code": "RS03",
+          "difficulty": "進階",
+          "question_text": "某反應在室溫下每小時產生2莫耳氣體，在40°C時每小時產生5莫耳氣體，表示什麼？",
+          "correct_answer": "B",
+          "source_key": "rs_v01c"
         }
       ],
       "generated_questions_sample": [
@@ -115,7 +131,8 @@
           "explanation": "總質量守恆與速率無直接等同；速率關心「每單位時間變化多少」。"
         }
       ],
-      "lecture_reference_zh": "教師版 B4 Ch3-1 第一節「反應速率」重點一（P1）：反應速率的快慢；單位時間內反應物／生成物變化量。"
+      "lecture_reference_zh": "教師版 B4 Ch3-1 第一節「反應速率」重點一（P1）：反應速率的快慢；單位時間內反應物／生成物變化量。",
+      "playlist_watch_url": "https://www.youtube.com/watch?v=sdu-MKCW8pM&list=PLE4eQs8dZrfRkacWcR80zWae-negWNdrH&index=1"
     },
     {
       "sort_order": 2,
@@ -176,7 +193,8 @@
           "explanation": "催化劑同等加速正逆反應途徑，通常不改變平衡常數與最終平衡位置。"
         }
       ],
-      "lecture_reference_zh": "Ch3-1 重點二（P2–P4）：活性、溫度與碰撞學說相關敘述（因素 1–3）。"
+      "lecture_reference_zh": "Ch3-1 重點二（P2–P4）：活性、溫度與碰撞學說相關敘述（因素 1–3）。",
+      "playlist_watch_url": "https://www.youtube.com/watch?v=x57sqaTu8og&list=PLE4eQs8dZrfRkacWcR80zWae-negWNdrH&index=2"
     },
     {
       "sort_order": 3,
@@ -237,7 +255,8 @@
           "explanation": "顏色多半是觀察線索，不能直接當成速率的因果；要看濃度、溫度、接觸面積、催化劑等。"
         }
       ],
-      "lecture_reference_zh": "Ch3-1 重點二（P4–P7）：表面積、濃度、催化劑；碰撞與灰石／硫代硫酸鈉實驗（因素 4–5）。"
+      "lecture_reference_zh": "Ch3-1 重點二（P4–P7）：表面積、濃度、催化劑；碰撞與灰石／硫代硫酸鈉實驗（因素 4–5）。",
+      "playlist_watch_url": "https://www.youtube.com/watch?v=Lef8gc4NRD0&list=PLE4eQs8dZrfRkacWcR80zWae-negWNdrH&index=3"
     },
     {
       "sort_order": 4,
@@ -298,7 +317,8 @@
           "explanation": "「控制變因」才是合理作法；B–D 都是常見疏忽。"
         }
       ],
-      "lecture_reference_zh": "Ch3-1 課後練習（約 P8）：題 1–10 與因素判斷、課本例題脈絡。"
+      "lecture_reference_zh": "Ch3-1 課後練習（約 P8）：題 1–10 與因素判斷、課本例題脈絡。",
+      "playlist_watch_url": "https://www.youtube.com/watch?v=H7eivEq8daI&list=PLE4eQs8dZrfRkacWcR80zWae-negWNdrH&index=4"
     },
     {
       "sort_order": 5,
@@ -359,7 +379,8 @@
           "explanation": "常見錯誤提醒：實驗結論要對應到「到底改了什麼」。"
         }
       ],
-      "lecture_reference_zh": "Ch3-1 課後練習（約 P8–P9）：題 8–13 實驗設計、控制變因、濃度／顆粒／圖表題。"
+      "lecture_reference_zh": "Ch3-1 課後練習（約 P8–P9）：題 8–13 實驗設計、控制變因、濃度／顆粒／圖表題。",
+      "playlist_watch_url": "https://www.youtube.com/watch?v=DphayyMuZbg&list=PLE4eQs8dZrfRkacWcR80zWae-negWNdrH&index=5"
     },
     {
       "sort_order": 6,
@@ -422,7 +443,8 @@
           "explanation": "易把「看不見變化」誤會成「沒有反應」。"
         }
       ],
-      "lecture_reference_zh": "Ch3-2 第二節「可逆反應與平衡」重點一（P1）：可逆反應；水蒸發／凝結；正逆反應速率相等＝平衡。"
+      "lecture_reference_zh": "Ch3-2 第二節「可逆反應與平衡」重點一（P1）：可逆反應；水蒸發／凝結；正逆反應速率相等＝平衡。",
+      "playlist_watch_url": "https://www.youtube.com/watch?v=F7ELlJAQ8Gg&list=PLE4eQs8dZrfRkacWcR80zWae-negWNdrH&index=6"
     },
     {
       "sort_order": 7,
@@ -485,7 +507,8 @@
           "explanation": "巨觀不變仍可能是動態平衡。"
         }
       ],
-      "lecture_reference_zh": "Ch3-2 重點二（P1–P2）：溶解平衡、飽和溶液、解離與結晶速率相等。"
+      "lecture_reference_zh": "Ch3-2 重點二（P1–P2）：溶解平衡、飽和溶液、解離與結晶速率相等。",
+      "playlist_watch_url": "https://www.youtube.com/watch?v=NAVp1dNa0q8&list=PLE4eQs8dZrfRkacWcR80zWae-negWNdrH&index=7"
     },
     {
       "sort_order": 8,
@@ -548,7 +571,8 @@
           "explanation": "常見錯誤提醒：不要把平衡移動誤以為「反應結束」。"
         }
       ],
-      "lecture_reference_zh": "Ch3-2 重點三（P2–P3）：鉻酸根／二鉻酸根、加酸鹼顏色變化、動態平衡。"
+      "lecture_reference_zh": "Ch3-2 重點三（P2–P3）：鉻酸根／二鉻酸根、加酸鹼顏色變化、動態平衡。",
+      "playlist_watch_url": "https://www.youtube.com/watch?v=OPFk8UMmMAo&list=PLE4eQs8dZrfRkacWcR80zWae-negWNdrH&index=8"
     },
     {
       "sort_order": 9,
@@ -611,7 +635,8 @@
           "explanation": "顏色深淺受濃度影響；要區分「濃度變薄」與「物種消失」。"
         }
       ],
-      "lecture_reference_zh": "Ch3-2 重點四（P3–P4）：溴水可逆、Br2＋H2OH^＋＋Br^－＋HBrO；加酸鹼顏色。"
+      "lecture_reference_zh": "Ch3-2 重點四（P3–P4）：溴水可逆、Br2＋H2OH^＋＋Br^－＋HBrO；加酸鹼顏色。",
+      "playlist_watch_url": "https://www.youtube.com/watch?v=yn3xRF-Bsb0&list=PLE4eQs8dZrfRkacWcR80zWae-negWNdrH&index=9"
     },
     {
       "sort_order": 10,
@@ -674,7 +699,8 @@
           "explanation": "常見錯誤提醒：是「趨向緩和」，不是「百分之一百補救回原狀」。"
         }
       ],
-      "lecture_reference_zh": "Ch3-2 重點五（P4）：平衡移動；改變濃度／溫度／壓力；新平衡。"
+      "lecture_reference_zh": "Ch3-2 重點五（P4）：平衡移動；改變濃度／溫度／壓力；新平衡。",
+      "playlist_watch_url": "https://www.youtube.com/watch?v=gUjBSSN07S0&list=PLE4eQs8dZrfRkacWcR80zWae-negWNdrH&index=10"
     },
     {
       "sort_order": 11,
@@ -737,7 +763,8 @@
           "explanation": "常見錯誤提醒：速率變快 ≠ 平衡必往產物多那一側。"
         }
       ],
-      "lecture_reference_zh": "Ch3-2 即時演練（P4–P5）：題 1–7 等，與鉻酸／溴水／平衡概念。"
+      "lecture_reference_zh": "Ch3-2 即時演練（P4–P5）：題 1–7 等，與鉻酸／溴水／平衡概念。",
+      "playlist_watch_url": "https://www.youtube.com/watch?v=bNN07cyxodg&list=PLE4eQs8dZrfRkacWcR80zWae-negWNdrH&index=11"
     },
     {
       "sort_order": 12,
@@ -800,7 +827,8 @@
           "explanation": "常見錯誤提醒：速率變快 ≠ 平衡必往產物多那一側。"
         }
       ],
-      "lecture_reference_zh": "Ch3-2 即時演練（P5–P6）：題 8–20。"
+      "lecture_reference_zh": "Ch3-2 即時演練（P5–P6）：題 8–20。",
+      "playlist_watch_url": "https://www.youtube.com/watch?v=rvczJif1toA&list=PLE4eQs8dZrfRkacWcR80zWae-negWNdrH&index=12"
     },
     {
       "sort_order": 13,
@@ -863,7 +891,8 @@
           "explanation": "常見錯誤提醒：速率變快 ≠ 平衡必往產物多那一側。"
         }
       ],
-      "lecture_reference_zh": "Ch3-2 課後練習／綜合（P6–P8）：可逆反應與平衡選擇題。"
+      "lecture_reference_zh": "Ch3-2 課後練習／綜合（P6–P8）：可逆反應與平衡選擇題。",
+      "playlist_watch_url": "https://www.youtube.com/watch?v=vKHA-Iv6g3U&list=PLE4eQs8dZrfRkacWcR80zWae-negWNdrH&index=13"
     },
     {
       "sort_order": 14,
@@ -926,7 +955,8 @@
           "explanation": "常見錯誤提醒：速率變快 ≠ 平衡必往產物多那一側。"
         }
       ],
-      "lecture_reference_zh": "Ch3-2 課後練習（P8–P11）：綜合題與圖表、生活情境。"
+      "lecture_reference_zh": "Ch3-2 課後練習（P8–P11）：綜合題與圖表、生活情境。",
+      "playlist_watch_url": "https://www.youtube.com/watch?v=vRpCMCtV_7g&list=PLE4eQs8dZrfRkacWcR80zWae-negWNdrH&index=14"
     }
   ]
 }

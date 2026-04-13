@@ -158,7 +158,12 @@ const adminQuizQuestionItemSchema = z
     }
   });
 
-/** 每部影片固定三題 */
+const MAX_QUIZ_QUESTIONS = 40;
+
+/** 每份測驗可 1～40 題（與後台 JSON／表單編輯一致） */
 export const adminPutQuizQuestionsBodySchema = z.object({
-  questions: z.tuple([adminQuizQuestionItemSchema, adminQuizQuestionItemSchema, adminQuizQuestionItemSchema]),
+  questions: z
+    .array(adminQuizQuestionItemSchema)
+    .min(1, "至少需要 1 題")
+    .max(MAX_QUIZ_QUESTIONS, `最多 ${MAX_QUIZ_QUESTIONS} 題`),
 });

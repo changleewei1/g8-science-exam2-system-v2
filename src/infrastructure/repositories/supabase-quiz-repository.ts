@@ -34,4 +34,18 @@ export class SupabaseQuizRepository implements QuizRepository {
     throwIfPostgrestError(error);
     return { id: (data as { id: string }).id };
   }
+
+  async syncQuestionCountMeta(quizId: string, questionCount: number) {
+    const quiz = await this.findById(quizId);
+    if (!quiz) return;
+    const passScore = Math.min(quiz.passScore, questionCount);
+    const { error } = await getSupabaseAdmin()
+      .from("quizzes")
+      .update({
+        question_count: questionCount,
+        pass_score: passScore,
+      })
+      .eq("id", quizId);
+    throwIfPostgrestError(error);
+  }
 }

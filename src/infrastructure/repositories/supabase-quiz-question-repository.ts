@@ -25,14 +25,14 @@ export class SupabaseQuizQuestionRepository implements QuizQuestionRepository {
     throwIfPostgrestError(error);
   }
 
-  async syncExactlyThreeForQuiz(quizId: string, items: QuizQuestionSyncPayload[]) {
-    if (items.length !== 3) {
-      throw new Error("THREE_QUESTIONS_REQUIRED");
+  async syncQuestionsForQuiz(quizId: string, items: QuizQuestionSyncPayload[]) {
+    if (items.length < 1) {
+      throw new Error("AT_LEAST_ONE_QUESTION_REQUIRED");
     }
     const existing = await this.findByQuizId(quizId);
     const sorted = [...existing].sort((a, b) => a.sortOrder - b.sortOrder);
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < items.length; i++) {
       const it = items[i];
       const letter = it.correct_answer.trim().toUpperCase().charAt(0);
       const payload = {
@@ -70,7 +70,7 @@ export class SupabaseQuizQuestionRepository implements QuizQuestionRepository {
       }
     }
 
-    for (const extra of sorted.slice(3)) {
+    for (const extra of sorted.slice(items.length)) {
       const { error } = await getSupabaseAdmin()
         .from("quiz_questions")
         .delete()

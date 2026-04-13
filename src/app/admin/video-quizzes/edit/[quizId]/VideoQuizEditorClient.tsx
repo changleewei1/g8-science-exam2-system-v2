@@ -2,26 +2,16 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import {
+  parseVideoQuizBatchJson,
+  videoQuizRowsToExportJson,
+  VIDEO_QUIZ_JSON_MAX_QUESTIONS,
+  type VideoQuizQuestionFormRow,
+} from "@/lib/video-quiz-batch-json";
 
 export type SkillOption = { code: string; name: string };
 
-export type QuestionFormRow = {
-  questionText: string;
-  questionImageUrl: string;
-  referenceImageUrl: string;
-  choiceA: string;
-  choiceAImageUrl: string;
-  choiceB: string;
-  choiceBImageUrl: string;
-  choiceC: string;
-  choiceCImageUrl: string;
-  choiceD: string;
-  choiceDImageUrl: string;
-  correctAnswer: "A" | "B" | "C" | "D";
-  explanation: string;
-  difficulty: string;
-  skillCode: string;
-};
+export type QuestionFormRow = VideoQuizQuestionFormRow;
 
 type Props = {
   quizId: string;
@@ -101,6 +91,63 @@ export function VideoQuizEditorClient({
   const [status, setStatus] = useState<"idle" | "saving" | "ok" | "err">("idle");
   const [errMsg, setErrMsg] = useState<string | null>(null);
   const [uploadKey, setUploadKey] = useState<string | null>(null);
+  const [jsonText, setJsonText] = useState("");
+  const [jsonErr, setJsonErr] = useState<string | null>(null);
+
+  const defaultSkill = skillOptions[0]?.code ?? "";
+
+  function makeEmptyRow(skill: string): QuestionFormRow {
+    return {
+      questionText: "",
+      questionImageUrl: "",
+      referenceImageUrl: "",
+      choiceA: "",
+      choiceAImageUrl: "",
+      choiceB: "",
+      choiceBImageUrl: "",
+      choiceC: "",
+      choiceCImageUrl: "",
+      choiceD: "",
+      choiceDImageUrl: "",
+      correctAnswer: "A",
+      explanation: "",
+      difficulty: "基礎",
+      skillCode: skill,
+    };
+  }
+
+  function addQuestionRow() {
+    setRows((prev) => {
+      if (prev.length >= VIDEO_QUIZ_JSON_MAX_QUESTIONS) return prev;
+      return [...prev, makeEmptyRow(defaultSkill)];
+    });
+    setStatus("idle");
+  }
+
+  function removeLastQuestionRow() {
+    setRows((prev) => {
+      if (prev.length <= 1) return prev;
+      return prev.slice(0, -1);
+    });
+    setStatus("idle");
+  }
+
+  function applyJsonBatch() {
+    setJsonErr(null);
+    const parsed = parseVideoQuizBatchJson(jsonText, defaultSkill);
+    if (!parsed.ok) {
+      setJsonErr(parsed.error);
+      return;
+    }
+    setRows(parsed.rows);
+    setErrMsg(null);
+    setStatus("idle");
+  }
+
+  function fillJsonFromForm() {
+    setJsonErr(null);
+    setJsonText(videoQuizRowsToExportJson(rows));
+  }
 
   function field(i: number, key: keyof QuestionFormRow, value: string) {
     setRows((prev) => {
@@ -186,8 +233,59 @@ export function VideoQuizEditorClient({
     }
   }
 
+  function scrollToJsonBatch() {
+    document.getElementById("json-batch-edit")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   return (
     <div className="space-y-8">
+      <section
+        id="json-batch-edit"
+        className="scroll-mt-4 rounded-2xl border-2 border-teal-400 bg-teal-50/80 p-5 shadow-md ring-2 ring-teal-300/50"
+      >
+        <h2 className="text-xl font-bold tracking-tight text-teal-950">JSON 批次輸入</h2>
+        <p className="mt-1 text-sm font-medium text-teal-900/90">貼上 JSON → 按下方按鈕套用 → 再至頁面底部「儲存變更」</p>
+        <p className="mt-2 text-xs leading-relaxed text-slate-700">
+          貼上 <strong>1～{VIDEO_QUIZ_JSON_MAX_QUESTIONS} 題</strong>，格式為{" "}
+          <code className="rounded bg-white/80 px-1 py-0.5 text-[11px]">{"{ \"questions\": [ … ] }"}</code>{" "}
+          或陣列 <code className="rounded bg-white/80 px-1 py-0.5 text-[11px]">[ … ]</code>
+          。欄位可用 snake_case（與 API 相同）或 camelCase；含{" "}
+          <code className="rounded bg-white/80 px-1">correct_choice_index</code>（0–3）亦可。按「套用 JSON 至表單」後再按「儲存變更」寫入資料庫。
+        </p>
+        {jsonErr ? (
+          <p className="mt-3 rounded-lg bg-red-100 px-3 py-2 text-sm text-red-900">{jsonErr}</p>
+        ) : null}
+        <textarea
+          className="mt-3 min-h-[240px] w-full rounded-lg border border-teal-200 bg-white px-3 py-2 font-mono text-xs leading-relaxed text-slate-900 shadow-inner"
+          spellCheck={false}
+          aria-label="JSON 題目批次輸入"
+          placeholder='{"questions":[{"question_text":"…","choice_a":"…","choice_b":"…","choice_c":"…","choice_d":"…","correct_answer":"A","skill_code":"RS01","explanation":"…","difficulty":"基礎"}, …]}'
+          value={jsonText}
+          onChange={(e) => {
+            setJsonText(e.target.value);
+            setJsonErr(null);
+          }}
+        />
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => applyJsonBatch()}
+            disabled={status === "saving"}
+            className="rounded-lg bg-teal-800 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-teal-900 disabled:opacity-50"
+          >
+            套用 JSON 至表單
+          </button>
+          <button
+            type="button"
+            onClick={() => fillJsonFromForm()}
+            disabled={status === "saving"}
+            className="rounded-lg border-2 border-teal-500 bg-white px-4 py-2.5 text-sm font-semibold text-teal-900 hover:bg-teal-50"
+          >
+            匯出 JSON（從表單）
+          </button>
+        </div>
+      </section>
+
       <div>
         <Link
           href="/admin/video-quizzes"
@@ -200,7 +298,8 @@ export function VideoQuizEditorClient({
         <p className="mt-1 text-sm text-slate-700">影片：{videoTitle}</p>
         <p className="mt-3 text-xs text-slate-500">
           題幹可只用文字、只用圖、或兩者並列；參考圖附加在題幹下方。每個選項亦可只用文字或只用圖。圖檔建議 5MB
-          以內（JPEG／PNG／WebP／GIF）。
+          以內（JPEG／PNG／WebP／GIF）。上方綠框為 <strong className="text-slate-700">JSON 批次輸入</strong>
+          ；若題目多，可用底部「回到 JSON 批次」。
         </p>
       </div>
 
@@ -212,6 +311,13 @@ export function VideoQuizEditorClient({
       {errMsg && (
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-900">{errMsg}</p>
       )}
+
+      <h2
+        id="video-quiz-form-section"
+        className="text-lg font-semibold text-slate-900 scroll-mt-4"
+      >
+        表單逐題編輯 <span className="text-base font-normal text-slate-500">（共 {rows.length} 題）</span>
+      </h2>
 
       <div className="space-y-10">
         {rows.map((r, i) => (
@@ -288,7 +394,7 @@ export function VideoQuizEditorClient({
                   <label key={k} className="flex items-center gap-2 text-sm">
                     <input
                       type="radio"
-                      name={`correct-${i}`}
+                      name={`correct-${quizId}-${i}`}
                       checked={r.correctAnswer === k}
                       onChange={() => field(i, "correctAnswer", k)}
                     />
@@ -337,7 +443,14 @@ export function VideoQuizEditorClient({
         ))}
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          onClick={scrollToJsonBatch}
+          className="rounded-lg border border-teal-300 bg-teal-50 px-4 py-2.5 text-sm font-semibold text-teal-900 hover:bg-teal-100"
+        >
+          回到 JSON 批次輸入
+        </button>
         <button
           type="button"
           onClick={() => void onSave()}
@@ -345,6 +458,24 @@ export function VideoQuizEditorClient({
           className="interactive-btn rounded-lg bg-teal-600 px-5 py-2.5 text-sm font-medium text-white disabled:opacity-50"
         >
           {status === "saving" ? "儲存中…" : "儲存變更"}
+        </button>
+        <button
+          type="button"
+          onClick={addQuestionRow}
+          disabled={
+            status === "saving" || rows.length >= VIDEO_QUIZ_JSON_MAX_QUESTIONS || uploadKey !== null
+          }
+          className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-800 disabled:opacity-50"
+        >
+          新增一題
+        </button>
+        <button
+          type="button"
+          onClick={removeLastQuestionRow}
+          disabled={status === "saving" || rows.length <= 1 || uploadKey !== null}
+          className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-800 disabled:opacity-50"
+        >
+          移除最後一題
         </button>
         <Link
           href="/admin/video-quizzes"

@@ -4,6 +4,8 @@ export interface QuizRepository {
   findById(id: string): Promise<Quiz | null>;
   findByVideoId(videoId: string): Promise<Quiz | null>;
   insert(quiz: QuizInsert): Promise<{ id: string }>;
+  /** 與實際題目數同步；若通過門檻高於題數則自動下修 */
+  syncQuestionCountMeta(quizId: string, questionCount: number): Promise<void>;
 }
 
 export type QuizInsert = {

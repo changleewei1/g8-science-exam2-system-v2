@@ -34,32 +34,26 @@ function emptyRow(skillCode: string): QuestionFormRow {
 
 function toFormRows(questions: QuizQuestion[], defaultSkill: string): QuestionFormRow[] {
   const sorted = [...questions].sort((a, b) => a.sortOrder - b.sortOrder);
-  const out: QuestionFormRow[] = [];
-  for (let i = 0; i < 3; i++) {
-    const q = sorted[i];
-    if (q) {
-      out.push({
-        questionText: q.questionText,
-        questionImageUrl: q.questionImageUrl ?? "",
-        referenceImageUrl: q.referenceImageUrl ?? "",
-        choiceA: q.choiceA,
-        choiceAImageUrl: q.choiceAImageUrl ?? "",
-        choiceB: q.choiceB,
-        choiceBImageUrl: q.choiceBImageUrl ?? "",
-        choiceC: q.choiceC,
-        choiceCImageUrl: q.choiceCImageUrl ?? "",
-        choiceD: q.choiceD,
-        choiceDImageUrl: q.choiceDImageUrl ?? "",
-        correctAnswer: parseCorrect(q.correctAnswer),
-        explanation: q.explanation ?? "",
-        difficulty: q.difficulty ?? "基礎",
-        skillCode: q.skillCode || defaultSkill,
-      });
-    } else {
-      out.push(emptyRow(defaultSkill));
-    }
+  if (sorted.length === 0) {
+    return [emptyRow(defaultSkill), emptyRow(defaultSkill), emptyRow(defaultSkill)];
   }
-  return out;
+  return sorted.map((q) => ({
+    questionText: q.questionText,
+    questionImageUrl: q.questionImageUrl ?? "",
+    referenceImageUrl: q.referenceImageUrl ?? "",
+    choiceA: q.choiceA,
+    choiceAImageUrl: q.choiceAImageUrl ?? "",
+    choiceB: q.choiceB,
+    choiceBImageUrl: q.choiceBImageUrl ?? "",
+    choiceC: q.choiceC,
+    choiceCImageUrl: q.choiceCImageUrl ?? "",
+    choiceD: q.choiceD,
+    choiceDImageUrl: q.choiceDImageUrl ?? "",
+    correctAnswer: parseCorrect(q.correctAnswer),
+    explanation: q.explanation ?? "",
+    difficulty: q.difficulty ?? "基礎",
+    skillCode: q.skillCode || defaultSkill,
+  }));
 }
 
 type Props = { params: Promise<{ quizId: string }> };
