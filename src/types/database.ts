@@ -219,3 +219,40 @@ export type StudentReportTokenRow = {
   expires_at: string | null;
   created_at: string;
 };
+
+export type ParentLineSubscriberRow = {
+  id: string;
+  line_user_id: string;
+  student_id: string;
+  role: "father" | "mother";
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type LineMessageSendLogRow = {
+  id: string;
+  line_user_id: string | null;
+  direction: string;
+  message_type: string | null;
+  text_preview: string | null;
+  line_message_id: string | null;
+  reply_token: string | null;
+  status: string;
+  error_message: string | null;
+  created_at: string;
+};
+
+export type LineUserContextRow = {
+  id: string;
+  line_user_id: string;
+  pending_action:
+    | "homework_status"
+    | "learning_performance"
+    | "video_recommendation";
+  pending_student_id: string | null;
+  pending_student_name: string | null;
+  expires_at: string;
+  created_at: string;
+  updated_at: string;
+};
