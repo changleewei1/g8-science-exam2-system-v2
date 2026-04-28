@@ -4,8 +4,14 @@ export type StudentDigestRow = {
   studentId: string;
   studentName: string;
   className: string | null;
-  videoCompletionRate: number;
-  quizCompletionRate: number;
+  /**
+   * 0-100；若今日無進行中任務或任務未配置影片，則為 null（避免誤顯示 0%）。
+   */
+  videoCompletionRate: number | null;
+  /**
+   * 0-100；若今日無進行中任務或任務未配置影片，則為 null（避免誤顯示 0%）。
+   */
+  quizCompletionRate: number | null;
   weakestSkills: { skillCode: string; skillName: string; accuracy: number }[];
   suggestion: string;
   warnings: string[];
@@ -176,14 +182,16 @@ export class StudentWeaknessAnalysisService {
       for (const vid of scopedVideos) {
         if (completedByStudentVideo.has(`${s.id}:${vid}`)) completedVideos += 1;
       }
-      const videoCompletionRate = toPercent(completedVideos, scopedVideos.length);
+      const videoCompletionRate =
+        taskId && scopedVideos.length > 0 ? toPercent(completedVideos, scopedVideos.length) : null;
 
       const scopedQuizIds = [...new Set(scopedVideos.flatMap((v) => quizIdsByVideo.get(v) ?? []))];
       let completedQuizzes = 0;
       for (const quizId of scopedQuizIds) {
         if (attemptedQuizByStudent.has(`${s.id}:${quizId}`)) completedQuizzes += 1;
       }
-      const quizCompletionRate = toPercent(completedQuizzes, scopedQuizIds.length);
+      const quizCompletionRate =
+        taskId && scopedVideos.length > 0 ? toPercent(completedQuizzes, scopedQuizIds.length) : null;
 
       const skillStats = byStudentSkill.get(s.id) ?? new Map<string, { total: number; correct: number }>();
       const weakest = [...skillStats.entries()]
@@ -216,7 +224,10 @@ export class StudentWeaknessAnalysisService {
         weakestSkills: weakest,
         suggestion,
         warnings: warningsForStudent,
-        hasIncompleteTask: scopedVideos.length > 0 && (videoCompletionRate < 100 || quizCompletionRate < 100),
+        hasIncompleteTask:
+          scopedVideos.length > 0 &&
+          ((videoCompletionRate !== null && videoCompletionRate < 100) ||
+            (quizCompletionRate !== null && quizCompletionRate < 100)),
       });
     }
 

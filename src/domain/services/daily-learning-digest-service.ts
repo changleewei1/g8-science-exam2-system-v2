@@ -113,6 +113,8 @@ export class DailyLearningDigestService {
 
     const studentWeaknessHtml = students
       .map((s) => {
+        const videoRateText = s.videoCompletionRate === null ? "—" : `${s.videoCompletionRate}%`;
+        const quizRateText = s.quizCompletionRate === null ? "—" : `${s.quizCompletionRate}%`;
         const weakList =
           s.weakestSkills.length === 0
             ? "資料不足，建議先完成更多測驗。"
@@ -123,8 +125,8 @@ export class DailyLearningDigestService {
           <tr>
             <td>${escapeHtml(s.studentName)}</td>
             <td>${escapeHtml(s.className ?? "未分班")}</td>
-            <td>${s.videoCompletionRate}%</td>
-            <td>${s.quizCompletionRate}%</td>
+            <td>${videoRateText}</td>
+            <td>${quizRateText}</td>
             <td>${escapeHtml(weakList)}</td>
             <td>${escapeHtml(s.suggestion)}</td>
           </tr>
@@ -135,8 +137,11 @@ export class DailyLearningDigestService {
     const incompleteHtml = students
       .filter((s) => s.hasIncompleteTask)
       .map(
-        (s) =>
-          `<li>${escapeHtml(s.className ?? "未分班")} ${escapeHtml(s.studentName)}：影片 ${s.videoCompletionRate}% / 測驗 ${s.quizCompletionRate}%</li>`,
+        (s) => {
+          const videoRateText = s.videoCompletionRate === null ? "—" : `${s.videoCompletionRate}%`;
+          const quizRateText = s.quizCompletionRate === null ? "—" : `${s.quizCompletionRate}%`;
+          return `<li>${escapeHtml(s.className ?? "未分班")} ${escapeHtml(s.studentName)}：影片 ${videoRateText} / 測驗 ${quizRateText}</li>`;
+        },
       )
       .join("");
 
