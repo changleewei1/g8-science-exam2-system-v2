@@ -1,0 +1,218 @@
+{
+  "type": "flex",
+  "altText": "王小明 學習狀況摘要（進度偏低）",
+  "contents": {
+    "type": "bubble",
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "sm",
+      "contents": [
+        {
+          "type": "text",
+          "text": "學習狀況摘要",
+          "weight": "bold",
+          "size": "xl",
+          "wrap": true
+        },
+        {
+          "type": "text",
+          "text": "👤 王小明　📘 702班",
+          "size": "sm",
+          "wrap": true,
+          "color": "#333333"
+        },
+        {
+          "type": "separator",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "📊 科目與範圍",
+          "weight": "bold",
+          "size": "sm",
+          "color": "#1DB446",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "理化｜段考範圍：第三冊 Ch.1–Ch.3",
+          "size": "sm",
+          "wrap": true,
+          "color": "#333333"
+        },
+        {
+          "type": "separator",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "📋 任務",
+          "weight": "bold",
+          "size": "sm",
+          "color": "#1DB446",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "段考複習任務（單元測驗＋補強影片）",
+          "size": "sm",
+          "wrap": true,
+          "color": "#333333"
+        },
+        {
+          "type": "separator",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "📈 核心數據",
+          "weight": "bold",
+          "size": "sm",
+          "color": "#1DB446",
+          "margin": "md"
+        },
+        {
+          "type": "box",
+          "layout": "horizontal",
+          "spacing": "lg",
+          "contents": [
+            {
+              "type": "box",
+              "layout": "vertical",
+              "flex": 1,
+              "contents": [
+                {
+                  "type": "text",
+                  "text": "影片完成率",
+                  "size": "xs",
+                  "wrap": true,
+                  "color": "#333333"
+                },
+                {
+                  "type": "text",
+                  "text": "41.5%",
+                  "size": "xl",
+                  "weight": "bold",
+                  "color": "#0275D8"
+                }
+              ]
+            },
+            {
+              "type": "separator",
+              "color": "#E0E0E0"
+            },
+            {
+              "type": "box",
+              "layout": "vertical",
+              "flex": 1,
+              "contents": [
+                {
+                  "type": "text",
+                  "text": "測驗通過率",
+                  "size": "xs",
+                  "wrap": true,
+                  "color": "#333333"
+                },
+                {
+                  "type": "text",
+                  "text": "72.8%",
+                  "size": "xl",
+                  "weight": "bold",
+                  "color": "#5C6BC0"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "separator",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "🎯 學習判斷",
+          "weight": "bold",
+          "size": "sm",
+          "color": "#1DB446",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "進度偏低",
+          "size": "sm",
+          "wrap": true,
+          "color": "#333333"
+        },
+        {
+          "type": "separator",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "⚠️ 弱點（最多 3 項）",
+          "weight": "bold",
+          "size": "sm",
+          "color": "#1DB446",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "· 牛頓運動定律（圖像理解）\n· 力矩與平衡\n· 壓力與浮力觀念辨析",
+          "size": "sm",
+          "wrap": true,
+          "color": "#555555"
+        },
+        {
+          "type": "separator",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "💡 建議",
+          "weight": "bold",
+          "size": "sm",
+          "color": "#1DB446",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "影片進度略低於測驗表現，建議先看「補強段」再把錯題訂正，可更快補齊缺口。",
+          "size": "sm",
+          "wrap": true,
+          "color": "#333333"
+        }
+      ],
+      "paddingAll": "16px"
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "sm",
+      "contents": [
+        {
+          "type": "button",
+          "style": "primary",
+          "color": "#0275D8",
+          "height": "sm",
+          "action": {
+            "type": "uri",
+            "label": "查看完整報告",
+            "uri": "https://line.me/"
+          }
+        },
+        {
+          "type": "button",
+          "style": "secondary",
+          "height": "sm",
+          "action": {
+            "type": "uri",
+            "label": "補強學習影片",
+            "uri": "https://line.me/"
+          }
+        }
+      ],
+      "paddingAll": "12px"
+    }
+  }
+}

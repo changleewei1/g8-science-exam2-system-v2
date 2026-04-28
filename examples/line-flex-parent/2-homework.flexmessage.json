@@ -1,0 +1,140 @@
+{
+  "type": "flex",
+  "altText": "王小明 回家功課 3/7 完成率 42.9%",
+  "contents": {
+    "type": "bubble",
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "sm",
+      "contents": [
+        {
+          "type": "text",
+          "text": "回家功課完成狀況",
+          "weight": "bold",
+          "size": "xl",
+          "wrap": true
+        },
+        {
+          "type": "text",
+          "text": "👤 王小明　📘 702班",
+          "size": "sm",
+          "wrap": true
+        },
+        {
+          "type": "separator",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "📗 科目",
+          "weight": "bold",
+          "size": "sm",
+          "color": "#1DB446",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "理化",
+          "size": "md",
+          "wrap": true,
+          "weight": "bold"
+        },
+        {
+          "type": "separator",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "📝 今日作業",
+          "weight": "bold",
+          "size": "sm",
+          "color": "#1DB446",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "完成 3/7 題（項）",
+          "size": "lg",
+          "weight": "bold",
+          "wrap": true
+        },
+        {
+          "type": "text",
+          "text": "完成率　42.9%",
+          "size": "xl",
+          "weight": "bold",
+          "color": "#F57C00",
+          "wrap": true
+        },
+        {
+          "type": "separator",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "⏳ 未完成（最多顯示 3 項）",
+          "weight": "bold",
+          "size": "sm",
+          "color": "#1DB446",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "1. 第三章力矩練習（共 4 題）\n2. 補強影片筆記上傳\n3. 線上小測驗—單元三",
+          "size": "sm",
+          "wrap": true,
+          "color": "#555555"
+        },
+        {
+          "type": "separator",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "💡 建議",
+          "weight": "bold",
+          "size": "sm",
+          "color": "#1DB446",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "優先完成「第三章力矩練習」，再銜接補強影片較省力。",
+          "size": "sm",
+          "wrap": true
+        }
+      ],
+      "paddingAll": "16px"
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "sm",
+      "contents": [
+        {
+          "type": "button",
+          "style": "primary",
+          "color": "#0275D8",
+          "height": "sm",
+          "action": {
+            "type": "uri",
+            "label": "查看詳細作業",
+            "uri": "https://line.me/"
+          }
+        },
+        {
+          "type": "button",
+          "style": "secondary",
+          "height": "sm",
+          "action": {
+            "type": "uri",
+            "label": "開始補強學習",
+            "uri": "https://line.me/"
+          }
+        }
+      ],
+      "paddingAll": "12px"
+    }
+  }
+}

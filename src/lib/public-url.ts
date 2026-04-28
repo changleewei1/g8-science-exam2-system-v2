@@ -44,3 +44,34 @@ export function publicReportPageUrl(req: Request, token: string): string {
   const q = new URLSearchParams({ t: token });
   return `${base}/report?${q.toString()}`;
 }
+
+/**
+ * 背景 job 無 Request 時組 /report?t=… 絕對 URL（與 publicReportPageUrl 邏輯對齊）。
+ */
+export function publicReportPageUrlFromEnv(token: string): string {
+  const base = resolvePublicOriginWithoutRequest();
+  const q = new URLSearchParams({ t: token });
+  return `${base}/report?${q.toString()}`;
+}
+
+function resolvePublicOriginWithoutRequest(): string {
+  const explicit =
+    process.env.APP_BASE_URL?.trim() || process.env.NEXT_PUBLIC_APP_URL?.trim();
+  if (explicit) {
+    return explicit.replace(/\/$/, "");
+  }
+
+  const vercel = process.env.VERCEL_URL?.trim();
+  if (vercel) {
+    const host = vercel.replace(/^https?:\/\//, "");
+    return `https://${host}`;
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return "http://localhost:3000";
+  }
+
+  throw new Error(
+    "PUBLIC_BASE_URL_MISSING: 無法推斷公開網址。請設定 APP_BASE_URL 或 NEXT_PUBLIC_APP_URL（含 https://）。",
+  );
+}

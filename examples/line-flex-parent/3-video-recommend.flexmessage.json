@@ -1,0 +1,169 @@
+{
+  "type": "flex",
+  "altText": "王小明 AI 學習推薦",
+  "contents": {
+    "type": "bubble",
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "sm",
+      "contents": [
+        {
+          "type": "text",
+          "text": "AI 學習推薦",
+          "weight": "bold",
+          "size": "xl",
+          "wrap": true
+        },
+        {
+          "type": "text",
+          "text": "👤 王小明　📘 702班",
+          "size": "sm",
+          "wrap": true
+        },
+        {
+          "type": "separator",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "📗 科目",
+          "weight": "bold",
+          "size": "sm",
+          "color": "#1DB446",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "理化",
+          "size": "md",
+          "weight": "bold",
+          "wrap": true
+        },
+        {
+          "type": "separator",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "🧠 推薦原因",
+          "weight": "bold",
+          "size": "sm",
+          "color": "#1DB446",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "依測驗錯題與技能雷達，牛頓運動定律與受力分析錯誤率較高，下列影片可優先補強。",
+          "size": "sm",
+          "wrap": true,
+          "color": "#333333"
+        },
+        {
+          "type": "box",
+          "layout": "vertical",
+          "spacing": "xs",
+          "margin": "lg",
+          "contents": [
+            {
+              "type": "text",
+              "text": "🎬 1. 牛頓三大定律—圖像我會看（12 分鐘）",
+              "weight": "bold",
+              "size": "sm",
+              "wrap": true
+            },
+            {
+              "type": "text",
+              "text": "對應弱點：牛頓運動定律（圖像理解）",
+              "size": "xs",
+              "wrap": true,
+              "color": "#666666"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "layout": "vertical",
+          "spacing": "xs",
+          "margin": "lg",
+          "contents": [
+            {
+              "type": "text",
+              "text": "🎬 2. 受力分析與力圖：斜面與繩張力",
+              "weight": "bold",
+              "size": "sm",
+              "wrap": true
+            },
+            {
+              "type": "text",
+              "text": "對應弱點：受力分析步驟",
+              "size": "xs",
+              "wrap": true,
+              "color": "#666666"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "layout": "vertical",
+          "spacing": "xs",
+          "margin": "lg",
+          "contents": [
+            {
+              "type": "text",
+              "text": "🎬 3. 力矩與槓桿：生活題拆解",
+              "weight": "bold",
+              "size": "sm",
+              "wrap": true
+            },
+            {
+              "type": "text",
+              "text": "對應弱點：力矩與平衡",
+              "size": "xs",
+              "wrap": true,
+              "color": "#666666"
+            }
+          ]
+        },
+        {
+          "type": "separator",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "💡 建議",
+          "weight": "bold",
+          "size": "sm",
+          "color": "#1DB446",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "每天觀看 1 支並完成隨堂小測，一週內通常可明顯改善錯題型態。",
+          "size": "sm",
+          "wrap": true
+        }
+      ],
+      "paddingAll": "16px"
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "sm",
+      "contents": [
+        {
+          "type": "button",
+          "style": "primary",
+          "color": "#1DB446",
+          "height": "sm",
+          "action": {
+            "type": "uri",
+            "label": "查看更多推薦",
+            "uri": "https://line.me/"
+          }
+        }
+      ],
+      "paddingAll": "12px"
+    }
+  }
+}

@@ -1,7 +1,5 @@
-import { getEnv } from "@/lib/env";
-import { publicReportPageUrl } from "@/lib/public-url";
 import { bindParentLineSubscriber } from "@/lib/line/parent-binding-service";
-import { buildParentReportFlex } from "@/lib/line/build-parent-report-flex";
+import { MSG_PARENT_REPORT_PROCESSING } from "@/lib/line/parent-line-messages";
 import {
   getParentStudentByLineUser,
   listBoundStudentsForLineUser,
@@ -14,6 +12,7 @@ import {
 } from "@/lib/line/parse-parent-binding";
 import { normalizeStudentNameForMatch } from "@/lib/line/parent-binding-service";
 import { replyLineMessages, type LineMessage } from "@/lib/line/reply-message";
+import { scheduleParentReportJob } from "@/lib/line/schedule-parent-report-job";
 import { resolveExamScopeIdForSubjectCode } from "@/lib/line/resolve-exam-scope-for-subject";
 import {
   matchTextEntryToAction,
@@ -41,16 +40,12 @@ import {
 } from "@/lib/line-user-context/line-user-context-service";
 import {
   isSubjectOnlyLine,
+  matchesParentLearningOverviewQuery,
   parseSubjectStepInput,
   normalizeLineInput,
   type SubjectCode,
 } from "@/lib/line-user-context/parse-subject-input";
-import {
-  getCreateStudentReportLinkUseCase,
-  getStudentReportService,
-} from "@/infrastructure/composition";
-
-const QUERY_LEARNING = "小朋友學習狀況";
+import { getStudentReportService } from "@/infrastructure/composition";
 
 const MSG_DUPLICATE_STUDENT = "資料重複，請聯絡老師";
 const MSG_BIND_FORMAT =
@@ -61,9 +56,6 @@ const MSG_ALREADY_BOUND = "您已綁定此學生。";
 const MSG_NOT_FOUND = "找不到學生資料，請確認班級與姓名。";
 const MSG_PARENT_LIMIT = "該學生已綁定兩位家長，請聯絡老師。";
 const MSG_NOT_LINKED = "尚未綁定學生，請先完成綁定。";
-const MSG_MULTI_HINT =
-  "您已綁定多位學生，以下為最近一次更新之學生報告；如需調整請聯絡老師。";
-
 export type LineTextPipelineResult = { handled: true } | { handled: false };
 
 function subjectCodeToLabel(code: SubjectCode): string {
@@ -143,46 +135,17 @@ async function handleLearningQuery(
     return;
   }
 
-  const studentId = ctx.studentId;
-  const reportSvc = getStudentReportService();
-  const dto = await reportSvc.buildReport({
-    studentId,
-    audience: "parent",
-  });
+  await replyLineMessages(replyToken, [
+    { type: "text", text: MSG_PARENT_REPORT_PROCESSING },
+  ]);
+  await logOutboundOk(lineUserId, replyToken, MSG_PARENT_REPORT_PROCESSING);
 
-  if (!dto) {
-    await replyLineMessages(replyToken, [
-      { type: "text", text: "暫時無法產生報告，請稍後再試。" },
-    ]);
-    await logOutboundOk(lineUserId, replyToken, "（無報告）");
-    return;
-  }
-
-  const linkUc = getCreateStudentReportLinkUseCase();
-  const { token } = await linkUc.execute({ studentId });
-  let fullReportUrl: string;
-  try {
-    fullReportUrl = publicReportPageUrl(req, token);
-  } catch {
-    const base =
-      getEnv("APP_BASE_URL")?.replace(/\/$/, "") ||
-      getEnv("NEXT_PUBLIC_APP_URL")?.replace(/\/$/, "") ||
-      "http://localhost:3000";
-    fullReportUrl = `${base}/report?t=${encodeURIComponent(token)}`;
-  }
-
-  const flex = buildParentReportFlex({ dto, fullReportUrl });
-  const messages =
-    ctx.kind === "multiple"
-      ? ([{ type: "text" as const, text: MSG_MULTI_HINT }, flex] as LineMessage[])
-      : ([flex] as LineMessage[]);
-
-  await replyLineMessages(replyToken, messages);
-  await logOutboundOk(
+  scheduleParentReportJob(req, {
+    kind: "learning_overview",
     lineUserId,
-    replyToken,
-    ctx.kind === "multiple" ? `${MSG_MULTI_HINT} [flex]` : "[flex]",
-  );
+    studentId: ctx.studentId,
+    multiBinding: ctx.kind === "multiple",
+  });
 }
 
 function resolveStudentForSubjectStep(
@@ -313,6 +276,7 @@ async function runReportQuery(args: {
 }
 
 async function handleSubjectWithContext(args: {
+  req: Request;
   lineUserId: string;
   replyToken: string;
   rawText: string;
@@ -355,6 +319,25 @@ async function handleSubjectWithContext(args: {
     return;
   }
 
+  if (subjectCode === "science") {
+    await replyLineMessages(args.replyToken, [
+      { type: "text", text: MSG_PARENT_REPORT_PROCESSING },
+    ]);
+    await logOutboundOk(
+      args.lineUserId,
+      args.replyToken,
+      MSG_PARENT_REPORT_PROCESSING,
+    );
+    scheduleParentReportJob(args.req, {
+      kind: "subject_query",
+      lineUserId: args.lineUserId,
+      studentId: studentPick.studentId,
+      subjectCode: "science",
+      pendingAction: args.pendingAction,
+    });
+    return;
+  }
+
   await runReportQuery({
     lineUserId: args.lineUserId,
     replyToken: args.replyToken,
@@ -374,7 +357,7 @@ export async function runLineTextPipeline(
   const raw = input.text;
   const text = normalizeLineInput(raw);
 
-  if (text === QUERY_LEARNING) {
+  if (matchesParentLearningOverviewQuery(raw)) {
     await handleLearningQuery(req, input.lineUserId, input.replyToken);
     return { handled: true };
   }
@@ -426,6 +409,7 @@ export async function runLineTextPipeline(
     }
 
     await handleSubjectWithContext({
+      req,
       lineUserId: input.lineUserId,
       replyToken: input.replyToken,
       rawText: raw,

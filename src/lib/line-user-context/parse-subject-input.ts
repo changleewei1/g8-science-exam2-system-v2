@@ -17,6 +17,20 @@ export function normalizeLineInput(raw: string): string {
     .trim();
 }
 
+/** 與 LINE 上「小朋友學習狀況」總覽查詢比對用之標準字串（不含標點） */
+export const PARENT_LEARNING_OVERVIEW_QUERY_KEY = "小朋友學習狀況";
+
+/**
+ * 是否為「小朋友學習狀況」查詢（允許尾端標點、句中多餘空白、零寬字元）。
+ * 避免使用者輸入「小朋友學習狀況。」等導致嚴格相等失敗、看不到處理中訊息。
+ */
+export function matchesParentLearningOverviewQuery(raw: string): boolean {
+  let n = normalizeLineInput(raw).replace(/\u200b/g, "");
+  n = n.replace(/[。．.!?！？;；、，,?？]+$/u, "").trim();
+  n = n.replace(/\s+/g, "");
+  return n === PARENT_LEARNING_OVERVIEW_QUERY_KEY;
+}
+
 /**
  * 將單一段字串對應到科目；支援別名（不分大小寫之英文關鍵字另判斷）。
  */
