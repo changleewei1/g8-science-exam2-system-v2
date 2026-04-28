@@ -21,6 +21,7 @@ export function TaskCreateForm({ videos, editTaskId }: Props) {
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [endDateTouched, setEndDateTouched] = useState(false);
   const [className, setClassName] = useState("");
   const [assignmentMode, setAssignmentMode] = useState<"class" | "students">("class");
   const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([]);
@@ -59,6 +60,7 @@ export function TaskCreateForm({ videos, editTaskId }: Props) {
         setDescription(t.description ?? "");
         setStartDate(t.startDate);
         setEndDate(t.endDate);
+        setEndDateTouched(true);
         setClassName(t.className);
         setIsActive(t.isActive !== false);
         if (t.assignmentMode === "students" && Array.isArray(t.assigneeStudentIds)) {
@@ -85,6 +87,15 @@ export function TaskCreateForm({ videos, editTaskId }: Props) {
       cancelled = true;
     };
   }, [editTaskId, videos.length]);
+
+  useEffect(() => {
+    if (!startDate) return;
+    if (endDateTouched) return;
+    const d = new Date(`${startDate}T12:00:00`);
+    d.setDate(d.getDate() + 7);
+    const next = d.toISOString().slice(0, 10);
+    setEndDate(next);
+  }, [startDate, endDateTouched]);
 
   function addRow() {
     setRows((r) => [...r, { videoId: videos[0]?.id ?? "", dayIndex: 1 }]);
@@ -294,7 +305,9 @@ export function TaskCreateForm({ videos, editTaskId }: Props) {
               type="date"
               className="mt-1.5 w-full rounded-xl border border-slate-300 px-3 py-2.5 shadow-sm"
               value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
+              onChange={(e) => {
+                setStartDate(e.target.value);
+              }}
             />
           </label>
           <label className="block text-sm">
@@ -304,7 +317,10 @@ export function TaskCreateForm({ videos, editTaskId }: Props) {
               type="date"
               className="mt-1.5 w-full rounded-xl border border-slate-300 px-3 py-2.5 shadow-sm"
               value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
+              onChange={(e) => {
+                setEndDateTouched(true);
+                setEndDate(e.target.value);
+              }}
             />
           </label>
         </div>
