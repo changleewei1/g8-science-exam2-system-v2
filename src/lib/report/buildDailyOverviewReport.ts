@@ -1,8 +1,14 @@
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import {
+  buildTeacherSuggestions,
+  getAtRiskStudents,
+  getWeakSkills,
+} from "@/lib/report/analysis";
 import { resolvePublicOriginWithoutRequest } from "@/lib/report/reportOrigin";
 
 export type DailyOverviewReport = {
   title: string;
+  content: string;
   html: string;
   metrics: {
     classCount: number;
@@ -61,20 +67,19 @@ export async function buildDailyOverviewReport(): Promise<DailyOverviewReport> {
     .limit(1)
     .maybeSingle();
   const examScopeId = (scope as { id: string } | null)?.id ?? null;
+  if (!examScopeId) {
+    throw new Error("examScopeId 不存在");
+  }
 
   let scopeVideoIds: string[] = [];
-  if (!examScopeId) {
-    warnings.push("找不到啟用中的 exam_scopes，無法以段考範圍計算完成率。");
-  } else {
-    const { data: units } = await supabase
-      .from("scope_units")
-      .select("id")
-      .eq("exam_scope_id", examScopeId);
-    const unitIds = (units ?? []).map((u: { id: string }) => u.id);
-    if (unitIds.length > 0) {
-      const { data: vids } = await supabase.from("videos").select("id").in("unit_id", unitIds);
-      scopeVideoIds = [...new Set((vids ?? []).map((v: { id: string }) => v.id))];
-    }
+  const { data: units } = await supabase
+    .from("scope_units")
+    .select("id")
+    .eq("exam_scope_id", examScopeId);
+  const unitIds = (units ?? []).map((u: { id: string }) => u.id);
+  if (unitIds.length > 0) {
+    const { data: vids } = await supabase.from("videos").select("id").in("unit_id", unitIds);
+    scopeVideoIds = [...new Set((vids ?? []).map((v: { id: string }) => v.id))];
   }
 
   const scopeVideoTotal = scopeVideoIds.length;
@@ -171,42 +176,86 @@ export async function buildDailyOverviewReport(): Promise<DailyOverviewReport> {
 
   const origin = resolvePublicOriginWithoutRequest();
   const adminLink = `${origin}/admin`;
+  const weakSkills = await getWeakSkills(supabase, examScopeId);
+  const riskStudents = await getAtRiskStudents(supabase);
+  const suggestions = buildTeacherSuggestions(
+    weakSkills,
+    todayViewedVideoCount,
+    incompleteStudentCount,
+  );
 
-  const html = `
-    <h2 style="margin:0 0 8px 0">每日學習分析總覽（${escapeHtml(new Date().toLocaleDateString("zh-TW"))}）</h2>
-    <p style="margin:0 0 12px 0;color:#334155">
-      段考範圍：${examScopeId ? "以啟用中的 exam_scope 統計" : "（未設定）"}
-    </p>
+  const content = `
+📊 每日學習分析（${today}）
 
-    <table width="100%" border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;margin:8px 0 16px 0">
-      <tr><th align="left">班級整體完成率</th><td>${classVideoCompletionRate}%</td></tr>
-      <tr><th align="left">今日觀看影片數</th><td>${todayViewedVideoCount}</td></tr>
-      <tr><th align="left">今日作答題目數</th><td>${todayAnsweredQuestionCount}</td></tr>
-      <tr><th align="left">未完成學生數</th><td>${incompleteStudentCount}</td></tr>
-    </table>
+📘 班級整體狀況
+- 完成率：${classVideoCompletionRate}%
+- 未完成學生：${incompleteStudentCount}人
 
-    <h3 style="margin:0 0 8px 0">完成率前 5 名（段考範圍影片）</h3>
-    <table width="100%" border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;margin:8px 0 16px 0">
-      <tr><th align="left">學生</th><th align="left">班級</th><th align="left">完成率</th></tr>
-      ${
-        topStudents.length === 0
-          ? `<tr><td colspan="3">目前沒有可統計學生資料。</td></tr>`
-          : topStudents
-              .map(
-                (s) =>
-                  `<tr><td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.className ?? "未分班")}</td><td>${s.completionRate}%</td></tr>`,
-              )
-              .join("")
-      }
-    </table>
+${incompleteStudentCount > 10 ? "⚠️ 未完成學生偏多，需關注\n" : ""}
 
-    <p style="margin:0;color:#0f172a">
-      後台連結：<a href="${escapeHtml(adminLink)}">${escapeHtml(adminLink)}</a>
-    </p>
-  `;
+━━━━━━━━━━━━━━━━━━
+
+⚠️ 教學重點（弱點 TOP3）
+${
+  weakSkills.length > 0
+    ? weakSkills
+        .map(
+          (s, i) =>
+            `${i + 1}. ${s.skill}（錯誤率 ${(s.wrongRate * 100).toFixed(1)}%）`,
+        )
+        .join("\n")
+    : "目前資料不足，尚無法判斷弱點"
+}
+
+━━━━━━━━━━━━━━━━━━
+
+👤 高風險學生（需關注）
+${
+  riskStudents.length > 0
+    ? riskStudents
+        .map(
+          (s) =>
+            `- ${s.student_name}${s.class_name ? `（${s.class_name}）` : ""}（完成率 ${(s.completion_rate * 100).toFixed(0)}%）`,
+        )
+        .join("\n")
+    : "目前無明顯風險學生"
+}
+
+━━━━━━━━━━━━━━━━━━
+
+🏆 學習表現優秀（前5名）
+${topStudents
+  .map((s) => `- ${s.name}（${s.completionRate}%）`)
+  .join("\n")}
+
+━━━━━━━━━━━━━━━━━━
+
+📉 今日學習狀況
+- 今日觀看影片：${todayViewedVideoCount}
+- 今日作答題目：${todayAnsweredQuestionCount}
+
+${todayViewedVideoCount === 0 ? "⚠️ 今日無學生學習紀錄\n" : ""}
+
+━━━━━━━━━━━━━━━━━━
+
+🧠 教學建議
+${
+  suggestions.length > 0
+    ? suggestions.map((s) => `👉 ${s}`).join("\n")
+    : "暫無建議"
+}
+
+━━━━━━━━━━━━━━━━━━
+
+🔗 後台管理
+${adminLink}
+  `.trim();
+
+  const html = escapeHtml(content);
 
   return {
     title,
+    content,
     html,
     metrics: {
       classCount: classSet.size,

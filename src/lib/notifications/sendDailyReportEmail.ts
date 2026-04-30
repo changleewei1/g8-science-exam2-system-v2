@@ -5,13 +5,18 @@ export async function sendDailyReportEmail(input: {
   from: string;
   to: string;
   subject: string;
-  html: string;
+  content: string;
 }): Promise<{ id?: string }> {
+  const html = `
+<div style="font-family: Arial, sans-serif; line-height: 1.6; white-space: pre-line;">
+${input.content}
+</div>
+`;
   return await sendEmailViaResend({
     apiKey: input.resendApiKey,
     from: input.from,
     to: input.to,
     subject: input.subject,
-    html: input.html,
+    html,
   });
 }

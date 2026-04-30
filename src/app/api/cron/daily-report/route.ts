@@ -28,12 +28,14 @@ async function runDailyReport() {
   const warnings: string[] = [];
 
   let dailyHtml = "";
+  let dailyContent = "";
   let dailyWarnings: string[] = [];
   let dailyTitle = "【國二理化】每日學習分析總覽";
   try {
     const daily = await buildDailyOverviewReport();
     dailyTitle = daily.title;
     dailyHtml = daily.html;
+    dailyContent = daily.content;
     dailyWarnings = daily.warnings;
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
@@ -61,9 +63,9 @@ async function runDailyReport() {
         .join("")}</ul></div>`
     : "";
 
-  const html = `
+  const content = `
     <div style="font-family:Arial,sans-serif;line-height:1.6;color:#111">
-      ${dailyHtml || "<p>今日無法產生每日總覽。</p>"}
+      ${dailyHtml || dailyContent || "今日無法產生每日總覽。"}
       ${taskHtml ? `<hr style="margin:24px 0;border:none;border-top:1px solid #e2e8f0" />${taskHtml}` : ""}
       ${taskHtml ? "" : "<p style=\"margin-top:18px;color:#334155\">今日沒有符合條件（7 天內）的任務追蹤推播。</p>"}
       ${warningHtml}
@@ -77,7 +79,7 @@ async function runDailyReport() {
     from: emailFrom,
     to: adminEmail,
     subject,
-    html,
+    content,
   });
 
   return {
