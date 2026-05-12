@@ -11,7 +11,7 @@ export class GetVideoDetailUseCase {
 
   async execute(videoId: string, studentId: string) {
     const video = await this.videos.findById(videoId);
-    if (!video) return null;
+    if (!video || !video.visibleToStudent()) return null;
     const progress = await this.progress.findByStudentAndVideo(studentId, videoId);
     const quiz = await this.quizzes.findByVideoId(videoId);
     return { video, progress, quiz };

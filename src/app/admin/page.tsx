@@ -47,6 +47,15 @@ export default async function AdminHomePage() {
           </li>
           <li>
             <Link
+              href="/admin/skill-practice"
+              className="interactive-btn block min-h-[120px] rounded-2xl border border-slate-200 bg-white p-5 shadow-md sm:p-6"
+            >
+              <span className="font-medium text-slate-900">技能樹練習追蹤</span>
+              <p className="mt-2 text-sm text-slate-600">依段考範圍檢視智慧練習熟練度與全班對照（僅讀取練習紀錄）</p>
+            </Link>
+          </li>
+          <li>
+            <Link
               href="/admin/tasks"
               className="interactive-btn block min-h-[120px] rounded-2xl border border-slate-200 bg-white p-5 shadow-md sm:p-6"
             >
@@ -70,6 +79,33 @@ export default async function AdminHomePage() {
             >
               <span className="font-medium text-slate-900">影片測驗題編輯</span>
               <p className="mt-2 text-sm text-slate-600">依單元修改每部影片的 3 題與正解</p>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/admin/video-skill-review"
+              className="interactive-btn block min-h-[120px] rounded-2xl border border-slate-200 bg-white p-5 shadow-md sm:p-6"
+            >
+              <span className="font-medium text-slate-900">影片技能候選審核</span>
+              <p className="mt-2 text-sm text-slate-600">審核 AI 初判 skill_code，核准後才寫入正式標籤</p>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/admin/video-skill-tags"
+              className="interactive-btn block min-h-[120px] rounded-2xl border border-slate-200 bg-white p-5 shadow-md sm:p-6"
+            >
+              <span className="font-medium text-slate-900">影片技能對應管理</span>
+              <p className="mt-2 text-sm text-slate-600">手動新增／移除影片與 skill_code 的連結（不影響影片/題庫）</p>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/admin/videos"
+              className="interactive-btn block min-h-[120px] rounded-2xl border border-slate-200 bg-white p-5 shadow-md sm:p-6"
+            >
+              <span className="font-medium text-slate-900">影片管理中心</span>
+              <p className="mt-2 text-sm text-slate-600">新增草稿影片、分析 skill、生成候選題目與審核入庫（不覆寫既有資料）</p>
             </Link>
           </li>
         </ul>

@@ -45,8 +45,10 @@ async function runDailyReport() {
   let taskHtml = "";
   let taskWarnings: string[] = [];
   let taskCount = 0;
+  let hasRecentTasks = false;
   try {
     const task = await buildTaskTrackingReport();
+    hasRecentTasks = task.hasRecentTasks;
     taskHtml = task.html;
     taskWarnings = task.warnings;
     taskCount = task.tasks.length;
@@ -64,13 +66,10 @@ async function runDailyReport() {
     : "";
 
   const content = `
-    <div style="font-family:Arial,sans-serif;line-height:1.6;color:#111">
-      ${dailyHtml || dailyContent || "今日無法產生每日總覽。"}
-      ${taskHtml ? `<hr style="margin:24px 0;border:none;border-top:1px solid #e2e8f0" />${taskHtml}` : ""}
-      ${taskHtml ? "" : "<p style=\"margin-top:18px;color:#334155\">今日沒有符合條件（7 天內）的任務追蹤推播。</p>"}
-      ${warningHtml}
-    </div>
-  `;
+${dailyContent || dailyHtml || "今日無法產生每日總覽。"}
+${taskHtml && hasRecentTasks ? `\n\n━━━━━━━━━━━━━━━━━━\n\n${taskHtml}` : ""}
+${warningHtml ? `\n\n${warningHtml}` : ""}
+  `.trim();
 
   const subject = taskCount > 0 ? `${dailyTitle}（含任務追蹤 ${taskCount} 筆）` : dailyTitle;
 

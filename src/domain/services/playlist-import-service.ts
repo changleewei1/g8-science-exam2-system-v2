@@ -169,6 +169,7 @@ export class PlaylistImportService {
         subtitle_text: null,
         sort_order: item.playlistPosition,
         is_active: true,
+        management_status: "active",
       };
       const videoId = await this.videoRepo.insertReturningId(videoRow);
 

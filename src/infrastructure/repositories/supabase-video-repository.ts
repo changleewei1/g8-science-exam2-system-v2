@@ -37,7 +37,8 @@ export class SupabaseVideoRepository implements VideoRepository {
       .from("videos")
       .select("*")
       .eq("unit_id", unitId)
-      .eq("is_active", true);
+      .eq("is_active", true)
+      .eq("management_status", "active");
     throwIfPostgrestError(error);
     const list = (data as VideoRow[]).map(videoFromRow);
     return sortVideosInUnitByPlaylistTitle(list);
@@ -47,7 +48,8 @@ export class SupabaseVideoRepository implements VideoRepository {
     const { data, error } = await getSupabaseAdmin()
       .from("videos")
       .select("*")
-      .eq("is_active", true);
+      .eq("is_active", true)
+      .eq("management_status", "active");
     throwIfPostgrestError(error);
     const list = (data as VideoRow[]).map(videoFromRow);
     return sortVideosByUnitThenPlaylistTitle(list);

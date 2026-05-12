@@ -70,6 +70,7 @@ export function videoFromRow(r: VideoRow): Video {
     r.subtitle_text,
     r.sort_order,
     r.is_active,
+    r.management_status?.trim() ? r.management_status.trim() : "active",
   );
 }
 

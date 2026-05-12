@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getStudentDashboardUseCase, getRepositories } from "@/infrastructure/composition";
+import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import { StudentG8ExamScopeOverview } from "@/components/student/StudentG8ExamScopeOverview";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { getStudentSession } from "@/lib/session";
 import { getDefaultExamScopeId } from "@/lib/constants";
+import { getStudentSkillPracticeRows } from "@/lib/skill-practice-summary";
+import { resolveSpringSecondExamScope, resolveSpringThirdExamScope } from "@/lib/student-g8-exam-scope-resolver";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +18,9 @@ export default async function StudentDashboardPage() {
   const envScope = getDefaultExamScopeId();
   const { examScopes } = getRepositories();
   const scopes = await examScopes.findAllActive();
-  const scopeId = envScope ?? scopes[0]?.id;
+  const springSecond = resolveSpringSecondExamScope(scopes, envScope);
+  const springThird = resolveSpringThirdExamScope(scopes);
+  const scopeId = springSecond?.id ?? envScope ?? scopes[0]?.id;
   if (!scopeId) {
     return (
       <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
@@ -28,6 +34,66 @@ export default async function StudentDashboardPage() {
 
   const uc = getStudentDashboardUseCase();
   const data = await uc.execute(session.studentId, scopeId);
+  const practice = await getStudentSkillPracticeRows(session.studentId, scopeId);
+
+  const flatSkills = practice?.units.flatMap((u) => u.skills) ?? [];
+  const practicedSkills = flatSkills.filter((s) => s.answered_count > 0);
+  const weakSkills = flatSkills
+    .filter((s) => s.status === "建議加強")
+    .sort((a, b) => a.mastery_score - b.mastery_score);
+  const completedSkills = flatSkills.filter((s) => s.status === "已精熟").length;
+  const skillCompletionRate = flatSkills.length > 0 ? Math.round((completedSkills / flatSkills.length) * 100) : 0;
+  const avgMastery =
+    practicedSkills.length > 0
+      ? Math.round(practicedSkills.reduce((acc, s) => acc + s.mastery_score, 0) / practicedSkills.length)
+      : 0;
+  const latestPracticed = practicedSkills
+    .filter((s) => Boolean(s.last_practice_at))
+    .sort((a, b) => (b.last_practice_at ?? "").localeCompare(a.last_practice_at ?? ""))[0];
+
+  let todayAnsweredCount = 0;
+  if (flatSkills.length > 0) {
+    const supabase = getSupabaseAdmin();
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const { data: todaySessions } = await supabase
+      .from("adaptive_practice_sessions")
+      .select("id")
+      .eq("student_id", session.studentId)
+      .in(
+        "skill_code",
+        flatSkills.map((s) => s.skill_code),
+      )
+      .gte("created_at", todayStart.toISOString())
+      .limit(2000);
+    const todaySessionIds = (todaySessions ?? []).map((s) => s.id as string);
+    if (todaySessionIds.length > 0) {
+      const { count } = await supabase
+        .from("adaptive_practice_answers")
+        .select("id", { count: "exact", head: true })
+        .in("session_id", todaySessionIds);
+      todayAnsweredCount = count ?? 0;
+    }
+  }
+
+  const recommendedSkills = weakSkills.slice(0, 2);
+  const recommendationLabel =
+    recommendedSkills.length > 0
+      ? recommendedSkills.map((s) => s.skill_name).join("、")
+      : practicedSkills.length > 0
+        ? practicedSkills
+            .sort((a, b) => (b.last_practice_at ?? "").localeCompare(a.last_practice_at ?? ""))
+            .slice(0, 2)
+            .map((s) => s.skill_name)
+            .join("、")
+        : "開始你的 AI 技能樹練習";
+  const statusTag =
+    weakSkills.length > 0
+      ? "⚠️ 建議加強"
+      : todayAnsweredCount > 0
+        ? "🔥 本週進步中"
+        : "🎯 今日尚未開始 skill 練習";
+
   if (!data) {
     return (
       <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
@@ -37,11 +103,14 @@ export default async function StudentDashboardPage() {
   }
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
-      <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
+      <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm text-slate-500 sm:text-base">你好，{student?.name ?? "同學"}</p>
-          <h1 className="mt-1 text-xl font-semibold text-slate-900 sm:text-2xl">{data.scope.title}</h1>
+          <h1 className="mt-1 text-xl font-semibold text-slate-900 sm:text-2xl">學習總覽</h1>
+          <p className="mt-1 text-sm text-slate-600">
+            目前預設進度與建議練習以「{data.scope.title}」為主；亦可從下方選擇其他段考範圍。
+          </p>
         </div>
         <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap">
           <Link
@@ -58,6 +127,78 @@ export default async function StudentDashboardPage() {
           </Link>
         </div>
       </header>
+
+      <StudentG8ExamScopeOverview springSecondScopeId={springSecond?.id ?? null} springThirdScopeId={springThird?.id ?? null} />
+
+      <Link
+        href={`/student/exam-scope/${data.scope.id}/skills`}
+        className="flame-glow group relative mb-7 block overflow-hidden rounded-2xl border border-violet-200 bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 p-[1px] transition-all duration-300 hover:scale-[1.01] hover:shadow-violet-300/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
+      >
+        <div className="relative rounded-2xl bg-slate-950/90 p-5 text-white sm:p-6">
+          <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-violet-300/20 blur-2xl transition group-hover:scale-110" />
+          <div className="pointer-events-none absolute -bottom-10 -left-10 h-32 w-32 rounded-full bg-cyan-300/20 blur-2xl" />
+          <div className="relative">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-violet-100">
+                  <span className="animate-flame" aria-hidden>
+                    🔥
+                  </span>
+                  技能樹練習
+                </p>
+                <h2 className="mt-3 text-2xl font-semibold tracking-tight">🔥 今日推薦練習</h2>
+                <p className="mt-2 max-w-xl text-sm text-violet-100/90">
+                  系統會依照你的答題狀況，自動推薦適合的題目與難度。
+                </p>
+              </div>
+              <div className="rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-right">
+                <p className="text-xs text-violet-100/80">熟練度提升</p>
+                <p className="text-2xl font-bold text-emerald-300">+{Math.max(0, avgMastery - 50)}</p>
+              </div>
+            </div>
+
+            <div className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
+              <p className="rounded-lg bg-white/10 px-3 py-2">今日推薦：{recommendationLabel}</p>
+              <p className="rounded-lg bg-white/10 px-3 py-2">{statusTag}</p>
+              <p className="rounded-lg bg-white/10 px-3 py-2">今日練習題數：{todayAnsweredCount}</p>
+              <p className="rounded-lg bg-white/10 px-3 py-2">
+                最近提升技能：{latestPracticed ? latestPracticed.skill_name : "開始你的 AI 技能樹練習"}
+              </p>
+            </div>
+
+            <div className="mt-5 space-y-3">
+              <div>
+                <div className="mb-1 flex items-center justify-between text-xs text-violet-100">
+                  <span>熟練度進度</span>
+                  <span>{avgMastery} / 100</span>
+                </div>
+                <div className="h-2.5 overflow-hidden rounded-full bg-white/20">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-cyan-300 to-emerald-300 transition-all duration-500"
+                    style={{ width: `${Math.min(100, Math.max(0, avgMastery))}%` }}
+                  />
+                </div>
+              </div>
+              <div>
+                <div className="mb-1 flex items-center justify-between text-xs text-violet-100">
+                  <span>skill 完成率</span>
+                  <span>{skillCompletionRate}%</span>
+                </div>
+                <div className="h-2 overflow-hidden rounded-full bg-white/20">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-violet-300 to-pink-300 transition-all duration-500"
+                    style={{ width: `${Math.min(100, Math.max(0, skillCompletionRate))}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5 inline-flex min-h-12 items-center rounded-xl bg-white px-4 py-2 text-base font-semibold text-violet-700 transition group-hover:scale-[1.02]">
+              ⚡ 立即開始練習
+            </div>
+          </div>
+        </div>
+      </Link>
 
       <section className="mb-8 grid gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
         <h2 className="text-sm font-medium text-slate-700">整體進度</h2>

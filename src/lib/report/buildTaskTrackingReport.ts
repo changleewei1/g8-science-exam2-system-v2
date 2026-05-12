@@ -1,6 +1,8 @@
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
 
 export type TaskTrackingReport = {
+  hasRecentTasks: boolean;
+  recentTaskCount: number;
   tasks: {
     taskId: string;
     title: string;
@@ -47,6 +49,17 @@ export async function buildTaskTrackingReport(): Promise<TaskTrackingReport> {
   const supabase = getSupabaseAdmin();
   const warnings: string[] = [];
   const today = ymdTaipei();
+  const threeDaysAgo = new Date(`${today}T12:00:00+08:00`);
+  threeDaysAgo.setDate(threeDaysAgo.getDate() - 2);
+  const recentDate = threeDaysAgo.toISOString().slice(0, 10);
+
+  const { data: recentTasks } = await supabase
+    .from("learning_tasks")
+    .select("id")
+    .or(`created_at.gte.${recentDate}T00:00:00+08:00,start_date.gte.${recentDate}`)
+    .limit(20);
+  const recentTaskCount = (recentTasks ?? []).length;
+  const hasRecentTasks = recentTaskCount > 0;
 
   const { data: tasks } = await supabase
     .from("learning_tasks")
@@ -66,7 +79,7 @@ export async function buildTaskTrackingReport(): Promise<TaskTrackingReport> {
   }[];
 
   if (activeTasks.length === 0) {
-    return { tasks: [], html: "", warnings };
+    return { hasRecentTasks, recentTaskCount, tasks: [], html: "", warnings };
   }
 
   const { data: students } = await supabase
@@ -207,7 +220,7 @@ export async function buildTaskTrackingReport(): Promise<TaskTrackingReport> {
     });
   }
 
-  if (taskBlocks.length === 0) return { tasks: [], html: "", warnings };
+  if (taskBlocks.length === 0) return { hasRecentTasks, recentTaskCount, tasks: [], html: "", warnings };
 
   const html = `
     <h2 style="margin:24px 0 8px 0">學習任務追蹤（任務建立後 7 天內每日推播）</h2>
@@ -250,6 +263,6 @@ export async function buildTaskTrackingReport(): Promise<TaskTrackingReport> {
       .join("")}
   `;
 
-  return { tasks: taskBlocks, html, warnings };
+  return { hasRecentTasks, recentTaskCount, tasks: taskBlocks, html, warnings };
 }
 

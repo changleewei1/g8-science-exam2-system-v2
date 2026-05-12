@@ -24,6 +24,16 @@ export const submitQuizBodySchema = z.object({
   answers: z.record(z.string(), z.string()),
 });
 
+export const practiceStartBodySchema = z.object({
+  skill_code: z.string().min(1).max(32),
+});
+
+export const practiceAnswerBodySchema = z.object({
+  session_id: z.string().uuid(),
+  question_id: z.string().uuid(),
+  answer: z.string().min(1).max(8),
+});
+
 export const reportLinkBodySchema = z.object({
   taskId: z.string().uuid().nullable().optional(),
   expiresInDays: z.number().int().min(1).max(365).nullable().optional(),

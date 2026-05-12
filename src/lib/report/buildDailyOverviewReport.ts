@@ -2,6 +2,7 @@ import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
 import {
   buildTeacherSuggestions,
   getAtRiskStudents,
+  type StudentCompletionRow,
   getWeakSkills,
 } from "@/lib/report/analysis";
 import { resolvePublicOriginWithoutRequest } from "@/lib/report/reportOrigin";
@@ -19,6 +20,9 @@ export type DailyOverviewReport = {
     todayViewedVideoCount: number;
     todayAnsweredQuestionCount: number;
     incompleteStudentCount: number;
+    completedStudentCount: number;
+    atRiskStudentCount: number;
+    recentTaskCount: number;
     topStudents: { name: string; className: string | null; completionRate: number }[];
   };
   warnings: string[];
@@ -29,14 +33,6 @@ function toPercent(numerator: number, denominator: number): number {
   return Math.round((numerator / denominator) * 1000) / 10;
 }
 
-function escapeHtml(text: string): string {
-  return text
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-}
-
 function ymdTaipei(d = new Date()): string {
   const p = new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Taipei" }).format(d);
   // sv-SE gives YYYY-MM-DD
@@ -44,6 +40,12 @@ function ymdTaipei(d = new Date()): string {
 }
 
 export async function buildDailyOverviewReport(): Promise<DailyOverviewReport> {
+  type StudentScopeCompletion = StudentCompletionRow & {
+    videoCompletionRate: number;
+    quizCompletionRate: number;
+    completedVideos: number;
+    completedQuizzes: number;
+  };
   const supabase = getSupabaseAdmin();
   const warnings: string[] = [];
 
@@ -55,6 +57,9 @@ export async function buildDailyOverviewReport(): Promise<DailyOverviewReport> {
     .select("id, name, class_name, is_active")
     .eq("is_active", true);
   const activeStudents = (students ?? []) as { id: string; name: string; class_name: string | null }[];
+  if (activeStudents.length === 0) {
+    warnings.push("沒有學生資料。");
+  }
   const studentIds = activeStudents.map((s) => s.id);
   const classSet = new Set(activeStudents.map((s) => s.class_name ?? "未分班"));
 
@@ -83,6 +88,9 @@ export async function buildDailyOverviewReport(): Promise<DailyOverviewReport> {
   }
 
   const scopeVideoTotal = scopeVideoIds.length;
+  if (scopeVideoTotal === 0) {
+    warnings.push("段考範圍沒有影片資料。");
+  }
 
   // 影片完成：用 student_video_progress.is_completed（段考範圍內）
   const completedByStudent = new Map<string, number>();
@@ -159,39 +167,155 @@ export async function buildDailyOverviewReport(): Promise<DailyOverviewReport> {
     warnings.push("無法統計今日作答題目數（可能缺少 student_quiz_answers 或欄位）。");
   }
 
-  // 各學生完成率（前 5 名）
-  const topStudents = activeStudents
-    .map((s) => {
-      const done = completedByStudent.get(s.id) ?? 0;
-      return { name: s.name, className: s.class_name, completionRate: toPercent(done, scopeVideoTotal) };
-    })
-    .sort((a, b) => b.completionRate - a.completionRate)
-    .slice(0, 5);
+  // 段考範圍 quizzes（若無 quiz，整體完成率先採用影片完成率）
+  let scopeQuizIds: string[] = [];
+  if (scopeVideoIds.length > 0) {
+    const { data: quizzes } = await supabase
+      .from("quizzes")
+      .select("id")
+      .in("video_id", scopeVideoIds);
+    scopeQuizIds = [...new Set((quizzes ?? []).map((q: { id: string }) => q.id))];
+  }
+  if (scopeQuizIds.length === 0) {
+    warnings.push("段考範圍沒有 quiz 資料，完成率先以影片完成率計算。");
+  }
 
-  // 未完成學生數（段考範圍影片完成率 < 100）
-  const incompleteStudentCount = activeStudents.filter((s) => {
-    const done = completedByStudent.get(s.id) ?? 0;
-    return scopeVideoTotal > 0 && done < scopeVideoTotal;
-  }).length;
+  const attemptedQuizSet = new Set<string>();
+  if (scopeQuizIds.length > 0 && studentIds.length > 0) {
+    const { data: attempts } = await supabase
+      .from("student_quiz_attempts")
+      .select("student_id, quiz_id")
+      .in("student_id", studentIds)
+      .in("quiz_id", scopeQuizIds)
+      .not("submitted_at", "is", null);
+    for (const row of attempts ?? []) {
+      const r = row as { student_id: string; quiz_id: string };
+      attemptedQuizSet.add(`${r.student_id}:${r.quiz_id}`);
+    }
+  }
+
+  const totalQuizzes = scopeQuizIds.length;
+  const studentCompletions: StudentScopeCompletion[] = activeStudents.map((s) => {
+    const completedVideos = completedByStudent.get(s.id) ?? 0;
+    const videoCompletionRate = toPercent(completedVideos, scopeVideoTotal);
+
+    let completedQuizzes = 0;
+    for (const qid of scopeQuizIds) {
+      if (attemptedQuizSet.has(`${s.id}:${qid}`)) completedQuizzes += 1;
+    }
+    const quizCompletionRate = toPercent(completedQuizzes, totalQuizzes);
+
+    /**
+     * 完成率算法：
+     * - 若段考範圍有 quiz：overall = video*0.7 + quiz*0.3
+     * - 若無 quiz：overall = video（避免因無測驗資料而誤降）
+     */
+    const overallCompletion =
+      totalQuizzes > 0
+        ? Math.round((videoCompletionRate * 0.7 + quizCompletionRate * 0.3) * 10) / 10
+        : videoCompletionRate;
+
+    return {
+      studentId: s.id,
+      studentName: s.name,
+      className: s.class_name,
+      overallCompletion,
+      videoCompletionRate,
+      quizCompletionRate,
+      completedVideos,
+      completedQuizzes,
+    };
+  });
+
+  const completedStudents = studentCompletions
+    .filter((s) => s.videoCompletionRate >= 100 && s.quizCompletionRate >= 100)
+    .map((s) => ({ studentName: s.studentName, className: s.className }));
+
+  const incompleteStudents = studentCompletions
+    .filter((s) => !(s.videoCompletionRate >= 100 && s.quizCompletionRate >= 100))
+    .sort((a, b) => a.overallCompletion - b.overallCompletion);
+
+  const incompleteStudentCount = incompleteStudents.length;
+  const riskStudents = getAtRiskStudents(studentCompletions, 30);
+  const atRiskStudentCount = riskStudents.length;
+
+  const topStudents = [...studentCompletions]
+    .sort((a, b) => b.overallCompletion - a.overallCompletion)
+    .slice(0, 5)
+    .map((s) => ({
+      name: s.studentName,
+      className: s.className,
+      completionRate: s.overallCompletion,
+    }));
 
   const origin = resolvePublicOriginWithoutRequest();
   const adminLink = `${origin}/admin`;
   const weakSkills = await getWeakSkills(supabase, examScopeId);
-  const riskStudents = await getAtRiskStudents(supabase);
+  const threeDaysAgo = new Date(`${today}T12:00:00+08:00`);
+  threeDaysAgo.setDate(threeDaysAgo.getDate() - 2);
+  const recentDate = threeDaysAgo.toISOString().slice(0, 10);
+  const { data: recentTasks } = await supabase
+    .from("learning_tasks")
+    .select("id")
+    .or(`created_at.gte.${recentDate}T00:00:00+08:00,start_date.gte.${recentDate}`)
+    .limit(1);
+  const recentTaskCount = (recentTasks ?? []).length;
   const suggestions = buildTeacherSuggestions(
     weakSkills,
     todayViewedVideoCount,
     incompleteStudentCount,
+    atRiskStudentCount,
+    recentTaskCount,
+    completedStudents.length,
   );
 
   const content = `
 📊 每日學習分析（${today}）
 
 📘 班級整體狀況
-- 完成率：${classVideoCompletionRate}%
-- 未完成學生：${incompleteStudentCount}人
+- 班級整體完成率：${classVideoCompletionRate}%
+- 已完成學生：${completedStudents.length}人
+- 尚未完成學生：${incompleteStudentCount}人
+- 高風險學生：${atRiskStudentCount}人
 
-${incompleteStudentCount > 10 ? "⚠️ 未完成學生偏多，需關注\n" : ""}
+━━━━━━━━━━━━━━━━━━
+
+✅ 已完成段考範圍學生（共 ${completedStudents.length} 人）
+${
+  completedStudents.length > 0
+    ? completedStudents
+        .map((s) => `- ${s.studentName}${s.className ? `（${s.className}）` : ""}`)
+        .join("\n")
+    : "目前尚無學生完成全部段考範圍"
+}
+
+━━━━━━━━━━━━━━━━━━
+
+📌 尚未完成學生（共 ${incompleteStudentCount} 人）
+${
+  incompleteStudents.length > 0
+    ? incompleteStudents
+        .map(
+          (s) =>
+            `- ${s.studentName}${s.className ? `（${s.className}）` : ""}：${s.overallCompletion}%`,
+        )
+        .join("\n")
+    : "目前所有學生已完成段考範圍"
+}
+
+━━━━━━━━━━━━━━━━━━
+
+🚨 高風險學生（完成率低於 30%）
+${
+  riskStudents.length > 0
+    ? riskStudents
+        .map(
+          (s) =>
+            `- ${s.studentName}${s.className ? `（${s.className}）` : ""}：${s.completionRate}%`,
+        )
+        .join("\n")
+    : "目前無高風險學生"
+}
 
 ━━━━━━━━━━━━━━━━━━
 
@@ -209,20 +333,6 @@ ${
 
 ━━━━━━━━━━━━━━━━━━
 
-👤 高風險學生（需關注）
-${
-  riskStudents.length > 0
-    ? riskStudents
-        .map(
-          (s) =>
-            `- ${s.student_name}${s.class_name ? `（${s.class_name}）` : ""}（完成率 ${(s.completion_rate * 100).toFixed(0)}%）`,
-        )
-        .join("\n")
-    : "目前無明顯風險學生"
-}
-
-━━━━━━━━━━━━━━━━━━
-
 🏆 學習表現優秀（前5名）
 ${topStudents
   .map((s) => `- ${s.name}（${s.completionRate}%）`)
@@ -234,7 +344,12 @@ ${topStudents
 - 今日觀看影片：${todayViewedVideoCount}
 - 今日作答題目：${todayAnsweredQuestionCount}
 
-${todayViewedVideoCount === 0 ? "⚠️ 今日無學生學習紀錄\n" : ""}
+${
+  todayViewedVideoCount === 0
+    ? `⚠️ 今日尚無新增學習紀錄
+${recentTaskCount === 0 ? "目前三天內未新增學習任務，因此今日無新增紀錄屬正常狀況。" : ""}`
+    : ""
+}
 
 ━━━━━━━━━━━━━━━━━━
 
@@ -251,12 +366,10 @@ ${
 ${adminLink}
   `.trim();
 
-  const html = escapeHtml(content);
-
   return {
     title,
     content,
-    html,
+    html: content,
     metrics: {
       classCount: classSet.size,
       studentCount: activeStudents.length,
@@ -266,6 +379,9 @@ ${adminLink}
       todayViewedVideoCount,
       todayAnsweredQuestionCount,
       incompleteStudentCount,
+      completedStudentCount: completedStudents.length,
+      atRiskStudentCount,
+      recentTaskCount,
       topStudents,
     },
     warnings,

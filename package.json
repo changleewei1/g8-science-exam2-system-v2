@@ -18,6 +18,12 @@
     "export:reaction-rate-review": "tsx --tsconfig tsconfig.json scripts/export-reaction-rate-question-bank.ts",
     "sync:reaction-rate-review": "tsx --tsconfig tsconfig.json scripts/sync-reaction-rate-question-bank.ts",
     "promote:reaction-rate-candidates": "tsx --tsconfig tsconfig.json scripts/promote-reaction-rate-candidates.ts",
+    "generate:questions": "tsx --tsconfig tsconfig.json scripts/generate-questions-from-playlist.ts",
+    "generate:missing-skills": "tsx --tsconfig tsconfig.json scripts/generate-missing-skill-questions.ts",
+    "check:skill-coverage": "tsx --tsconfig tsconfig.json scripts/check-skill-coverage.ts",
+    "import:generated-questions": "tsx --tsconfig tsconfig.json scripts/import-generated-questions.ts",
+    "analyze:video-skills": "tsx --tsconfig tsconfig.json scripts/analyze-video-skill-mapping.ts",
+    "patch:video-skills": "tsx --tsconfig tsconfig.json scripts/patch-video-skill-tags.ts",
     "seed:g8-students": "tsx --tsconfig tsconfig.json scripts/seed-g8-class-students.ts",
     "seed:g8-student": "tsx --tsconfig tsconfig.json scripts/seed-g8-class-students.ts"
   },

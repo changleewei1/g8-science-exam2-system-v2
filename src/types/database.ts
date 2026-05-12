@@ -45,6 +45,8 @@ export type VideoRow = {
   subtitle_text: string | null;
   sort_order: number;
   is_active: boolean;
+  /** migration 20260509130000；未套用前視為 active */
+  management_status?: string;
   created_at: string;
 };
 
@@ -179,6 +181,26 @@ export type VideoQuizMappingRow = {
   created_at: string;
 };
 
+export type GeneratedQuestionCandidateRow = {
+  id: string;
+  video_id: string;
+  unit: string;
+  skill_code: string;
+  difficulty: string;
+  question_text: string;
+  choice_a: string;
+  choice_b: string;
+  choice_c: string;
+  choice_d: string;
+  correct_answer: string;
+  explanation: string | null;
+  source_excerpt: string | null;
+  status: string;
+  created_at: string;
+  reviewed_at: string | null;
+  promoted_bank_item_id: string | null;
+};
+
 export type LearningTaskRow = {
   id: string;
   title: string;
@@ -255,4 +277,26 @@ export type LineUserContextRow = {
   expires_at: string;
   created_at: string;
   updated_at: string;
+};
+
+export type AdaptivePracticeSessionRow = {
+  id: string;
+  student_id: string;
+  skill_code: string;
+  score: number;
+  current_difficulty: string;
+  streak: number;
+  is_mastered: boolean;
+  created_at: string;
+  /** migration 20260510000000；未套用前可能不存在 */
+  updated_at?: string;
+};
+
+export type AdaptivePracticeAnswerRow = {
+  id: string;
+  session_id: string;
+  question_id: string;
+  is_correct: boolean;
+  difficulty: string;
+  created_at: string;
 };

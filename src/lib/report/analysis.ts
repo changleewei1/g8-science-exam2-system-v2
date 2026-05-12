@@ -1,11 +1,17 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-type WeakSkill = { skill: string; wrongRate: number };
-type RiskStudent = {
-  student_id: string;
-  student_name: string;
-  class_name: string | null;
-  completion_rate: number;
+export type WeakSkill = { skill: string; wrongRate: number };
+export type StudentCompletionRow = {
+  studentId: string;
+  studentName: string;
+  className: string | null;
+  overallCompletion: number;
+};
+export type RiskStudent = {
+  studentId: string;
+  studentName: string;
+  className: string | null;
+  completionRate: number;
 };
 
 function toPercent(numerator: number, denominator: number): number {
@@ -82,56 +88,19 @@ export async function getWeakSkills(
     .slice(0, 3);
 }
 
-/**
- * 高風險學生（完成率低）
- * 以 student_task_progress 聚合出每位學生任務完成率；若沒有任務資料回傳空陣列。
- */
-export async function getAtRiskStudents(
-  supabase: SupabaseClient,
-): Promise<RiskStudent[]> {
-  const { data } = await supabase
-    .from("student_task_progress")
-    .select("student_id, is_completed");
-  if (!data || data.length === 0) return [];
-
-  const stats = new Map<string, { total: number; completed: number }>();
-  for (const row of data as { student_id: string; is_completed: boolean }[]) {
-    const cur = stats.get(row.student_id) ?? { total: 0, completed: 0 };
-    cur.total += 1;
-    if (row.is_completed) cur.completed += 1;
-    stats.set(row.student_id, cur);
-  }
-
-  const risk = [...stats.entries()]
-    .map(([student_id, v]) => ({
-      student_id,
-      completion_rate: v.total === 0 ? 0 : v.completed / v.total,
-    }))
-    .filter((s) => (s.completion_rate ?? 0) < 0.4)
-    .sort((a, b) => a.completion_rate - b.completion_rate)
-    .slice(0, 5);
-
-  if (risk.length === 0) return [];
-
-  const ids = risk.map((r) => r.student_id);
-  const { data: students } = await supabase
-    .from("students")
-    .select("id, name, class_name")
-    .in("id", ids);
-  const byId = new Map<string, { name: string; class_name: string | null }>();
-  for (const row of students ?? []) {
-    const r = row as { id: string; name: string; class_name: string | null };
-    byId.set(r.id, { name: r.name, class_name: r.class_name });
-  }
-
-  return risk.map((r) => {
-    const s = byId.get(r.student_id);
-    return {
-      ...r,
-      student_name: s?.name ?? r.student_id,
-      class_name: s?.class_name ?? null,
-    };
-  });
+export function getAtRiskStudents(
+  students: StudentCompletionRow[],
+  threshold = 30,
+): RiskStudent[] {
+  return students
+    .filter((s) => (s.overallCompletion ?? 0) < threshold)
+    .sort((a, b) => a.overallCompletion - b.overallCompletion)
+    .map((s) => ({
+      studentId: s.studentId,
+      studentName: s.studentName,
+      className: s.className,
+      completionRate: s.overallCompletion,
+    }));
 }
 
 /**
@@ -141,19 +110,30 @@ export function buildTeacherSuggestions(
   weakSkills: WeakSkill[],
   todayVideoCount: number,
   incompleteCount: number,
+  atRiskCount: number,
+  recentTaskCount: number,
+  completedCount: number,
 ): string[] {
   const suggestions: string[] = [];
 
+  if (atRiskCount > 0) {
+    suggestions.push("建議優先提醒完成率低於 30% 的學生，確認是否有登入或觀看困難。");
+  }
+
+  if (incompleteCount > 0) {
+    suggestions.push("建議課堂前提醒尚未完成學生補看影片。");
+  }
+
+  if (todayVideoCount === 0 && recentTaskCount === 0) {
+    suggestions.push("目前三天內未新增學習任務，可視情況安排下一階段預習任務。");
+  }
+
+  if (completedCount >= 5) {
+    suggestions.push("可讓已完成學生進入複習或進階練習。");
+  }
+
   if (weakSkills.length > 0) {
-    suggestions.push(`優先講解「${weakSkills[0].skill}」相關觀念`);
-  }
-
-  if (todayVideoCount === 0) {
-    suggestions.push("今日無學習行為，建議安排預習任務或提醒學生");
-  }
-
-  if (incompleteCount > 10) {
-    suggestions.push("未完成學生偏多，建議課堂前進行提醒或點名確認");
+    suggestions.push(`可搭配課堂優先講解「${weakSkills[0].skill}」相關概念與題型。`);
   }
 
   return suggestions;

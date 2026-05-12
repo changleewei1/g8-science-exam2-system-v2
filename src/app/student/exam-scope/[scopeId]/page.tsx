@@ -23,6 +23,14 @@ export default async function ExamScopePage({ params }: Props) {
       </div>
       <h1 className="text-2xl font-semibold text-slate-900">{data.scope.title}</h1>
       <p className="mt-2 text-slate-600">{data.scope.description ?? "請依序完成各單元影片與AI學習診斷。"}</p>
+      <div className="mt-4">
+        <Link
+          href={`/student/exam-scope/${scopeId}/skills`}
+          className="inline-flex min-h-11 items-center rounded-lg border border-teal-200 bg-teal-50 px-4 py-2 text-sm font-medium text-teal-800 hover:bg-teal-100"
+        >
+          查看段考技能樹
+        </Link>
+      </div>
       <ul className="mt-8 space-y-3">
         {data.units.map((u) => (
           <li key={u.id}>

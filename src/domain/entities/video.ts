@@ -12,7 +12,18 @@ export class Video {
     public readonly subtitleText: string | null,
     public readonly sortOrder: number,
     public readonly isActive: boolean,
+    /** draft | pending_review | active（對應資料庫 management_status） */
+    public readonly managementStatus: string = "active",
   ) {}
+
+  /** 學生端列表／影片詳情：須為已對外且已啟用 */
+  visibleToStudent(): boolean {
+    return (
+      this.isActive &&
+      this.youtubeVideoId.length > 0 &&
+      (this.managementStatus === "active" || !this.managementStatus)
+    );
+  }
 
   isPlayable(): boolean {
     return this.isActive && this.youtubeVideoId.length > 0;

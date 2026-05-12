@@ -29,4 +29,5 @@ export type VideoInsert = {
   subtitle_text: string | null;
   sort_order: number;
   is_active: boolean;
+  management_status?: string;
 };
