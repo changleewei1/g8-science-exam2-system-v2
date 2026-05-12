@@ -50,6 +50,9 @@ export function StudentG8ExamScopeOverview({ springSecondScopeId, springThirdSco
                   <li>酸鹼中和</li>
                   <li>反應速率</li>
                 </ul>
+                <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                  本次段考包含酸鹼中和、反應速率，請依照技能樹完成影片學習與智慧練習。
+                </p>
                 <div className="mt-4 flex flex-col gap-2">
                   <Link
                     href={`/student/exam-scope/${springSecondScopeId}/skills`}
