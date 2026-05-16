@@ -96,46 +96,76 @@ export async function PATCH(req: Request, ctx: { params: Promise<Params> }) {
 
     // approve
     const qt = row.question_text as string;
-    const sc = String(row.skill_code ?? "").trim().toUpperCase();
-    const { data: dup, error: dErr } = await supabase
-      .from("question_bank_items")
-      .select("id")
-      .eq("skill_code", sc)
-      .eq("question_text", qt)
-      .limit(1);
+    const scInsert = String(row.skill_code ?? "").trim();
+    const videoId = String(row.video_id ?? "").trim();
+
+    let dupQ = supabase.from("question_bank_items").select("id").eq("skill_code", scInsert).eq("question_text", qt);
+    if (videoId) dupQ = dupQ.eq("video_id", videoId);
+    else dupQ = dupQ.is("video_id", null);
+    const { data: dup, error: dErr } = await dupQ.limit(1);
     if (dErr) throw dErr;
     if ((dup ?? []).length > 0) {
       return NextResponse.json(
-        { error: "DUPLICATE_IN_BANK", message: "題庫已存在完全相同題文，將不會重複寫入。" },
+        { error: "DUPLICATE_IN_BANK", message: "題庫已存在相同影片（或共用題庫）之相同題文，將不會重複寫入。" },
         { status: 409 },
       );
     }
 
-    const { data: maxRow } = await supabase
-      .from("question_bank_items")
-      .select("sort_order")
-      .eq("skill_code", sc)
-      .order("sort_order", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-    const nextOrder = Number(maxRow?.sort_order ?? 0) + 1;
+    let nextOrder = 1;
+    if (videoId) {
+      const { data: maxRow } = await supabase
+        .from("question_bank_items")
+        .select("sort_order")
+        .eq("video_id", videoId)
+        .order("sort_order", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      nextOrder = Number(maxRow?.sort_order ?? 0) + 1;
+    } else {
+      const { data: maxRow } = await supabase
+        .from("question_bank_items")
+        .select("sort_order")
+        .eq("skill_code", scInsert)
+        .order("sort_order", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      nextOrder = Number(maxRow?.sort_order ?? 0) + 1;
+    }
+
+    let examScopeId = (row.exam_scope_id as string | null) ?? null;
+    if (!examScopeId && videoId) {
+      const { data: vjoin } = await supabase.from("videos").select("unit_id").eq("id", videoId).maybeSingle();
+      if (vjoin?.unit_id) {
+        const { data: su } = await supabase
+          .from("scope_units")
+          .select("exam_scope_id")
+          .eq("id", vjoin.unit_id as string)
+          .maybeSingle();
+        examScopeId = (su?.exam_scope_id as string | null) ?? null;
+      }
+    }
+
+    const bankInsert: Record<string, unknown> = {
+      unit: row.unit as string,
+      skill_code: scInsert,
+      difficulty: (row.difficulty as string) || "基礎",
+      question_text: qt,
+      choice_a: row.choice_a as string,
+      choice_b: row.choice_b as string,
+      choice_c: row.choice_c as string,
+      choice_d: row.choice_d as string,
+      correct_answer: String(row.correct_answer ?? "").trim().toUpperCase(),
+      explanation: row.explanation as string | null,
+      sort_order: nextOrder,
+      source_key: `admin_video_candidate:${row.id}:${row.video_id}`,
+      question_type: "single_choice",
+    };
+    if (videoId) bankInsert.video_id = videoId;
+    if (examScopeId) bankInsert.exam_scope_id = examScopeId;
 
     const { data: insRow, error: insErr } = await supabase
       .from("question_bank_items")
-      .insert({
-        unit: row.unit as string,
-        skill_code: sc,
-        difficulty: (row.difficulty as string) || "基礎",
-        question_text: qt,
-        choice_a: row.choice_a as string,
-        choice_b: row.choice_b as string,
-        choice_c: row.choice_c as string,
-        choice_d: row.choice_d as string,
-        correct_answer: String(row.correct_answer ?? "").trim().toUpperCase(),
-        explanation: row.explanation as string | null,
-        sort_order: nextOrder,
-        source_key: `admin_video_candidate:${row.id}:${row.video_id}`,
-      })
+      .insert(bankInsert)
       .select("id")
       .single();
     if (insErr) throw insErr;
@@ -150,7 +180,18 @@ export async function PATCH(req: Request, ctx: { params: Promise<Params> }) {
       .eq("id", id);
     if (upErr) throw upErr;
 
-    return NextResponse.json({ ok: true, status: "approved", bank_item_id: insRow?.id ?? null });
+    let quizSynced: { ok: boolean; reason?: string; quizId?: string } | null = null;
+    if (videoId) {
+      const { syncVideoComprehensionQuizFromBank } = await import("@/lib/admin/sync-video-quiz-from-bank");
+      quizSynced = await syncVideoComprehensionQuizFromBank(supabase, videoId);
+    }
+
+    return NextResponse.json({
+      ok: true,
+      status: "approved",
+      bank_item_id: insRow?.id ?? null,
+      quiz_sync: quizSynced,
+    });
   } catch (e) {
     const msg = e instanceof Error ? e.message : "UNKNOWN";
     return NextResponse.json({ error: "PATCH_FAILED", detail: msg }, { status: 500 });

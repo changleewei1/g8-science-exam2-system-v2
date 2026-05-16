@@ -136,6 +136,13 @@ export type SkillTagRow = {
   difficulty: string | null;
   domain: string | null;
   created_at: string;
+  /** migration 20260512133000；課本次單元（例 5-1），大單元仍用 unit */
+  lesson_unit?: string | null;
+  skill_detail?: string | null;
+  common_mistakes?: string | null;
+  ai_detection_rule?: string | null;
+  sample_question?: string | null;
+  exam_scope_title?: string | null;
 };
 
 export type QuestionBankItemRow = {
@@ -152,6 +159,10 @@ export type QuestionBankItemRow = {
   explanation: string | null;
   sort_order: number;
   source_key: string | null;
+  /** migration 20260513120000 */
+  video_id?: string | null;
+  exam_scope_id?: string | null;
+  question_type?: string;
   /** migration 20260409120000；未套用前可能為 undefined */
   excluded_from_video_quiz_pool?: boolean;
   created_at: string;
@@ -199,6 +210,8 @@ export type GeneratedQuestionCandidateRow = {
   created_at: string;
   reviewed_at: string | null;
   promoted_bank_item_id: string | null;
+  /** migration 20260513120000 */
+  exam_scope_id?: string | null;
 };
 
 export type LearningTaskRow = {

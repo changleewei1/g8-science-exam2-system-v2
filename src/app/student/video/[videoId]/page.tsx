@@ -1,5 +1,7 @@
 import { redirect, notFound } from "next/navigation";
 import { getVideoDetailUseCase } from "@/infrastructure/composition";
+import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import { ensureExam3VideoQuizReady } from "@/lib/admin/ensure-exam3-video-quiz-ready";
 import { getStudentSession } from "@/lib/session";
 import { parseStudentVideoSearchParams } from "@/lib/student-video-context";
 import { VideoPageClient } from "./VideoPageClient";
@@ -18,6 +20,7 @@ export default async function VideoPage({ params, searchParams }: Props) {
   const sp = await searchParams;
   const { fromTask, taskId } = parseStudentVideoSearchParams(sp);
   const uc = getVideoDetailUseCase();
+  await ensureExam3VideoQuizReady(getSupabaseAdmin(), videoId);
   const data = await uc.execute(videoId, session.studentId);
   if (!data?.video) notFound();
 

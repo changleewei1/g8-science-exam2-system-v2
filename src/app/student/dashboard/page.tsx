@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getStudentDashboardUseCase, getRepositories } from "@/infrastructure/composition";
+import type { ActiveSpringExamScopeCardProps } from "@/components/student/ActiveSpringExamScopeCard";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import { DashboardHashScroll } from "@/components/student/DashboardHashScroll";
 import { StudentG8ExamScopeOverview } from "@/components/student/StudentG8ExamScopeOverview";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { getStudentSession } from "@/lib/session";
@@ -16,10 +18,22 @@ export default async function StudentDashboardPage() {
   if (!session) redirect("/login");
 
   const envScope = getDefaultExamScopeId();
-  const { examScopes } = getRepositories();
+  const { examScopes, scopeUnits } = getRepositories();
   const scopes = await examScopes.findAllActive();
   const springSecond = resolveSpringSecondExamScope(scopes, envScope);
   const springThird = resolveSpringThirdExamScope(scopes);
+
+  async function buildScopeCard(scope: { id: string; title: string } | null): Promise<ActiveSpringExamScopeCardProps | null> {
+    if (!scope) return null;
+    const units = await scopeUnits.findByExamScopeId(scope.id);
+    return {
+      scopeId: scope.id,
+      title: scope.title,
+      unitTitles: units.map((u) => u.unitTitle),
+    };
+  }
+  const springSecondCard = await buildScopeCard(springSecond);
+  const springThirdCard = await buildScopeCard(springThird);
   const scopeId = springSecond?.id ?? envScope ?? scopes[0]?.id;
   if (!scopeId) {
     return (
@@ -104,6 +118,7 @@ export default async function StudentDashboardPage() {
 
   return (
     <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
+      <DashboardHashScroll />
       <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm text-slate-500 sm:text-base">你好，{student?.name ?? "同學"}</p>
@@ -120,7 +135,7 @@ export default async function StudentDashboardPage() {
             學習任務
           </Link>
           <Link
-            href={`/student/exam-scope/${data.scope.id}`}
+            href="/student/dashboard#exam-scopes"
             className="interactive-btn inline-flex min-h-11 items-center justify-center rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-medium text-white sm:text-base"
           >
             進入學習單元
@@ -128,10 +143,10 @@ export default async function StudentDashboardPage() {
         </div>
       </header>
 
-      <StudentG8ExamScopeOverview springSecondScopeId={springSecond?.id ?? null} springThirdScopeId={springThird?.id ?? null} />
+      <StudentG8ExamScopeOverview springSecond={springSecondCard} springThird={springThirdCard} />
 
       <Link
-        href={`/student/exam-scope/${data.scope.id}/skills`}
+        href="/student/dashboard#exam-scopes"
         className="flame-glow group relative mb-7 block overflow-hidden rounded-2xl border border-violet-200 bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 p-[1px] transition-all duration-300 hover:scale-[1.01] hover:shadow-violet-300/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
       >
         <div className="relative rounded-2xl bg-slate-950/90 p-5 text-white sm:p-6">
@@ -148,7 +163,10 @@ export default async function StudentDashboardPage() {
                 </p>
                 <h2 className="mt-3 text-2xl font-semibold tracking-tight">🔥 今日推薦練習</h2>
                 <p className="mt-2 max-w-xl text-sm text-violet-100/90">
-                  系統會依照你的答題狀況，自動推薦適合的題目與難度。
+                  請先選擇本次段考（第二次／第三次），再進入對應技能樹；系統會依答題狀況推薦題目與難度。
+                </p>
+                <p className="mt-2 text-xs text-violet-200/90">
+                  下方「國二理化段考範圍」可選擇「進入技能樹練習」；目前預設進度統計以「{data.scope.title}」為主。
                 </p>
               </div>
               <div className="rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-right">
@@ -194,7 +212,7 @@ export default async function StudentDashboardPage() {
             </div>
 
             <div className="mt-5 inline-flex min-h-12 items-center rounded-xl bg-white px-4 py-2 text-base font-semibold text-violet-700 transition group-hover:scale-[1.02]">
-              ⚡ 立即開始練習
+              ⚡ 選擇段考並開始練習
             </div>
           </div>
         </div>

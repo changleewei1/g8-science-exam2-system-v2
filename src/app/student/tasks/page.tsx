@@ -32,7 +32,7 @@ export default async function StudentTasksPage({ searchParams }: PageProps) {
       <TaskListScrollAnchor taskId={focusTaskId} />
       <header className="mb-8 space-y-4">
         <div>
-          <StudentBackLink href="/student/dashboard">返回學習總覽</StudentBackLink>
+          <StudentBackLink href="/student/dashboard#exam-scopes">返回學習總覽</StudentBackLink>
         </div>
         <div className="flex flex-wrap items-center justify-between gap-4">
           <h1 className="text-2xl font-semibold text-slate-900">學習任務（影片預習）</h1>

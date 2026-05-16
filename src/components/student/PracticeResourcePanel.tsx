@@ -75,7 +75,7 @@ export function PracticeResourcePanel({
           再練一題
         </button>
         <Link
-          href="/student/dashboard"
+          href="/student/dashboard#exam-scopes"
           className="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-800 hover:border-teal-300 hover:bg-teal-50"
         >
           查看學習狀況

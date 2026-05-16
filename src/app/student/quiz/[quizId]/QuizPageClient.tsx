@@ -29,7 +29,7 @@ function useQuizReturnContext() {
     const taskId = searchParams.get("taskId");
     const unitId = searchParams.get("unitId");
     const fromTask = from === "task";
-    let backHref = "/student/dashboard";
+    let backHref = "/student/dashboard#exam-scopes";
     let backLabel = "返回學習總覽";
     if (fromTask) {
       backHref = `/student/tasks${taskId ? `?taskId=${encodeURIComponent(taskId)}` : ""}`;
@@ -98,7 +98,16 @@ export default function QuizPageClient() {
         setLoading(false);
         return;
       }
-      setQuestions(data.questions ?? []);
+      if (data.quizIncomplete) {
+        setErr(
+          typeof data.incompleteMessage === "string" && data.incompleteMessage.trim()
+            ? data.incompleteMessage
+            : "此影片尚未建立完整測驗題（需至少 3 題已核准並同步）。",
+        );
+        setQuestions([]);
+      } else {
+        setQuestions(data.questions ?? []);
+      }
       setLoading(false);
     }
     void load();

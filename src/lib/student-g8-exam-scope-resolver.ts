@@ -20,11 +20,7 @@ export function resolveSpringSecondExamScope(
   return (
     g8.find((s) => {
       const u = t(s);
-      return (
-        u.includes("第二次段考") ||
-        (u.includes("酸鹼") && u.includes("反應速率")) ||
-        (u.includes("酸鹼中和") && u.includes("反應速率"))
-      );
+      return u.includes("第二次段考") || (u.includes("下學期") && u.includes("第二次"));
     }) ?? null
   );
 }

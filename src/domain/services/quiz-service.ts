@@ -6,6 +6,11 @@ import type {
 import type { QuizQuestionRepository } from "@/domain/repositories";
 import type { QuizRepository } from "@/domain/repositories";
 import type { VideoProgressRepository } from "@/domain/repositories";
+import type { VideoRepository } from "@/domain/repositories";
+import {
+  filterExam3VideoComprehensionQuestions,
+  isExam3ScopeId,
+} from "@/lib/exam3-video-quiz-guards";
 
 export class QuizService {
   constructor(
@@ -13,6 +18,7 @@ export class QuizService {
     private readonly questionRepo: QuizQuestionRepository,
     private readonly progressRepo: VideoProgressRepository,
     private readonly attemptRepo: QuizAttemptRepository,
+    private readonly videoRepo: VideoRepository,
   ) {}
 
   async getQuizByQuizId(quizId: string, studentId: string) {
@@ -23,7 +29,8 @@ export class QuizService {
       return { quiz, questions: [] as never[], unlocked: false, videoId: quiz.videoId };
     }
     const questions = await this.questionRepo.findByQuizId(quiz.id);
-    const sanitized = questions.map((q) => ({
+    const examScopeId = await this.videoRepo.findExamScopeIdForVideo(quiz.videoId);
+    const mapped = questions.map((q) => ({
       id: q.id,
       questionText: q.questionText,
       questionImageUrl: q.questionImageUrl,
@@ -39,7 +46,14 @@ export class QuizService {
       sortOrder: q.sortOrder,
       skillCode: q.skillCode,
     }));
-    return { quiz, questions: sanitized, unlocked: true, videoId: quiz.videoId };
+    const { items: sanitized, incomplete } = filterExam3VideoComprehensionQuestions(examScopeId, mapped);
+    return {
+      quiz,
+      questions: sanitized,
+      unlocked: true,
+      videoId: quiz.videoId,
+      quizIncomplete: incomplete,
+    };
   }
 
   async getQuizForVideo(videoId: string, studentId: string) {
@@ -50,7 +64,8 @@ export class QuizService {
       return { quiz, questions: [] as never[], unlocked: false };
     }
     const questions = await this.questionRepo.findByQuizId(quiz.id);
-    const sanitized = questions.map((q) => ({
+    const examScopeId = await this.videoRepo.findExamScopeIdForVideo(videoId);
+    const mapped = questions.map((q) => ({
       id: q.id,
       questionText: q.questionText,
       questionImageUrl: q.questionImageUrl,
@@ -66,7 +81,8 @@ export class QuizService {
       sortOrder: q.sortOrder,
       skillCode: q.skillCode,
     }));
-    return { quiz, questions: sanitized, unlocked: true };
+    const { items: sanitized, incomplete } = filterExam3VideoComprehensionQuestions(examScopeId, mapped);
+    return { quiz, questions: sanitized, unlocked: true, quizIncomplete: incomplete };
   }
 
   async submitQuiz(quizId: string, studentId: string, answers: AnswerMap) {
@@ -76,7 +92,12 @@ export class QuizService {
     if (!progress || !quiz.canBeTaken(progress)) throw new Error("VIDEO_NOT_COMPLETED");
 
     const questions = await this.questionRepo.findByQuizId(quizId);
-    if (questions.length === 0) throw new Error("NO_QUESTIONS");
+    const examScopeId = await this.videoRepo.findExamScopeIdForVideo(quiz.videoId);
+    const { items: exam3Subset } = filterExam3VideoComprehensionQuestions(examScopeId, questions);
+    const usable = isExam3ScopeId(examScopeId) ? exam3Subset : questions;
+    if (usable.length === 0) {
+      throw new Error("NO_QUESTIONS");
+    }
 
     const attempt = new QuizAttempt(
       "",
@@ -87,7 +108,7 @@ export class QuizService {
       new Date(),
       null,
     );
-    attempt.submit(answers, questions, quiz.passScore);
+    attempt.submit(answers, usable, quiz.passScore);
 
     const { id: attemptId } = await this.attemptRepo.createAttempt({
       student_id: studentId,
@@ -98,7 +119,7 @@ export class QuizService {
       submitted_at: null,
     });
 
-    const answerRows: AnswerInsert[] = questions.map((q) => {
+    const answerRows: AnswerInsert[] = usable.map((q) => {
       const sel = answers[q.id] ?? "";
       return {
         attempt_id: attemptId,
@@ -116,11 +137,43 @@ export class QuizService {
       new Date().toISOString(),
     );
 
+    if (attempt.isPassed) {
+      await this.progressRepo.markCompletedFromQuizPass(studentId, quiz.videoId);
+    }
+
     return {
       attemptId,
       score: attempt.score,
       passed: attempt.isPassed,
       passScore: quiz.passScore,
+    };
+  }
+
+  /** 單題作答回饋（不寫入 attempts；供影片頁逐步顯示正解／解析） */
+  async getQuestionFeedback(quizId: string, studentId: string, questionId: string, selectedAnswer: string) {
+    const quiz = await this.quizRepo.findById(quizId);
+    if (!quiz) throw new Error("QUIZ_NOT_FOUND");
+    const progress = await this.progressRepo.findByStudentAndVideo(studentId, quiz.videoId);
+    if (!progress || !quiz.canBeTaken(progress)) throw new Error("VIDEO_NOT_COMPLETED");
+    const questions = await this.questionRepo.findByQuizId(quizId);
+    const examScopeId = await this.videoRepo.findExamScopeIdForVideo(quiz.videoId);
+    const { items: exam3Shown, incomplete } = filterExam3VideoComprehensionQuestions(
+      examScopeId,
+      questions,
+    );
+    const q = questions.find((x) => x.id === questionId);
+    if (!q) throw new Error("QUESTION_NOT_FOUND");
+    if (isExam3ScopeId(examScopeId)) {
+      if (incomplete || !exam3Shown.some((x) => x.id === questionId)) {
+        throw new Error("QUESTION_NOT_FOUND");
+      }
+    }
+    const letter = selectedAnswer.trim().toUpperCase().charAt(0);
+    return {
+      isCorrect: q.isCorrect(letter),
+      explanation: q.explanation ?? "",
+      correctAnswer: q.correctAnswer.trim().toUpperCase().charAt(0),
+      skillCode: q.skillCode,
     };
   }
 }

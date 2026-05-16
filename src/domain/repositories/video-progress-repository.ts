@@ -5,6 +5,8 @@ export interface VideoProgressRepository {
   upsert(progress: VideoProgressUpsert): Promise<VideoProgress>;
   findByStudentId(studentId: string): Promise<VideoProgress[]>;
   countCompletedByStudent(studentId: string): Promise<number>;
+  /** 測驗通過後標記影片完成（不降低既有觀看進度） */
+  markCompletedFromQuizPass(studentId: string, videoId: string): Promise<void>;
 }
 
 export type VideoProgressUpsert = {

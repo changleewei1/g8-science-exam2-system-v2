@@ -74,7 +74,7 @@ export function getVideoTrackingService() {
 
 export function getQuizService() {
   const r = repos();
-  return new QuizService(r.quizzes, r.quizQuestions, r.videoProgress, r.quizAttempts);
+  return new QuizService(r.quizzes, r.quizQuestions, r.videoProgress, r.quizAttempts, r.videos);
 }
 
 export function getStudentLearningService() {

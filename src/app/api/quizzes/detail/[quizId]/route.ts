@@ -29,5 +29,10 @@ export async function GET(_req: Request, ctx: { params: Promise<Params> }) {
       passScore: data.quiz.passScore,
     },
     questions: data.questions,
+    quizIncomplete: Boolean((data as { quizIncomplete?: boolean }).quizIncomplete),
+    incompleteMessage:
+      (data as { quizIncomplete?: boolean }).quizIncomplete === true
+        ? "此影片的理解測驗尚未建立完成，請稍後再試。"
+        : undefined,
   });
 }

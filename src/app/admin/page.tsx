@@ -29,6 +29,33 @@ export default async function AdminHomePage() {
         <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <li>
             <Link
+              href="/admin/video-question-status"
+              className="interactive-btn block min-h-[120px] rounded-2xl border border-slate-200 bg-white p-5 shadow-md sm:p-6"
+            >
+              <span className="font-medium text-slate-900">第三次段考 · 影片題目狀態</span>
+              <p className="mt-2 text-sm text-slate-600">字幕、技能、題庫、測驗真題是否就緒（紅／綠）</p>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/admin/question-generator"
+              className="interactive-btn block min-h-[120px] rounded-2xl border border-slate-200 bg-white p-5 shadow-md sm:p-6"
+            >
+              <span className="font-medium text-slate-900">第三次段考 · 影片理解題產生</span>
+              <p className="mt-2 text-sm text-slate-600">選影片、檢視技能與字幕，AI 產生 3 題候選（draft）</p>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/admin/question-candidates"
+              className="interactive-btn block min-h-[120px] rounded-2xl border border-slate-200 bg-white p-5 shadow-md sm:p-6"
+            >
+              <span className="font-medium text-slate-900">題目候選審核</span>
+              <p className="mt-2 text-sm text-slate-600">編輯／核准／拒絕 AI 題；核准後同步學生端影片測驗</p>
+            </Link>
+          </li>
+          <li>
+            <Link
               href="/admin/students"
               className="interactive-btn block min-h-[120px] rounded-2xl border border-slate-200 bg-white p-5 shadow-md sm:p-6"
             >

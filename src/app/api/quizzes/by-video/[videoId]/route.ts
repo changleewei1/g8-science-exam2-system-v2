@@ -29,5 +29,10 @@ export async function GET(_req: Request, ctx: { params: Promise<Params> }) {
       questionCount: data.quiz.questionCount,
     },
     questions: data.questions,
+    quizIncomplete: Boolean((data as { quizIncomplete?: boolean }).quizIncomplete),
+    incompleteMessage:
+      (data as { quizIncomplete?: boolean }).quizIncomplete === true
+        ? "此影片尚未建立完整測驗題（需至少 3 題已核准並同步至測驗）。"
+        : undefined,
   });
 }

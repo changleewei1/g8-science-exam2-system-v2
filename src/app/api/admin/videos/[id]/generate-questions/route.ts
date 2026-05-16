@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import { generateExam3CandidatesForVideo } from "@/lib/admin/generate-exam3-questions-for-video";
 import { fetchSubtitleByYtDlp, generateMcqsWithOpenAI } from "@/lib/admin/video-ai";
+import { G8_SPRING_TERM_EXAM3_SCOPE_ID } from "@/lib/exam3-scope";
 import { getAdminSession } from "@/lib/session";
 
 const bodySchema = z.object({
@@ -48,11 +50,13 @@ export async function POST(req: Request, ctx: { params: Promise<Params> }) {
 
     const { data: unit, error: uErr } = await supabase
       .from("scope_units")
-      .select("unit_title")
+      .select("unit_title, exam_scope_id")
       .eq("id", video.unit_id as string)
       .maybeSingle();
     if (uErr) throw uErr;
     const unitForBank = unit?.unit_title ?? "未知單元";
+    const examScopeId = (unit?.exam_scope_id as string | null) ?? null;
+    const isExam3 = examScopeId === G8_SPRING_TERM_EXAM3_SCOPE_ID;
 
     const { data: tagRows, error: tgErr } = await supabase
       .from("video_skill_tags")
@@ -68,6 +72,37 @@ export async function POST(req: Request, ctx: { params: Promise<Params> }) {
         },
         { status: 400 },
       );
+    }
+
+    const model = (parsed.success && parsed.data.model) || "gpt-4o-mini";
+
+    if (isExam3) {
+      const gen = await generateExam3CandidatesForVideo(supabase, {
+        videoUuid,
+        openAiKey,
+        model,
+        manualSubtitle: parsed.success ? parsed.data.manual_subtitle : undefined,
+      });
+      if (!gen.ok) {
+        const st =
+          gen.reason === "OPENAI_FAILED"
+            ? 502
+            : gen.reason === "INCOMPLETE_GENERATION"
+              ? 422
+              : gen.reason === "NOT_FOUND"
+                ? 404
+                : 400;
+        return NextResponse.json(
+          { error: gen.reason, message: gen.message, inserted: gen.inserted ?? 0 },
+          { status: st },
+        );
+      }
+      return NextResponse.json({
+        ok: true,
+        inserted: gen.inserted,
+        mode: gen.mode,
+        message: `已寫入 ${gen.inserted} 筆題目候選（draft）；請至「題目候選審核」核准後，系統會同步影片測驗。`,
+      });
     }
 
     let subtitle =
@@ -90,22 +125,30 @@ export async function POST(req: Request, ctx: { params: Promise<Params> }) {
       .eq("id", videoUuid);
 
     const perSkill = parsed.success ? parsed.data.per_skill : 3;
-    const model = (parsed.success && parsed.data.model) || "gpt-4o-mini";
     let inserted = 0;
 
     for (const t of tags) {
-      const skillCode = String(t.skill_code ?? "").trim().toUpperCase();
+      const skillCode = String(t.skill_code ?? "").trim();
       const skillName = String(t.skill_name ?? "").trim() || skillCode;
-      const items = await generateMcqsWithOpenAI({
-        apiKey: openAiKey,
-        model,
-        unit: unitForBank,
-        skillCode,
-        skillName,
-        title: video.title as string,
-        subtitleText: subtitle,
-        count: perSkill,
-      });
+      let items;
+      try {
+        items = await generateMcqsWithOpenAI({
+          apiKey: openAiKey,
+          model,
+          unit: unitForBank,
+          skillCode: skillCode.toUpperCase(),
+          skillName,
+          title: video.title as string,
+          subtitleText: subtitle,
+          count: perSkill,
+        });
+      } catch (aiErr) {
+        const msg = aiErr instanceof Error ? aiErr.message : "OpenAI 錯誤";
+        return NextResponse.json(
+          { error: "OPENAI_FAILED", message: msg.slice(0, 400) },
+          { status: 502 },
+        );
+      }
 
       for (const it of items) {
         const excerpt = subtitle.slice(0, 500);
@@ -123,6 +166,7 @@ export async function POST(req: Request, ctx: { params: Promise<Params> }) {
           explanation: it.explanation,
           source_excerpt: excerpt,
           status: "draft",
+          exam_scope_id: examScopeId,
         });
         if (insErr?.message.includes("does not exist")) {
           return NextResponse.json({
@@ -138,6 +182,7 @@ export async function POST(req: Request, ctx: { params: Promise<Params> }) {
     return NextResponse.json({
       ok: true,
       inserted,
+      mode: "per_skill",
       message: `已寫入 ${inserted} 筆題目候選（draft）；請至「題目候選」審核核准後才會進題庫。`,
     });
   } catch (e) {

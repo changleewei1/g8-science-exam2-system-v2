@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { EditableQuestionCandidateCard, type QuestionCand } from "@/components/admin/EditableQuestionCandidateCard";
 
 type UnitOpt = {
   id: string;
@@ -25,6 +26,7 @@ type VideoListRow = {
   status_label: string;
   skill_codes: string[];
   question_count_via_skills: number;
+  draft_candidate_count?: number;
 };
 
 type SkillCand = {
@@ -35,25 +37,13 @@ type SkillCand = {
   reason: string | null;
 };
 
-type QuestionCand = {
-  id: string;
-  skill_code: string;
-  difficulty: string;
-  question_text: string;
-  choice_a: string;
-  choice_b: string;
-  choice_c: string;
-  choice_d: string;
-  correct_answer: string;
-  explanation: string | null;
-  status: string;
-};
-
 export function VideoManagementCenterClient() {
   const [units, setUnits] = useState<UnitOpt[]>([]);
   const [videos, setVideos] = useState<VideoListRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [openAiConfigured, setOpenAiConfigured] = useState<boolean | null>(null);
+  const [notice, setNotice] = useState<{ type: "error" | "success"; text: string } | null>(null);
 
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [unitId, setUnitId] = useState("");
@@ -69,8 +59,14 @@ export function VideoManagementCenterClient() {
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
+    setNotice(null);
     try {
-      const res = await fetch("/api/admin/videos", { credentials: "include" });
+      const [res, envRes] = await Promise.all([
+        fetch("/api/admin/videos", { credentials: "include" }),
+        fetch("/api/admin/ai-env-status", { credentials: "include" }),
+      ]);
+      const envData = await envRes.json().catch(() => ({}));
+      setOpenAiConfigured(envRes.ok ? Boolean(envData.openAiConfigured) : null);
       const data = await res.json().catch(() => null);
       if (!res.ok) {
         setError(data?.detail ?? data?.error ?? "LOAD_FAILED");
@@ -148,10 +144,10 @@ export function VideoManagementCenterClient() {
       });
       const data = await res.json().catch(() => null);
       if (!res.ok) {
-        alert(data?.message ?? data?.error ?? "分析失敗");
+        setNotice({ type: "error", text: data?.message ?? data?.error ?? "分析失敗" });
         return;
       }
-      alert(data?.message ?? "分析完成（候選須再審核）");
+      setNotice({ type: "success", text: data?.message ?? "分析完成（候選須再審核）" });
       setSubtitleDraft("");
       await load();
       if (focusedVideoId === videoId) await reloadFocus(videoId);
@@ -171,10 +167,10 @@ export function VideoManagementCenterClient() {
       });
       const data = await res.json().catch(() => null);
       if (!res.ok) {
-        alert(data?.message ?? data?.error ?? "生成失敗");
+        setNotice({ type: "error", text: data?.message ?? data?.error ?? "生成失敗" });
         return;
       }
-      alert(data?.message ?? "已產出候選題");
+      setNotice({ type: "success", text: data?.message ?? "已產出候選題" });
       await load();
       if (focusedVideoId === videoId) await reloadFocus(videoId);
     } finally {
@@ -258,6 +254,29 @@ export function VideoManagementCenterClient() {
 
   return (
     <div className="space-y-8">
+      {openAiConfigured === false ? (
+        <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-900">
+          <p className="font-medium">尚未設定 OPENAI_API_KEY，無法使用「分析影片」與「生成題目」</p>
+          <p className="mt-2 leading-relaxed">
+            若為 Vercel 部署：請至專案{" "}
+            <strong>Settings → Environment Variables</strong> 新增{" "}
+            <code className="rounded bg-white/90 px-1.5 py-0.5 font-mono text-xs">OPENAI_API_KEY</code>
+            ，並依需求勾選 Environment（Production / Preview），儲存後觸發<strong>重新部署</strong>。
+          </p>
+        </div>
+      ) : null}
+      {notice ? (
+        <div
+          role="status"
+          className={
+            notice.type === "error"
+              ? "rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950"
+              : "rounded-xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-950"
+          }
+        >
+          {notice.text}
+        </div>
+      ) : null}
       <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
         <h2 className="text-lg font-semibold text-slate-900">新增影片（草稿）</h2>
         <p className="mt-1 text-sm text-slate-600">
@@ -334,79 +353,115 @@ export function VideoManagementCenterClient() {
         {loading ? <p className="mt-4 text-sm text-slate-500">載入中…</p> : null}
         {error ? <p className="mt-4 text-sm text-rose-700">{error}</p> : null}
         {!loading && !error ? (
-          <ul className="mt-4 space-y-4">
+          <ul className="mt-4 space-y-5">
             {videos.map((v) => (
-              <li key={v.id} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <p className="font-medium text-slate-900">{v.title}</p>
-                    <p className="mt-1 text-xs text-slate-500">
-                      狀態：{v.status_label} · is_active={v.is_active ? "true" : "false"} · {v.management_status}
-                    </p>
-                    <p className="mt-1 text-xs text-slate-500">
-                      單元：{v.exam_scope_title} / {v.unit_title}
-                    </p>
-                    <p className="mt-1 text-xs font-mono text-slate-600">
-                      Youtube: {v.youtube_video_id}{" "}
-                      <a className="text-teal-700 underline" href={v.youtube_url} target="_blank" rel="noopener noreferrer">
-                        開啟連結
-                      </a>
-                    </p>
-                    <p className="mt-1 text-xs text-slate-600">
-                      skill：<span className="font-mono">{v.skill_codes.length ? v.skill_codes.join(", ") : "(無)"}</span>
-                    </p>
-                    <p className="text-xs text-slate-600">題目數（概估）：{v.question_count_via_skills}</p>
+              <li
+                key={v.id}
+                className="group flex min-h-[160px] flex-col gap-4 rounded-2xl border border-slate-200 bg-slate-50/90 p-4 shadow-sm transition-shadow duration-300 hover:shadow-md lg:flex-row lg:items-stretch lg:gap-6"
+              >
+                <div className="min-w-0 flex-1 space-y-2">
+                  <p className="font-medium leading-snug text-slate-900">{v.title}</p>
+                  <p className="text-xs text-slate-500">
+                    狀態：{v.status_label} · is_active={v.is_active ? "true" : "false"} · {v.management_status}
+                  </p>
+                  <p className="text-xs text-slate-500">
+                    單元：{v.exam_scope_title} / {v.unit_title}
+                  </p>
+                  <p className="break-all text-xs font-mono text-slate-600">
+                    Youtube: {v.youtube_video_id}{" "}
+                    <a className="text-teal-700 underline" href={v.youtube_url} target="_blank" rel="noopener noreferrer">
+                      開啟連結
+                    </a>
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {v.skill_codes.length ? (
+                      v.skill_codes.map((c) => (
+                        <span
+                          key={c}
+                          className="inline-block max-w-full break-all rounded-md bg-white px-2 py-0.5 text-xs font-mono text-teal-900 ring-1 ring-teal-100"
+                        >
+                          {c}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-xs text-slate-500">skill：（無）</span>
+                    )}
                   </div>
-                  <div className="flex flex-wrap gap-2">
+                  <p className="text-xs text-slate-600">
+                    題目數（概估）：{v.question_count_via_skills}
+                    {typeof v.draft_candidate_count === "number" ? (
+                      <>
+                        <span className="mx-2 text-slate-300">|</span>
+                        draft：{v.draft_candidate_count}
+                      </>
+                    ) : null}
+                  </p>
+                </div>
+                <div className="flex w-full shrink-0 flex-col gap-2 lg:w-[220px] lg:min-w-[200px] lg:max-w-[240px]">
                     <button
                       type="button"
                       onClick={() => {
                         setFocusedVideoId(v.id);
                         window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
                       }}
-                      className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium"
+                      className="w-full rounded-lg border border-slate-200 bg-white py-2 text-center text-xs font-medium hover:bg-slate-50"
                     >
                       檢視候選
                     </button>
                     <button
                       type="button"
-                      disabled={busyVideoId === v.id}
+                      disabled={loading || busyVideoId === v.id || openAiConfigured === false}
                       onClick={() => void analyze(v.id)}
-                      className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
+                      title={
+                        openAiConfigured === false
+                          ? "尚未設定 OPENAI_API_KEY"
+                          : undefined
+                      }
+                      className="w-full rounded-lg bg-indigo-600 py-2 text-center text-xs font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
                     >
                       分析影片
                     </button>
                     <Link
                       href="/admin/video-skill-tags"
-                      className="inline-flex items-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-800"
+                      className="flex w-full items-center justify-center rounded-lg border border-slate-200 bg-white py-2 text-center text-xs font-medium text-slate-800 hover:bg-slate-50"
                     >
                       編輯 skill 對應
                     </Link>
                     <button
                       type="button"
-                      disabled={busyVideoId === v.id || v.skill_codes.length === 0}
+                      disabled={
+                        loading ||
+                        busyVideoId === v.id ||
+                        v.skill_codes.length === 0 ||
+                        openAiConfigured === false
+                      }
                       onClick={() => void genQs(v.id)}
-                      title={v.skill_codes.length === 0 ? "請先有正式 video_skill_tags" : undefined}
-                      className="rounded-lg bg-teal-700 px-3 py-1.5 text-xs font-medium text-white hover:bg-teal-800 disabled:opacity-50"
+                      title={
+                        v.skill_codes.length === 0
+                          ? "請先有正式 video_skill_tags"
+                          : openAiConfigured === false
+                            ? "尚未設定 OPENAI_API_KEY"
+                            : undefined
+                      }
+                      className="w-full rounded-lg bg-teal-700 py-2 text-center text-xs font-medium text-white hover:bg-teal-800 disabled:opacity-50"
                     >
                       生成題目
                     </button>
                     <button
                       type="button"
                       onClick={() => void saveSubtitleToVideo(v.id)}
-                      className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium"
+                      className="w-full rounded-lg border border-slate-200 bg-white py-2 text-center text-xs font-medium hover:bg-slate-50"
                     >
                       儲存手動字幕
                     </button>
                     <button
                       type="button"
                       onClick={() => void toggleActive(v, !v.is_active)}
-                      className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium"
+                      className="w-full rounded-lg border border-slate-200 bg-white py-2 text-center text-xs font-medium hover:bg-slate-50"
                     >
                       {v.is_active ? "停用" : "啟用"}
                     </button>
                   </div>
-                </div>
               </li>
             ))}
           </ul>
@@ -479,7 +534,7 @@ export function VideoManagementCenterClient() {
               ) : (
                 <div className="mt-3 space-y-4">
                   {qCand.map((q) => (
-                    <EditableQuestionCard
+                    <EditableQuestionCandidateCard
                       key={q.id}
                       q={q}
                       onPatch={(p) => patchQuestion(q, p)}
@@ -495,78 +550,6 @@ export function VideoManagementCenterClient() {
           </div>
         )}
       </section>
-    </div>
-  );
-}
-
-function EditableQuestionCard(props: {
-  q: QuestionCand;
-  onPatch: (p: Record<string, unknown>) => Promise<void>;
-  onReload: () => Promise<void>;
-}) {
-  const { q } = props;
-  const [text, setText] = useState(q.question_text);
-  const [a, setA] = useState(q.choice_a);
-  const [b, setB] = useState(q.choice_b);
-  const [c, setC] = useState(q.choice_c);
-  const [d, setD] = useState(q.choice_d);
-  const [ans, setAns] = useState(q.correct_answer);
-  const [exp, setExp] = useState(q.explanation ?? "");
-  async function approve() {
-    await props.onPatch({ action: "approve" });
-    await props.onReload();
-  }
-  async function reject() {
-    await props.onPatch({ action: "reject" });
-    await props.onReload();
-  }
-  async function save() {
-    await props.onPatch({
-      question_text: text,
-      choice_a: a,
-      choice_b: b,
-      choice_c: c,
-      choice_d: d,
-      correct_answer: ans.toUpperCase() as "A" | "B" | "C" | "D",
-      explanation: exp,
-      action: "update",
-    });
-    await props.onReload();
-  }
-
-  return (
-    <div className="rounded-xl border border-slate-200 p-3">
-      <p className="text-xs font-mono text-slate-600">
-        {q.skill_code} · {q.difficulty}
-      </p>
-      <textarea value={text} onChange={(e) => setText(e.target.value)} className="mt-2 w-full rounded border px-2 py-1 text-sm" rows={2} />
-      <div className="mt-2 grid gap-2 sm:grid-cols-2">
-        <input value={a} onChange={(e) => setA(e.target.value)} className="rounded border px-2 py-1 text-xs" placeholder="A" />
-        <input value={b} onChange={(e) => setB(e.target.value)} className="rounded border px-2 py-1 text-xs" placeholder="B" />
-        <input value={c} onChange={(e) => setC(e.target.value)} className="rounded border px-2 py-1 text-xs" placeholder="C" />
-        <input value={d} onChange={(e) => setD(e.target.value)} className="rounded border px-2 py-1 text-xs" placeholder="D" />
-      </div>
-      <div className="mt-2 flex flex-wrap gap-2">
-        <select value={ans} onChange={(e) => setAns(e.target.value)} className="rounded border px-2 py-1 text-sm">
-          {(["A", "B", "C", "D"] as const).map((k) => (
-            <option key={k} value={k}>
-              {k}
-            </option>
-          ))}
-        </select>
-      </div>
-      <textarea value={exp} onChange={(e) => setExp(e.target.value)} className="mt-2 w-full rounded border px-2 py-1 text-sm" rows={2} placeholder="詳解" />
-      <div className="mt-2 flex flex-wrap gap-2">
-        <button type="button" onClick={() => void save()} className="rounded-lg border bg-white px-3 py-1 text-xs font-medium">
-          儲存修改
-        </button>
-        <button type="button" onClick={() => void approve()} className="rounded-lg bg-teal-700 px-3 py-1 text-xs font-medium text-white">
-          核准入題庫
-        </button>
-        <button type="button" onClick={() => void reject()} className="rounded-lg border px-3 py-1 text-xs text-rose-700">
-          拒絕
-        </button>
-      </div>
     </div>
   );
 }

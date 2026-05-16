@@ -14,9 +14,11 @@ const postBodySchema = z.object({
   management_status: z.enum(["draft", "pending_review", "active"]).optional().default("draft"),
 });
 
-export async function GET() {
+export async function GET(req: Request) {
   const admin = await getAdminSession();
   if (!admin) return NextResponse.json({ error: "UNAUTHORIZED" }, { status: 401 });
+
+  const scopeFilter = new URL(req.url).searchParams.get("exam_scope_id");
 
   try {
     const supabase = getSupabaseAdmin();
@@ -48,6 +50,22 @@ export async function GET() {
         .in("video_id", vids);
       if (tErr) throw tErr;
       tags = (tagRows ?? []) as Array<{ video_id: string; skill_code: string }>;
+    }
+
+    let draftRows: Array<{ video_id: string }> = [];
+    if (vids.length > 0) {
+      const { data: dRows, error: dErr } = await supabase
+        .from("generated_question_candidates")
+        .select("video_id")
+        .eq("status", "draft")
+        .in("video_id", vids);
+      if (dErr) throw dErr;
+      draftRows = (dRows ?? []) as Array<{ video_id: string }>;
+    }
+    const draftCountByVideo = new Map<string, number>();
+    for (const r of draftRows) {
+      const vid = r.video_id as string;
+      draftCountByVideo.set(vid, (draftCountByVideo.get(vid) ?? 0) + 1);
     }
 
     const tagsByVideo = new Map<string, string[]>();
@@ -96,6 +114,7 @@ export async function GET() {
         youtube_url: youtubeHref,
         unit_id: v.unit_id,
         unit_title: u?.unit_title ?? "",
+        exam_scope_id: (u?.exam_scope_id as string | undefined) ?? null,
         exam_scope_title: sc?.title ?? "",
         sort_order: v.sort_order ?? 0,
         is_active: v.is_active,
@@ -103,12 +122,18 @@ export async function GET() {
         status_label: statusLabel,
         skill_codes: skillCodes,
         question_count_via_skills: qCount,
+        draft_candidate_count: draftCountByVideo.get(id) ?? 0,
         created_at: v.created_at,
       };
     });
 
+    let outVideos = rows;
+    if (scopeFilter && /^[0-9a-f-]{36}$/i.test(scopeFilter)) {
+      outVideos = rows.filter((r) => r.exam_scope_id === scopeFilter);
+    }
+
     return NextResponse.json({
-      videos: rows,
+      videos: outVideos,
       units:
         units?.map((u) => ({
           id: u.id,

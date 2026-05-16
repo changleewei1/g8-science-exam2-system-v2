@@ -77,4 +77,22 @@ export class SupabaseVideoRepository implements VideoRepository {
     throwIfPostgrestError(error);
     return (data as { id: string }).id;
   }
+
+  async findExamScopeIdForVideo(videoId: string) {
+    const { data: v, error } = await getSupabaseAdmin()
+      .from("videos")
+      .select("unit_id")
+      .eq("id", videoId)
+      .maybeSingle();
+    throwIfPostgrestError(error);
+    const unitId = (v as { unit_id?: string } | null)?.unit_id;
+    if (!unitId) return null;
+    const { data: u, error: uErr } = await getSupabaseAdmin()
+      .from("scope_units")
+      .select("exam_scope_id")
+      .eq("id", unitId)
+      .maybeSingle();
+    throwIfPostgrestError(uErr);
+    return ((u as { exam_scope_id?: string | null } | null)?.exam_scope_id as string | null) ?? null;
+  }
 }

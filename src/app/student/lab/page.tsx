@@ -16,7 +16,7 @@ export default async function StudentLabPage() {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
       <header className="mb-6 space-y-2">
-        <StudentBackLink href="/student/dashboard">返回學習總覽</StudentBackLink>
+        <StudentBackLink href="/student/dashboard#exam-scopes">返回學習總覽</StudentBackLink>
         <h1 className="text-2xl font-semibold text-slate-900">智慧練習</h1>
         <p className="text-sm text-slate-600">透過連續練習提升熟練度，系統會依答題狀況自動調整難度。</p>
       </header>
@@ -41,7 +41,7 @@ export default async function StudentLabPage() {
           <p className="mt-3 text-sm text-slate-600">
             <strong>npm run dev</strong>：改完 <code className="text-xs">.env.local</code> 後請<strong>關閉並重開</strong>開發伺服器。
           </p>
-          <Link href="/student/dashboard" className="mt-4 inline-block text-sm font-medium text-teal-800 underline">
+          <Link href="/student/dashboard#exam-scopes" className="mt-4 inline-block text-sm font-medium text-teal-800 underline">
             返回學習總覽
           </Link>
           {process.env.NODE_ENV === "development" ? (

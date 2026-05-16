@@ -2,6 +2,7 @@ import type {
   VideoProgressRepository,
   VideoProgressUpsert,
 } from "@/domain/repositories";
+import { VideoProgress } from "@/domain/entities";
 import { videoProgressFromRow } from "@/infrastructure/mappers/entity-mappers";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
 import { throwIfPostgrestError } from "@/lib/supabase-user-message";
@@ -53,5 +54,37 @@ export class SupabaseVideoProgressRepository implements VideoProgressRepository 
       .eq("is_completed", true);
     throwIfPostgrestError(error);
     return count ?? 0;
+  }
+
+  async markCompletedFromQuizPass(studentId: string, videoId: string) {
+    const existing = await this.findByStudentAndVideo(studentId, videoId);
+    const e = existing
+      ? new VideoProgress(
+          existing.id,
+          existing.studentId,
+          existing.videoId,
+          existing.watchSeconds,
+          existing.lastPositionSeconds,
+          existing.completionRate,
+          existing.isCompleted,
+          existing.firstViewedAt,
+          existing.lastViewedAt,
+          existing.completedAt,
+          existing.viewCount,
+        )
+      : new VideoProgress("", studentId, videoId, 0, 0, 0, false, null, null, null, 0);
+    e.markCompleted();
+    await this.upsert({
+      student_id: studentId,
+      video_id: videoId,
+      watch_seconds: e.watchSeconds,
+      last_position_seconds: e.lastPositionSeconds,
+      completion_rate: e.completionRate,
+      is_completed: true,
+      first_viewed_at: e.firstViewedAt?.toISOString() ?? null,
+      last_viewed_at: e.lastViewedAt?.toISOString() ?? null,
+      completed_at: e.completedAt?.toISOString() ?? null,
+      view_count: e.viewCount,
+    });
   }
 }

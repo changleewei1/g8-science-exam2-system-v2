@@ -14,6 +14,8 @@ export interface VideoRepository {
   findAllForAdmin(): Promise<Video[]>;
   insertMany(videos: VideoInsert[]): Promise<void>;
   insertReturningId(video: VideoInsert): Promise<string>;
+  /** 影片所屬段考 scope（scope_units.exam_scope_id） */
+  findExamScopeIdForVideo(videoId: string): Promise<string | null>;
 }
 
 export type VideoInsert = {

@@ -31,6 +31,13 @@ export type ImportPlaylistInput = {
   /** 每支影片預設標籤（可選） */
   defaultSkillCode?: string;
   defaultSkillName?: string;
+  /** 為 true 時只寫入 videos（與可選的 video_skill_tags），不建立 quizzes／quiz_questions */
+  skipQuizSeed?: boolean;
+  /**
+   * 建立 quizzes 時是否寫入 3 題 placeholder（預設 true，與既有第二次段考匯入行為一致）。
+   * 第三次段考請設 false，改由 question_bank_items 同步真題。
+   */
+  seedQuizPlaceholderQuestions?: boolean;
 };
 
 /**
@@ -182,6 +189,10 @@ export class PlaylistImportService {
         await this.videoSkillRepo.insertMany([tag]);
       }
 
+      if (input.skipQuizSeed) {
+        continue;
+      }
+
       const quizInsert: QuizInsert = {
         video_id: videoId,
         title: `${item.title} — AI學習診斷`,
@@ -191,6 +202,10 @@ export class PlaylistImportService {
         is_active: true,
       };
       const { id: quizId } = await this.quizRepo.insert(quizInsert);
+
+      if (input.seedQuizPlaceholderQuestions === false) {
+        continue;
+      }
 
       const skill = input.defaultSkillCode ?? "EL01";
       const questions: QuizQuestionInsert[] = [1, 2, 3].map((n, idx) => ({
