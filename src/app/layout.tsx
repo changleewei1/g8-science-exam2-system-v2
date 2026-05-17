@@ -1,5 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Noto_Sans_TC } from "next/font/google";
+import {
+  SITE_BRAND,
+  SITE_DEFAULT_URL,
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+  SITE_TITLE_FULL,
+} from "@/lib/site-metadata";
 import "./globals.css";
 
 const noto = Noto_Sans_TC({
@@ -9,8 +16,43 @@ const noto = Noto_Sans_TC({
 });
 
 export const metadata: Metadata = {
-  title: "國中理化 AI 智慧學習測試系統｜名貫補習班",
-  description: "結合 AI 技術的國中理化學習平台｜精準診斷、個人化學習、智慧追蹤",
+  metadataBase: new URL(SITE_DEFAULT_URL),
+  title: {
+    default: SITE_TITLE_FULL,
+    template: `%s｜${SITE_TITLE}`,
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_TITLE,
+  openGraph: {
+    type: "website",
+    locale: "zh_TW",
+    url: "/",
+    siteName: SITE_BRAND,
+    title: SITE_TITLE_FULL,
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: "/mingguan-logo.png",
+        width: 512,
+        height: 512,
+        alt: SITE_TITLE_FULL,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: SITE_TITLE_FULL,
+    description: SITE_DESCRIPTION,
+    images: ["/mingguan-logo.png"],
+  },
+  appleWebApp: {
+    capable: true,
+    title: SITE_TITLE,
+    statusBarStyle: "black-translucent",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export const viewport: Viewport = {
