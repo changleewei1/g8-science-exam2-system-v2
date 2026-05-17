@@ -9,15 +9,15 @@ const noto = Noto_Sans_TC({
 });
 
 export const metadata: Metadata = {
-  title: "國二理化第二次段考預習觀看系統 v2",
-  description: "國二理化第二次段考｜影片觀看進度與AI學習診斷",
+  title: "國中理化 AI 智慧學習測試系統｜名貫補習班",
+  description: "結合 AI 技術的國中理化學習平台｜精準診斷、個人化學習、智慧追蹤",
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#f6f8fb",
+  themeColor: "#050810",
 };
 
 export default function RootLayout({
