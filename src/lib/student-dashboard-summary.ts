@@ -12,6 +12,8 @@ export type StudentDashboardSummaryResponse = {
     term: number;
     examNo: number;
   };
+  /** 此段考是否已建立影片／技能／測驗等學習架構（全無時前端顯示防呆文案） */
+  hasLearningData: boolean;
   overallCompletionRate: number;
   videoCompletionRate: number;
   quizPassRate: number;
@@ -154,11 +156,12 @@ export async function buildStudentDashboardSummary(
     }
   }
 
-  let hasQuizzesInScope = false;
+  let scopeQuizIds: string[] = [];
   if (orderedIds.length > 0) {
-    const { data: quizRows } = await supabase.from("quizzes").select("id").in("video_id", orderedIds).limit(1);
-    hasQuizzesInScope = (quizRows ?? []).length > 0;
+    const { data: quizRowsAll } = await supabase.from("quizzes").select("id").in("video_id", orderedIds);
+    scopeQuizIds = (quizRowsAll ?? []).map((r: { id: string }) => r.id);
   }
+  const hasQuizzesInScope = scopeQuizIds.length > 0;
 
   const flatSkills = practicePack?.units.flatMap((u) => u.skills) ?? [];
   const totalSkills = flatSkills.length;
@@ -195,20 +198,23 @@ export async function buildStudentDashboardSummary(
 
   let todayAnsweredQuestions = 0;
   try {
-    const { data: attempts } = await supabase
-      .from("student_quiz_attempts")
-      .select("id")
-      .eq("student_id", studentId)
-      .not("submitted_at", "is", null);
-    const attemptIds = (attempts ?? []).map((a: { id: string }) => a.id);
-    if (attemptIds.length > 0) {
-      const { data: ans } = await supabase
-        .from("student_quiz_answers")
+    if (scopeQuizIds.length > 0) {
+      const { data: attempts } = await supabase
+        .from("student_quiz_attempts")
         .select("id")
-        .in("attempt_id", attemptIds)
-        .gte("created_at", start)
-        .lte("created_at", end);
-      todayAnsweredQuestions = (ans ?? []).length;
+        .eq("student_id", studentId)
+        .in("quiz_id", scopeQuizIds)
+        .not("submitted_at", "is", null);
+      const attemptIds = (attempts ?? []).map((a: { id: string }) => a.id);
+      if (attemptIds.length > 0) {
+        const { data: ans } = await supabase
+          .from("student_quiz_answers")
+          .select("id")
+          .in("attempt_id", attemptIds)
+          .gte("created_at", start)
+          .lte("created_at", end);
+        todayAnsweredQuestions = (ans ?? []).length;
+      }
     }
   } catch {
     todayAnsweredQuestions = 0;
@@ -259,6 +265,8 @@ export async function buildStudentDashboardSummary(
   const skillSatisfied = totalSkills === 0 ? true : masteredSkills >= totalSkills;
   const todayTasksCompleted = videoSatisfied && skillSatisfied && quizSatisfied;
 
+  const hasLearningData = totalVideos > 0 || totalSkills > 0 || hasQuizzesInScope;
+
   return {
     examScope: {
       id: scope.id,
@@ -268,6 +276,7 @@ export async function buildStudentDashboardSummary(
       term: scope.term,
       examNo: scope.exam_no,
     },
+    hasLearningData,
     overallCompletionRate,
     videoCompletionRate,
     quizPassRate: hasQuizzesInScope ? quizPassRate : 0,

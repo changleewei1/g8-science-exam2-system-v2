@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { motion } from "framer-motion";
 import { BarChart3, BookOpen, Clock, Sparkles } from "lucide-react";
 import { DashboardHashScroll } from "@/components/student/DashboardHashScroll";
@@ -88,10 +89,18 @@ export function StudentDashboard({ data }: Props) {
             <h2 id="personal-overview-heading" className="sr-only">
               個人學習總覽
             </h2>
-            <PersonalLearningOverview
-              initialScopeId={defaultOverviewScopeId}
-              scopeOptions={overviewScopeOptions}
-            />
+            <Suspense
+              fallback={
+                <div className="rounded-3xl border border-cyan-500/20 bg-slate-900/60 p-8 text-center text-slate-300">
+                  載入個人學習總覽…
+                </div>
+              }
+            >
+              <PersonalLearningOverview
+                initialScopeId={defaultOverviewScopeId}
+                scopeOptions={overviewScopeOptions}
+              />
+            </Suspense>
           </motion.section>
 
           <div className="mt-10 space-y-10">

@@ -9,6 +9,7 @@ import type {
   GradeDashboardBlock,
   SemesterLabel,
   StudentDashboardPayload,
+  StudentOverviewScopeOption,
 } from "@/lib/student-dashboard-types";
 import { getStudentLearningService } from "@/infrastructure/composition";
 
@@ -117,10 +118,30 @@ async function enrichOpenCard(
 
 function collectSpringExam2And3Options(
   springCards: ExamCard[],
-): { id: string; label: string }[] {
+  gradeShortLabel: string,
+): StudentOverviewScopeOption[] {
   return springCards
     .filter((c) => c.isOpen && (c.exam === "第二次段考" || c.exam === "第三次段考"))
-    .map((c) => ({ id: c.id, label: `${c.semester} · ${c.exam}` }));
+    .map((c) => ({
+      id: c.id,
+      label: `${c.semester} · ${c.exam}`,
+      fullLabel: `${gradeShortLabel}理化${c.semester}${c.exam}`,
+      role: c.exam === "第三次段考" ? ("current_prep" as const) : ("historical" as const),
+    }));
+}
+
+/** URL ?scopeId= → 有效則採用；否則預設第三次段考，再 fallback 第二次 */
+export function resolveDefaultOverviewScopeId(
+  options: StudentOverviewScopeOption[],
+  queryScopeId?: string | null,
+): string | null {
+  const q = queryScopeId?.trim();
+  if (q && options.some((o) => o.id === q)) return q;
+  const third = options.find((o) => o.role === "current_prep");
+  if (third) return third.id;
+  const second = options.find((o) => o.role === "historical");
+  if (second) return second.id;
+  return options[0]?.id ?? null;
 }
 
 export async function buildStudentDashboardPayload(
@@ -129,6 +150,7 @@ export async function buildStudentDashboardPayload(
   studentGrade: number,
   scopes: ExamScope[],
   scopeUnits: ScopeUnitRepository,
+  overviewScopeQueryId?: string | null,
 ): Promise<StudentDashboardPayload> {
   const scopeBySlot = new Map<SlotKey, ExamScope>();
   scopes.forEach((s) => {
@@ -233,9 +255,9 @@ export async function buildStudentDashboardPayload(
   ];
 
   const myGradeBlock = grades.find((g) => g.gradeNumber === studentGrade);
-  const overviewScopeOptions = collectSpringExam2And3Options(myGradeBlock?.spring ?? []);
-  const defaultOverviewScopeId =
-    overviewScopeOptions[0]?.id ?? hero.recommendedScopeId ?? openCards[0]?.id ?? null;
+  const gradeShortLabel = studentGrade === 8 ? "國二" : studentGrade === 9 ? "國三" : `國${studentGrade}`;
+  const overviewScopeOptions = collectSpringExam2And3Options(myGradeBlock?.spring ?? [], gradeShortLabel);
+  const defaultOverviewScopeId = resolveDefaultOverviewScopeId(overviewScopeOptions, overviewScopeQueryId);
 
   return { studentName, summary, hero, grades, overviewScopeOptions, defaultOverviewScopeId };
 }

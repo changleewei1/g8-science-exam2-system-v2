@@ -40,7 +40,12 @@ export type GradeDashboardBlock = {
 /** 下學期第二／三次段考切換（僅開放中的範圍） */
 export type StudentOverviewScopeOption = {
   id: string;
+  /** 短標，例如：下學期 · 第三次段考 */
   label: string;
+  /** 完整名稱，例如：國二理化下學期第三次段考 */
+  fullLabel: string;
+  /** 第三次段考＝目前預習；第二次＝歷史紀錄（用於提示文案） */
+  role: "current_prep" | "historical";
 };
 
 export type StudentDashboardPayload = {

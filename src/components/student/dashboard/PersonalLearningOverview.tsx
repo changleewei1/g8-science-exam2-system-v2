@@ -1,18 +1,28 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
-import { AlertTriangle, BookMarked, CheckCircle2, ChevronRight, Loader2, Target } from "lucide-react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  AlertTriangle,
+  BookMarked,
+  CheckCircle2,
+  ChevronDown,
+  ChevronRight,
+  ChevronUp,
+  Loader2,
+  Target,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { isAdaptivePracticeLabEnabled } from "@/lib/feature-flags";
 import type { StudentDashboardSummaryResponse } from "@/lib/student-dashboard-summary";
+import type { StudentOverviewScopeOption } from "@/lib/student-dashboard-types";
 import { cn } from "@/lib/utils";
-
-export type OverviewScopeOption = { id: string; label: string };
 
 type Props = {
   initialScopeId: string | null;
-  scopeOptions: OverviewScopeOption[];
+  scopeOptions: StudentOverviewScopeOption[];
 };
 
 function StatCard({
@@ -40,40 +50,100 @@ function StatCard({
   );
 }
 
+const NO_DATA_MESSAGE = "此段考尚未建立完整學習資料。";
+
 export function PersonalLearningOverview({ initialScopeId, scopeOptions }: Props) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [scopeId, setScopeId] = useState<string | null>(() => {
     if (initialScopeId) return initialScopeId;
     return scopeOptions[0]?.id ?? null;
   });
+
+  /** 收合或新請求時遞增，避免過期 fetch 寫回 state */
+  const fetchGenRef = useRef(0);
+
   const [data, setData] = useState<StudentDashboardSummaryResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  /** 須先選段考再按「展開」，才載入並顯示統計與建議 */
+  const [detailsExpanded, setDetailsExpanded] = useState(false);
+
+  const optionById = useMemo(() => new Map(scopeOptions.map((o) => [o.id, o])), [scopeOptions]);
+
+  const selectedOption = scopeId ? optionById.get(scopeId) : undefined;
+
+  const replaceScopeInUrl = useCallback(
+    (id: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("scopeId", id);
+      const qs = params.toString();
+      router.replace(`${pathname}?${qs}#learning-overview`, { scroll: false });
+    },
+    [pathname, router, searchParams],
+  );
 
   const load = useCallback(async (id: string) => {
+    const gen = ++fetchGenRef.current;
     setLoading(true);
     setError(null);
     try {
       const res = await fetch(`/api/student/dashboard-summary?scopeId=${encodeURIComponent(id)}`, {
         credentials: "include",
       });
+      if (gen !== fetchGenRef.current) return;
       if (!res.ok) {
+        if (res.status === 404) {
+          setData(null);
+          setError(NO_DATA_MESSAGE);
+          return;
+        }
         const j = (await res.json().catch(() => ({}))) as { message?: string };
         throw new Error(j.message || `載入失敗 (${res.status})`);
       }
       const json = (await res.json()) as StudentDashboardSummaryResponse;
+      if (gen !== fetchGenRef.current) return;
       setData(json);
     } catch (e) {
+      if (gen !== fetchGenRef.current) return;
       setData(null);
       setError(e instanceof Error ? e.message : "無法載入總覽");
     } finally {
-      setLoading(false);
+      if (gen === fetchGenRef.current) setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    if (!scopeId) return;
+    if (!detailsExpanded || !scopeId) return;
     void load(scopeId);
-  }, [scopeId, load]);
+  }, [scopeId, load, detailsExpanded]);
+
+  /** 與伺服器 canonical URL 對齊（例如手動改網址） */
+  useEffect(() => {
+    const fromUrl = searchParams.get("scopeId")?.trim();
+    if (!fromUrl || !scopeOptions.some((o) => o.id === fromUrl)) return;
+    if (fromUrl !== scopeId) {
+      setScopeId(fromUrl);
+    }
+  }, [searchParams, scopeOptions, scopeId]);
+
+  const onSelectScope = (id: string) => {
+    if (id === scopeId) return;
+    setData(null);
+    setError(null);
+    setScopeId(id);
+    replaceScopeInUrl(id);
+  };
+
+  const collapseDetails = () => {
+    fetchGenRef.current += 1;
+    setDetailsExpanded(false);
+    setData(null);
+    setError(null);
+    setLoading(false);
+  };
 
   const labOn = isAdaptivePracticeLabEnabled();
   const skillHref = (code: string) =>
@@ -94,56 +164,143 @@ export function PersonalLearningOverview({ initialScopeId, scopeOptions }: Props
     );
   }
 
+  const roleHint =
+    selectedOption?.role === "historical"
+      ? "這是第二次段考的歷史學習紀錄。"
+      : selectedOption?.role === "current_prep"
+        ? "目前預習進行中，請依照技能樹完成影片與測驗。"
+        : null;
+
+  const badgeFor = (opt: StudentOverviewScopeOption) =>
+    opt.role === "current_prep" ? "🔥 目前預習中" : "已完成／歷史紀錄";
+
   return (
     <section
       id="learning-overview"
       className="rounded-3xl border border-cyan-500/25 bg-slate-900/75 p-4 shadow-[0_0_40px_-12px_rgba(34,211,238,0.2)] backdrop-blur-md sm:p-6"
       aria-labelledby="overview-heading"
     >
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex flex-col gap-4">
         <div>
           <h2 id="overview-heading" className="text-lg font-bold text-white sm:text-xl">
             個人學習總覽
           </h2>
           <p className="mt-1 text-sm leading-relaxed text-slate-200">依段考範圍彙整影片、測驗與技能練習進度</p>
         </div>
-        {scopeOptions.length > 1 ? (
-          <div className="flex flex-wrap gap-2" role="tablist" aria-label="段考切換">
-            {scopeOptions.map((opt) => (
-              <button
-                key={opt.id}
-                type="button"
-                role="tab"
-                aria-selected={scopeId === opt.id}
-                onClick={() => setScopeId(opt.id)}
-                className={cn(
-                  "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors sm:text-sm",
-                  scopeId === opt.id
-                    ? "border-cyan-400/70 bg-cyan-500/25 text-white shadow-sm"
-                    : "border-slate-500/50 bg-slate-800/80 text-slate-100 hover:border-cyan-400/40 hover:bg-slate-800",
-                )}
-              >
-                {opt.label}
-              </button>
-            ))}
+
+        {scopeOptions.length > 0 ? (
+          <div className="flex flex-col gap-3 rounded-2xl border border-slate-600/50 bg-slate-950/50 p-4">
+            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+              <label htmlFor="overview-scope-select" className="text-xs font-semibold text-slate-300 sm:text-sm">
+                目前查看
+              </label>
+              <div className="relative min-w-[min(100%,280px)] sm:max-w-md sm:flex-1">
+                <select
+                  id="overview-scope-select"
+                  value={scopeId}
+                  onChange={(e) => onSelectScope(e.target.value)}
+                  className="w-full appearance-none rounded-xl border border-cyan-500/40 bg-slate-900/90 py-2.5 pl-3 pr-10 text-sm font-semibold text-white shadow-inner focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/30"
+                  aria-label="選擇要查看的段考範圍"
+                >
+                  {scopeOptions.map((opt) => (
+                    <option key={opt.id} value={opt.id}>
+                      {opt.fullLabel}
+                    </option>
+                  ))}
+                </select>
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-cyan-300/90">
+                  ▼
+                </span>
+              </div>
+            </div>
+
+            {scopeOptions.length > 1 ? (
+              <div className="flex flex-wrap gap-2" role="tablist" aria-label="段考快速切換">
+                {scopeOptions.map((opt) => (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={scopeId === opt.id}
+                    onClick={() => onSelectScope(opt.id)}
+                    className={cn(
+                      "flex flex-col items-start gap-0.5 rounded-xl border px-3 py-2 text-left text-xs font-semibold transition-colors sm:text-sm",
+                      scopeId === opt.id
+                        ? "border-cyan-400/70 bg-cyan-500/25 text-white shadow-sm"
+                        : "border-slate-500/50 bg-slate-800/80 text-slate-100 hover:border-cyan-400/40 hover:bg-slate-800",
+                    )}
+                  >
+                    <span>{opt.label}</span>
+                    <span className="text-[10px] font-normal text-slate-300 sm:text-xs">{badgeFor(opt)}</span>
+                  </button>
+                ))}
+              </div>
+            ) : null}
+
+            {selectedOption ? (
+              <p className="text-sm text-slate-100">
+                目前顯示：<span className="font-semibold text-cyan-100">{selectedOption.fullLabel}</span>
+              </p>
+            ) : null}
+
+            {roleHint ? (
+              <p className="rounded-xl border border-slate-500/40 bg-slate-900/60 px-3 py-2 text-xs leading-relaxed text-slate-200 sm:text-sm">
+                {roleHint}
+              </p>
+            ) : null}
+
+            {!detailsExpanded ? (
+              <div className="mt-1 flex flex-col gap-3 border-t border-slate-600/40 pt-4">
+                <p className="text-xs text-slate-400 sm:text-sm">
+                  請先確認上方段考範圍，再展開查看統計、弱點與今日建議（不會自動載入，避免看錯段考）。
+                </p>
+                <Button
+                  type="button"
+                  variant="student"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                  onClick={() => setDetailsExpanded(true)}
+                >
+                  <ChevronDown className="h-5 w-5 shrink-0" aria-hidden />
+                  展開此段考的學習總覽
+                </Button>
+              </div>
+            ) : (
+              <div className="mt-1 flex flex-wrap items-center justify-end gap-2 border-t border-slate-600/40 pt-3">
+                <button
+                  type="button"
+                  onClick={collapseDetails}
+                  className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-medium text-slate-400 underline-offset-4 hover:text-slate-200 hover:underline"
+                >
+                  <ChevronUp className="h-4 w-4" aria-hidden />
+                  收合總覽
+                </button>
+              </div>
+            )}
           </div>
         ) : null}
       </div>
 
-      {error ? (
-        <div className="mt-4 rounded-2xl border border-red-400/30 bg-red-950/40 px-4 py-3 text-sm text-red-100">
+      {detailsExpanded && error ? (
+        <div className="mt-4 rounded-2xl border border-amber-400/30 bg-amber-950/35 px-4 py-3 text-sm text-amber-50">
           {error}
         </div>
       ) : null}
 
-      {loading && !data ? (
+      {detailsExpanded && loading && !data ? (
         <div className="mt-8 flex items-center justify-center gap-2 py-16 text-slate-200">
           <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
           <span>載入中…</span>
         </div>
       ) : null}
 
-      {data ? (
+      {detailsExpanded && data && !data.hasLearningData ? (
+        <div className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-950/30 px-4 py-6 text-center text-sm text-amber-50">
+          {NO_DATA_MESSAGE}
+        </div>
+      ) : null}
+
+      {detailsExpanded && data?.hasLearningData ? (
         <div className={cn("mt-6 space-y-8", loading ? "opacity-70" : "")}>
           <div>
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
