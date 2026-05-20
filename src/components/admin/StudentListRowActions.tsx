@@ -84,14 +84,14 @@ export function StudentListRowActions({ studentId, examScopeId, showUrlInline = 
       <div className="flex flex-wrap items-center gap-2">
         <Link
           href={reportHref}
-          className="interactive-btn inline-flex min-h-11 items-center justify-center rounded-lg border border-teal-600 bg-white px-3 py-2 text-sm font-medium text-cyan-200 shadow-sm sm:px-4"
+          className="interactive-btn inline-flex min-h-11 items-center justify-center rounded-lg border border-teal-600 bg-white px-3 py-2 text-sm font-medium text-cyan-800 shadow-sm sm:px-4"
         >
           查看學習報告
         </Link>
         {progressHref ? (
           <Link
             href={progressHref}
-            className="interactive-btn inline-flex min-h-11 items-center justify-center rounded-lg border border-white/15 bg-white px-3 py-2 text-sm font-medium text-slate-200 shadow-sm sm:px-4"
+            className="interactive-btn inline-flex min-h-11 items-center justify-center rounded-lg border border-slate-200/90 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm sm:px-4"
           >
             查看進度
           </Link>
@@ -108,20 +108,20 @@ export function StudentListRowActions({ studentId, examScopeId, showUrlInline = 
           <button
             type="button"
             onClick={() => void copyAgain()}
-            className="interactive-btn inline-flex min-h-11 items-center justify-center rounded-lg border border-white/15 bg-white px-3 py-2 text-sm font-medium text-slate-200 shadow-sm sm:px-4"
+            className="interactive-btn inline-flex min-h-11 items-center justify-center rounded-lg border border-slate-200/90 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm sm:px-4"
           >
             複製
           </button>
         ) : null}
       </div>
       {notice ? (
-        <p className="text-sm font-medium text-cyan-200" role="status">
+        <p className="text-sm font-medium text-cyan-800" role="status">
           {notice}
         </p>
       ) : null}
       {err ? <p className="text-sm text-red-600">{err}</p> : null}
       {showUrlInline && shareUrl ? (
-        <p className="max-w-md break-all rounded-lg bg-white/[0.04] px-2 py-1.5 font-mono text-[11px] leading-snug text-slate-300 ring-1 ring-white/10 sm:text-xs">
+        <p className="max-w-md break-all rounded-lg bg-slate-50/80 px-2 py-1.5 font-mono text-[11px] leading-snug text-slate-600 ring-1 ring-slate-200/90 sm:text-xs">
           {shareUrl}
         </p>
       ) : null}

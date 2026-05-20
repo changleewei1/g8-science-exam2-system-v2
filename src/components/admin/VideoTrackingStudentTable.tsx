@@ -27,9 +27,9 @@ function formatLastLearned(iso: string | null): string {
 
 export function VideoTrackingStudentTable({ rows, examScopeId }: Props) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.04] shadow-lg backdrop-blur-md">
+    <div className="overflow-x-auto rounded-2xl border border-slate-200/80 bg-slate-50/70 shadow-lg backdrop-blur-md">
       <table className="min-w-[960px] w-full text-left text-sm">
-        <thead className="border-b border-white/10 bg-white/[0.06] text-slate-300">
+        <thead className="border-b border-slate-200 bg-white text-slate-600">
           <tr>
             <th className="px-4 py-3 font-semibold">學生</th>
             <th className="px-4 py-3 font-semibold">任務完成率</th>
@@ -43,7 +43,7 @@ export function VideoTrackingStudentTable({ rows, examScopeId }: Props) {
           {rows.length === 0 ? (
             <tr>
               <td colSpan={6} className="px-4 py-12 text-center text-slate-400">
-                <p className="font-medium text-slate-200">目前尚無符合條件的學生</p>
+                <p className="font-medium text-slate-700">目前尚無符合條件的學生</p>
                 <p className="mt-2 text-sm">請調整學習範圍或搜尋條件後再試</p>
               </td>
             </tr>
@@ -51,26 +51,26 @@ export function VideoTrackingStudentTable({ rows, examScopeId }: Props) {
             rows.map((s) => (
               <tr
                 key={s.studentId}
-                className="border-t border-white/5 align-top transition-colors hover:bg-white/[0.03]"
+                className="border-t border-slate-100 align-top transition-colors hover:bg-slate-50"
               >
                 <td className="px-4 py-4">
                   <p className="font-semibold text-white">{s.name}</p>
                   <p className="mt-0.5 font-mono text-xs text-slate-400">{s.studentCode}</p>
                   {s.className ? (
-                    <span className="mt-2 inline-flex rounded-md border border-cyan-400/30 bg-cyan-500/10 px-2 py-0.5 text-xs font-medium text-cyan-200">
+                    <span className="mt-2 inline-flex rounded-md border border-cyan-400/30 bg-cyan-500/10 px-2 py-0.5 text-xs font-medium text-cyan-800">
                       {s.className} 班
                     </span>
                   ) : (
-                    <span className="mt-2 inline-flex rounded-md border border-white/10 px-2 py-0.5 text-xs text-slate-500">
+                    <span className="mt-2 inline-flex rounded-md border border-slate-200/90 px-2 py-0.5 text-xs text-slate-500">
                       未分班
                     </span>
                   )}
                 </td>
-                <td className="px-4 py-4 text-slate-300">
+                <td className="px-4 py-4 text-slate-600">
                   {s.taskCompletionRate == null ? (
                     <span className="text-sm text-slate-500">尚未指定任務</span>
                   ) : (
-                    <span className="font-medium tabular-nums text-slate-200">
+                    <span className="font-medium tabular-nums text-slate-700">
                       {s.taskCompletionRate}%
                     </span>
                   )}

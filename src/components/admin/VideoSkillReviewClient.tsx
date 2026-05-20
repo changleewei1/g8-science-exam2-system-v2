@@ -89,7 +89,7 @@ export function VideoSkillReviewClient() {
         {warning ? (
           <p className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">{warning}</p>
         ) : null}
-        <p className="rounded-xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-5 text-sm text-slate-400">目前沒有待審核候選。</p>
+        <p className="rounded-xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)] p-5 text-sm text-slate-400">目前沒有待審核候選。</p>
       </div>
     );
   }
@@ -99,15 +99,15 @@ export function VideoSkillReviewClient() {
       {rows.map((r) => {
         const rowState = stateById[r.id] ?? { loading: false, customSkill: r.suggested_skill_code };
         return (
-          <section key={r.id} className="rounded-xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-4 shadow-sm">
+          <section key={r.id} className="rounded-xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)] p-4 shadow-sm">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <h3 className="font-medium text-slate-50">{r.video_title || "(無標題影片)"}</h3>
+                <h3 className="font-medium text-slate-900">{r.video_title || "(無標題影片)"}</h3>
                 <p className="mt-1 text-xs text-slate-500">video_id: {r.video_id}</p>
                 <p className="mt-1 text-xs text-slate-500">unit: {r.unit || "-"}</p>
               </div>
               <div className="text-right text-sm">
-                <p className="font-semibold text-slate-50">{r.suggested_skill_code}</p>
+                <p className="font-semibold text-slate-900">{r.suggested_skill_code}</p>
                 <p className="text-slate-400">{r.suggested_skill_name || "-"}</p>
                 <p className="text-slate-400">confidence: {typeof r.confidence === "number" ? r.confidence.toFixed(2) : "-"}</p>
                 {lowConfidence(r.confidence) ? (
@@ -117,7 +117,7 @@ export function VideoSkillReviewClient() {
                 ) : null}
               </div>
             </div>
-            <p className="mt-3 rounded bg-white/[0.04] p-3 text-sm text-slate-300">{r.reason || "(無理由)"}</p>
+            <p className="mt-3 rounded bg-slate-50/80 p-3 text-sm text-slate-600">{r.reason || "(無理由)"}</p>
             <p className="mt-2 text-xs text-slate-500">字幕：{r.subtitle_available ? "有" : "無"}</p>
 
             <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -129,7 +129,7 @@ export function VideoSkillReviewClient() {
                     [r.id]: { ...(prev[r.id] ?? { loading: false }), customSkill: e.target.value.toUpperCase() },
                   }))
                 }
-                className="rounded border border-white/15 px-2 py-1 text-sm"
+                className="rounded border border-slate-200/90 px-2 py-1 text-sm"
                 placeholder="修改 skill_code"
               />
               <button

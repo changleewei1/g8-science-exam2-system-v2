@@ -41,21 +41,21 @@ export function TaskProgressClient({ taskId, detail }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-end">
+      <div className="flex flex-col gap-3 rounded-2xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)] p-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-end">
         <label className="block min-w-[160px] flex-1 text-sm">
-          <span className="font-medium text-slate-200">搜尋學生</span>
+          <span className="font-medium text-slate-700">搜尋學生</span>
           <input
             type="search"
-            className="mt-1.5 w-full rounded-xl border border-white/15 px-3 py-2 text-sm"
+            className="mt-1.5 w-full rounded-xl border border-slate-200/90 px-3 py-2 text-sm"
             placeholder="姓名或學號"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </label>
         <label className="block min-w-[120px] text-sm">
-          <span className="font-medium text-slate-200">班級</span>
+          <span className="font-medium text-slate-700">班級</span>
           <select
-            className="mt-1.5 w-full rounded-xl border border-white/15 px-3 py-2 text-sm"
+            className="mt-1.5 w-full rounded-xl border border-slate-200/90 px-3 py-2 text-sm"
             value={classFilter}
             onChange={(e) => setClassFilter(e.target.value)}
           >
@@ -67,19 +67,19 @@ export function TaskProgressClient({ taskId, detail }: Props) {
             ))}
           </select>
         </label>
-        <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-200">
+        <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
           <input
             type="checkbox"
-            className="rounded border-white/15"
+            className="rounded border-slate-200/90"
             checked={onlyIncomplete}
             onChange={(e) => setOnlyIncomplete(e.target.checked)}
           />
           只看未完成
         </label>
-        <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-200">
+        <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
           <input
             type="checkbox"
-            className="rounded border-white/15"
+            className="rounded border-slate-200/90"
             checked={onlyOverdue}
             onChange={(e) => setOnlyOverdue(e.target.checked)}
           />
@@ -87,9 +87,9 @@ export function TaskProgressClient({ taskId, detail }: Props) {
         </label>
       </div>
 
-      <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md shadow-[0_8px_36px_-16px_rgba(0,0,0,0.45)]">
+      <div className="overflow-x-auto rounded-2xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)]">
         <table className="min-w-[1100px] w-full text-left text-sm">
-          <thead className="bg-white/[0.08]/90 text-slate-300">
+          <thead className="bg-slate-50/95 text-slate-600">
             <tr>
               <th className="px-3 py-2 font-semibold">學生姓名</th>
               <th className="px-3 py-2 font-semibold">班級</th>
@@ -111,17 +111,17 @@ export function TaskProgressClient({ taskId, detail }: Props) {
               </tr>
             ) : (
               filtered.map((s) => (
-                <tr key={s.studentId} className="border-t border-white/10">
-                  <td className="px-3 py-2 font-medium text-slate-50">{s.name}</td>
-                  <td className="px-3 py-2 text-slate-300">{s.className ?? "—"}</td>
-                  <td className="px-3 py-2 text-slate-200">
+                <tr key={s.studentId} className="border-t border-slate-200">
+                  <td className="px-3 py-2 font-medium text-slate-900">{s.name}</td>
+                  <td className="px-3 py-2 text-slate-600">{s.className ?? "—"}</td>
+                  <td className="px-3 py-2 text-slate-700">
                     {s.completedCount} / {s.totalVideos}
                   </td>
                   <td className="px-3 py-2">{s.completionRate}%</td>
-                  <td className="px-3 py-2 whitespace-nowrap text-slate-300">
+                  <td className="px-3 py-2 whitespace-nowrap text-slate-600">
                     {s.quizzesPassed} / {s.quizzesTotal}
                   </td>
-                  <td className="px-3 py-2 text-slate-300">{s.quizSummary}</td>
+                  <td className="px-3 py-2 text-slate-600">{s.quizSummary}</td>
                   <td className="px-3 py-2 whitespace-nowrap text-slate-400 text-xs">
                     {s.lastActivityAt
                       ? new Date(s.lastActivityAt).toLocaleString("zh-TW", {
@@ -134,12 +134,12 @@ export function TaskProgressClient({ taskId, detail }: Props) {
                     <span
                       className={
                         s.statusLabel === "已完成"
-                          ? "text-cyan-200"
+                          ? "text-cyan-700"
                           : s.statusLabel === "逾期未完成"
                             ? "font-medium text-red-700"
                             : s.statusLabel === "尚未開始"
                               ? "text-slate-500"
-                              : "text-slate-200"
+                              : "text-slate-700"
                       }
                     >
                       {s.statusLabel}
@@ -149,7 +149,7 @@ export function TaskProgressClient({ taskId, detail }: Props) {
                     <div className="flex flex-col gap-1 sm:flex-row sm:gap-2">
                       <Link
                         href={`/admin/students/${s.studentId}/report?taskId=${encodeURIComponent(taskId)}`}
-                        className="text-cyan-300 underline text-xs font-medium"
+                        className="text-cyan-700 underline text-xs font-medium hover:text-cyan-900"
                       >
                         查看學習報告
                       </Link>

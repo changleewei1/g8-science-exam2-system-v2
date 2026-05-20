@@ -11,11 +11,11 @@ type Props = {
 export function LearningTasksDbMissing({ technicalDetail }: Props) {
   return (
     <div className="rounded-2xl border border-amber-200/90 bg-amber-50/90 p-6 shadow-md text-amber-950">
-      <h2 className="text-lg font-semibold text-slate-50">尚未完成系統設定</h2>
-      <p className="mt-3 text-sm leading-relaxed text-slate-200">
+      <h2 className="text-lg font-semibold text-slate-900">尚未完成系統設定</h2>
+      <p className="mt-3 text-sm leading-relaxed text-slate-700">
         建立學習任務前，需先完成一次初始化設定。
       </p>
-      <p className="mt-2 text-sm text-slate-300">
+      <p className="mt-2 text-sm text-slate-600">
         此步驟只需執行一次，完成後即可建立學習任務。
       </p>
       <div className="mt-6 flex flex-wrap gap-3">
@@ -27,17 +27,17 @@ export function LearningTasksDbMissing({ technicalDetail }: Props) {
         </Link>
         <Link
           href="/admin"
-          className="interactive-btn inline-flex min-h-11 items-center justify-center rounded-xl border border-white/15 bg-white px-5 py-2.5 text-sm font-medium text-slate-200 shadow-sm"
+          className="interactive-btn inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-200/90 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 shadow-sm"
         >
           返回後台首頁
         </Link>
       </div>
       {technicalDetail ? (
-        <details className="mt-6 rounded-xl border border-amber-200/60 bg-white/50 p-3 text-sm text-slate-300">
-          <summary className="cursor-pointer select-none font-medium text-slate-200">
+        <details className="mt-6 rounded-xl border border-amber-200/60 bg-cyan-50/400 p-3 text-sm text-slate-600">
+          <summary className="cursor-pointer select-none font-medium text-slate-700">
             技術人員參考（選讀）
           </summary>
-          <pre className="mt-3 max-h-40 overflow-auto whitespace-pre-wrap rounded-lg bg-white/[0.12] p-3 text-xs text-slate-400">
+          <pre className="mt-3 max-h-40 overflow-auto whitespace-pre-wrap rounded-lg bg-slate-100 p-3 text-xs text-slate-400">
             {technicalDetail}
           </pre>
         </details>

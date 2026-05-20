@@ -39,10 +39,10 @@ function ImageUrlBlock({
   disabled: boolean;
 }) {
   return (
-    <div className="space-y-2 rounded-lg border border-white/10 bg-white/[0.04] p-3">
+    <div className="space-y-2 rounded-lg border border-slate-200/80 bg-slate-50/70 p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <span className="text-sm font-medium text-slate-300">{label}</span>
-        <label className="text-xs text-cyan-300">
+        <span className="text-sm font-medium text-slate-600">{label}</span>
+        <label className="text-xs text-cyan-700">
           <span className="cursor-pointer underline decoration-teal-700/40 underline-offset-2">
             {uploading ? "上傳中…" : "上傳圖片"}
           </span>
@@ -64,7 +64,7 @@ function ImageUrlBlock({
         type="url"
         inputMode="url"
         placeholder="或貼上圖片網址（https）"
-        className="w-full rounded-md border border-white/10 bg-white px-3 py-2 text-sm"
+        className="w-full rounded-md border border-slate-200/90 bg-white px-3 py-2 text-sm"
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
@@ -73,7 +73,7 @@ function ImageUrlBlock({
         <img
           src={value}
           alt=""
-          className="max-h-36 w-full max-w-md rounded border border-white/10 object-contain"
+          className="max-h-36 w-full max-w-md rounded border border-slate-200/90 object-contain"
         />
       ) : null}
     </div>
@@ -244,19 +244,19 @@ export function VideoQuizEditorClient({
         className="scroll-mt-4 rounded-2xl border-2 border-teal-400 bg-cyan-500/10/80 p-5 shadow-md ring-2 ring-teal-300/50"
       >
         <h2 className="text-xl font-bold tracking-tight text-teal-950">JSON 批次輸入</h2>
-        <p className="mt-1 text-sm font-medium text-cyan-100/90">貼上 JSON → 按下方按鈕套用 → 再至頁面底部「儲存變更」</p>
-        <p className="mt-2 text-xs leading-relaxed text-slate-300">
+        <p className="mt-1 text-sm font-medium text-cyan-900/90">貼上 JSON → 按下方按鈕套用 → 再至頁面底部「儲存變更」</p>
+        <p className="mt-2 text-xs leading-relaxed text-slate-600">
           貼上 <strong>1～{VIDEO_QUIZ_JSON_MAX_QUESTIONS} 題</strong>，格式為{" "}
-          <code className="rounded bg-white/[0.12] px-1 py-0.5 text-[11px]">{"{ \"questions\": [ … ] }"}</code>{" "}
-          或陣列 <code className="rounded bg-white/[0.12] px-1 py-0.5 text-[11px]">[ … ]</code>
+          <code className="rounded bg-slate-100 px-1 py-0.5 text-[11px]">{"{ \"questions\": [ … ] }"}</code>{" "}
+          或陣列 <code className="rounded bg-slate-100 px-1 py-0.5 text-[11px]">[ … ]</code>
           。欄位可用 snake_case（與 API 相同）或 camelCase；含{" "}
-          <code className="rounded bg-white/[0.12] px-1">correct_choice_index</code>（0–3）亦可。按「套用 JSON 至表單」後再按「儲存變更」寫入資料庫。
+          <code className="rounded bg-slate-100 px-1">correct_choice_index</code>（0–3）亦可。按「套用 JSON 至表單」後再按「儲存變更」寫入資料庫。
         </p>
         {jsonErr ? (
           <p className="mt-3 rounded-lg bg-red-100 px-3 py-2 text-sm text-red-900">{jsonErr}</p>
         ) : null}
         <textarea
-          className="mt-3 min-h-[240px] w-full rounded-lg border border-cyan-400/35 bg-white px-3 py-2 font-mono text-xs leading-relaxed text-slate-50 shadow-inner"
+          className="mt-3 min-h-[240px] w-full rounded-lg border border-cyan-400/35 bg-white px-3 py-2 font-mono text-xs leading-relaxed text-slate-900 shadow-inner"
           spellCheck={false}
           aria-label="JSON 題目批次輸入"
           placeholder='{"questions":[{"question_text":"…","choice_a":"…","choice_b":"…","choice_c":"…","choice_d":"…","correct_answer":"A","skill_code":"RS01","explanation":"…","difficulty":"基礎"}, …]}'
@@ -279,7 +279,7 @@ export function VideoQuizEditorClient({
             type="button"
             onClick={() => fillJsonFromForm()}
             disabled={status === "saving"}
-            className="rounded-lg border-2 border-teal-500 bg-white px-4 py-2.5 text-sm font-semibold text-cyan-100 hover:bg-cyan-500/10"
+            className="rounded-lg border-2 border-teal-500 bg-white px-4 py-2.5 text-sm font-semibold text-cyan-900 hover:bg-cyan-500/10"
           >
             匯出 JSON（從表單）
           </button>
@@ -289,22 +289,22 @@ export function VideoQuizEditorClient({
       <div>
         <Link
           href="/admin/video-quizzes"
-          className="interactive-nav text-sm font-medium text-cyan-300 underline underline-offset-2"
+          className="interactive-nav text-sm font-medium text-cyan-700 underline underline-offset-2"
         >
           ← 返回測驗題列表
         </Link>
-        <h1 className="mt-4 text-2xl font-semibold text-slate-50">編輯測驗</h1>
+        <h1 className="mt-4 text-2xl font-semibold text-slate-900">編輯測驗</h1>
         <p className="mt-1 text-sm text-slate-400">測驗：{quizTitle}</p>
-        <p className="mt-1 text-sm text-slate-300">影片：{videoTitle}</p>
+        <p className="mt-1 text-sm text-slate-600">影片：{videoTitle}</p>
         <p className="mt-3 text-xs text-slate-500">
           題幹可只用文字、只用圖、或兩者並列；參考圖附加在題幹下方。每個選項亦可只用文字或只用圖。圖檔建議 5MB
-          以內（JPEG／PNG／WebP／GIF）。上方綠框為 <strong className="text-slate-300">JSON 批次輸入</strong>
+          以內（JPEG／PNG／WebP／GIF）。上方綠框為 <strong className="text-slate-600">JSON 批次輸入</strong>
           ；若題目多，可用底部「回到 JSON 批次」。
         </p>
       </div>
 
       {status === "ok" && (
-        <p className="rounded-lg bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100">
+        <p className="rounded-lg bg-cyan-500/10 px-4 py-3 text-sm text-cyan-900">
           已儲存成功（學生端將讀取新題目）。
         </p>
       )}
@@ -314,7 +314,7 @@ export function VideoQuizEditorClient({
 
       <h2
         id="video-quiz-form-section"
-        className="text-lg font-semibold text-slate-50 scroll-mt-4"
+        className="text-lg font-semibold text-slate-900 scroll-mt-4"
       >
         表單逐題編輯 <span className="text-base font-normal text-slate-500">（共 {rows.length} 題）</span>
       </h2>
@@ -323,14 +323,14 @@ export function VideoQuizEditorClient({
         {rows.map((r, i) => (
           <fieldset
             key={i}
-            className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-5 shadow-sm"
+            className="space-y-4 rounded-2xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)] p-5 shadow-sm"
           >
-            <legend className="px-1 text-base font-semibold text-slate-50">第 {i + 1} 題</legend>
+            <legend className="px-1 text-base font-semibold text-slate-900">第 {i + 1} 題</legend>
 
             <label className="block space-y-1">
-              <span className="text-sm font-medium text-slate-300">題幹文字（可與題幹圖擇一或並用）</span>
+              <span className="text-sm font-medium text-slate-600">題幹文字（可與題幹圖擇一或並用）</span>
               <textarea
-                className="min-h-[80px] w-full rounded-lg border border-white/10 px-3 py-2 text-sm"
+                className="min-h-[80px] w-full rounded-lg border border-slate-200/90 px-3 py-2 text-sm"
                 value={r.questionText}
                 onChange={(e) => field(i, "questionText", e.target.value)}
               />
@@ -365,12 +365,12 @@ export function VideoQuizEditorClient({
                   ["D", "choiceD", "choiceDImageUrl"],
                 ] as const
               ).map(([letter, textKey, imgKey]) => (
-                <div key={letter} className="space-y-2 rounded-lg border border-white/10 p-3">
-                  <span className="text-sm font-semibold text-slate-200">選項 {letter}</span>
+                <div key={letter} className="space-y-2 rounded-lg border border-slate-200/90 p-3">
+                  <span className="text-sm font-semibold text-slate-700">選項 {letter}</span>
                   <input
                     type="text"
                     placeholder="選項文字"
-                    className="w-full rounded-lg border border-white/10 px-3 py-2 text-sm"
+                    className="w-full rounded-lg border border-slate-200/90 px-3 py-2 text-sm"
                     value={r[textKey]}
                     onChange={(e) => field(i, textKey, e.target.value)}
                   />
@@ -388,7 +388,7 @@ export function VideoQuizEditorClient({
             </div>
 
             <fieldset className="space-y-2">
-              <legend className="text-sm font-medium text-slate-300">正解</legend>
+              <legend className="text-sm font-medium text-slate-600">正解</legend>
               <div className="flex flex-wrap gap-4">
                 {(["A", "B", "C", "D"] as const).map((k) => (
                   <label key={k} className="flex items-center gap-2 text-sm">
@@ -405,9 +405,9 @@ export function VideoQuizEditorClient({
             </fieldset>
 
             <label className="block space-y-1">
-              <span className="text-sm font-medium text-slate-300">解析（選填）</span>
+              <span className="text-sm font-medium text-slate-600">解析（選填）</span>
               <textarea
-                className="min-h-[60px] w-full rounded-lg border border-white/10 px-3 py-2 text-sm"
+                className="min-h-[60px] w-full rounded-lg border border-slate-200/90 px-3 py-2 text-sm"
                 value={r.explanation}
                 onChange={(e) => field(i, "explanation", e.target.value)}
               />
@@ -415,19 +415,19 @@ export function VideoQuizEditorClient({
 
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="block space-y-1">
-                <span className="text-sm font-medium text-slate-300">難度（選填）</span>
+                <span className="text-sm font-medium text-slate-600">難度（選填）</span>
                 <input
                   type="text"
-                  className="w-full rounded-lg border border-white/10 px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-slate-200/90 px-3 py-2 text-sm"
                   placeholder="例如：基礎"
                   value={r.difficulty}
                   onChange={(e) => field(i, "difficulty", e.target.value)}
                 />
               </label>
               <label className="block space-y-1">
-                <span className="text-sm font-medium text-slate-300">技能代碼</span>
+                <span className="text-sm font-medium text-slate-600">技能代碼</span>
                 <select
-                  className="w-full rounded-lg border border-white/10 px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-slate-200/90 px-3 py-2 text-sm"
                   value={r.skillCode}
                   onChange={(e) => field(i, "skillCode", e.target.value)}
                 >
@@ -447,7 +447,7 @@ export function VideoQuizEditorClient({
         <button
           type="button"
           onClick={scrollToJsonBatch}
-          className="rounded-lg border border-cyan-400/40 bg-cyan-500/10 px-4 py-2.5 text-sm font-semibold text-cyan-100 hover:bg-teal-100"
+          className="rounded-lg border border-cyan-400/40 bg-cyan-500/10 px-4 py-2.5 text-sm font-semibold text-cyan-900 hover:bg-teal-100"
         >
           回到 JSON 批次輸入
         </button>
@@ -465,7 +465,7 @@ export function VideoQuizEditorClient({
           disabled={
             status === "saving" || rows.length >= VIDEO_QUIZ_JSON_MAX_QUESTIONS || uploadKey !== null
           }
-          className="rounded-lg border border-white/15 bg-white px-4 py-2 text-sm font-medium text-slate-200 disabled:opacity-50"
+          className="rounded-lg border border-slate-200/90 bg-white px-4 py-2 text-sm font-medium text-slate-700 disabled:opacity-50"
         >
           新增一題
         </button>
@@ -473,13 +473,13 @@ export function VideoQuizEditorClient({
           type="button"
           onClick={removeLastQuestionRow}
           disabled={status === "saving" || rows.length <= 1 || uploadKey !== null}
-          className="rounded-lg border border-white/15 bg-white px-4 py-2 text-sm font-medium text-slate-200 disabled:opacity-50"
+          className="rounded-lg border border-slate-200/90 bg-white px-4 py-2 text-sm font-medium text-slate-700 disabled:opacity-50"
         >
           移除最後一題
         </button>
         <Link
           href="/admin/video-quizzes"
-          className="inline-flex min-h-10 items-center rounded-lg border border-white/10 bg-white px-4 py-2 text-sm font-medium text-slate-300"
+          className="inline-flex min-h-10 items-center rounded-lg border border-slate-200/90 bg-white px-4 py-2 text-sm font-medium text-slate-600"
         >
           取消
         </Link>

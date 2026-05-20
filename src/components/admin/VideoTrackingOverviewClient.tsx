@@ -142,10 +142,10 @@ export function VideoTrackingOverviewClient({ scopes }: Props) {
         <p className="max-w-2xl text-sm leading-relaxed text-slate-400 sm:text-base">
           依年級、科目與段考範圍查看學生影片觀看、測驗表現與學習報告。
         </p>
-        <span className="inline-flex flex-wrap items-center gap-1 rounded-full border border-cyan-400/30 bg-cyan-500/10 px-3 py-1 text-xs font-medium text-cyan-100">
+        <span className="inline-flex flex-wrap items-center gap-1 rounded-full border border-cyan-400/30 bg-cyan-500/10 px-3 py-1 text-xs font-medium text-cyan-900">
           {scopeBadge}
           {resolvedScope ? (
-            <span className="text-cyan-300/70">（{resolvedScope.title}）</span>
+            <span className="text-cyan-700/70">（{resolvedScope.title}）</span>
           ) : null}
         </span>
       </motion.header>

@@ -20,9 +20,9 @@ type Props = {
 };
 
 const selectClass =
-  "h-10 w-full rounded-xl border border-white/15 bg-slate-950/50 px-3 text-sm text-slate-100 outline-none transition-colors focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20";
+  "h-10 w-full rounded-xl border border-slate-200/90 bg-white px-3 text-sm text-slate-900 shadow-inner outline-none transition-colors focus:border-cyan-400 focus:ring-2 focus:ring-cyan-200/60";
 
-const labelClass = "mb-1.5 block text-xs font-medium text-slate-400";
+const labelClass = "mb-1.5 block text-xs font-medium text-slate-600";
 
 export function LearningScopeFilter({ draft, onChange, onApply, loading }: Props) {
   function patch(partial: Partial<LearningScope>) {
@@ -30,10 +30,10 @@ export function LearningScopeFilter({ draft, onChange, onApply, loading }: Props
   }
 
   return (
-    <div className="rounded-2xl border border-cyan-400/20 bg-white/5 p-4 shadow-[0_0_40px_rgba(34,211,238,0.08)] backdrop-blur-md sm:p-5">
+    <div className="rounded-2xl border border-cyan-200/60 bg-white p-4 shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)] sm:p-5">
       <div className="mb-4 flex items-center gap-2">
-        <SlidersHorizontal className="h-4 w-4 text-cyan-300" />
-        <h2 className="text-sm font-semibold text-white">學習範圍篩選</h2>
+        <SlidersHorizontal className="h-4 w-4 text-cyan-700" />
+        <h2 className="text-sm font-semibold text-slate-900">學習範圍篩選</h2>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">

@@ -8,9 +8,9 @@ export default function AdminVideoQuizzesLayout({ children }: { children: React.
       <header className={adminTopHeader}>
         <div className={adminTopHeaderInner}>
           <div className="flex flex-wrap items-center gap-3">
-            <HomeBackLink variant="dark" />
-            <span className="hidden h-6 w-px bg-white/15 sm:block" aria-hidden />
-            <span className="text-sm font-semibold text-white sm:text-base lg:text-lg">老師｜影片測驗題編輯</span>
+            <HomeBackLink variant="admin" />
+            <span className="hidden h-6 w-px bg-cyan-200/70 sm:block" aria-hidden />
+            <span className="text-sm font-semibold text-slate-900 sm:text-base lg:text-lg">老師｜影片測驗題編輯</span>
           </div>
           <nav className="flex flex-wrap gap-x-3 gap-y-2 text-sm sm:gap-4 sm:text-base">
             <Link className={adminNavLink} href="/admin">

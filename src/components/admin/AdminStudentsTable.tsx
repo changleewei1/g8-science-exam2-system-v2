@@ -8,9 +8,9 @@ type Props = {
 
 export function AdminStudentsTable({ students, examScopeId }: Props) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-white/10 bg-white/[0.06] backdrop-blur-md shadow-[0_8px_32px_-16px_rgba(0,0,0,0.4)]">
+    <div className="overflow-x-auto rounded-xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)]">
       <table className="min-w-[640px] w-full text-left text-sm">
-        <thead className="bg-white/[0.08] text-slate-300">
+        <thead className="bg-slate-50 text-slate-600">
           <tr>
             <th className="px-3 py-2 sm:px-4">學號</th>
             <th className="px-3 py-2 sm:px-4">姓名</th>
@@ -20,9 +20,9 @@ export function AdminStudentsTable({ students, examScopeId }: Props) {
         </thead>
         <tbody>
           {students.map((s) => (
-            <tr key={s.id} className="border-t border-white/10 align-top">
-              <td className="px-3 py-3 font-mono text-slate-50 sm:px-4">{s.studentCode}</td>
-              <td className="px-3 py-3 text-slate-50 sm:px-4">{s.name}</td>
+            <tr key={s.id} className="border-t border-slate-200 align-top">
+              <td className="px-3 py-3 font-mono text-slate-900 sm:px-4">{s.studentCode}</td>
+              <td className="px-3 py-3 text-slate-900 sm:px-4">{s.name}</td>
               <td className="px-3 py-3 text-slate-400 sm:px-4">{s.className ?? "—"}</td>
               <td className="px-3 py-3 sm:px-4">
                 <StudentListRowActions studentId={s.id} examScopeId={examScopeId} />

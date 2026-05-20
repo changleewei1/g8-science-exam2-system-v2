@@ -146,12 +146,12 @@ export default async function AdminStudentReportPage({ params, searchParams }: P
       <>
         <AdminStandaloneHeader title="學生學習報告" narrow />
         <AdminStandaloneMain narrow>
-          <div className="rounded-2xl border border-rose-500/35 bg-rose-950/45 p-6 text-rose-50 shadow-md">
+          <div className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-rose-900 shadow-md">
             <p className="font-medium">無法載入學習報告</p>
-            <p className="mt-2 text-sm leading-relaxed text-rose-100/90">
+            <p className="mt-2 text-sm leading-relaxed text-rose-800/90">
               請稍後再試。若持續發生，請確認資料庫連線與 migration 是否已套用。
             </p>
-            <pre className="mt-4 max-h-48 overflow-auto rounded-lg bg-black/30 p-3 text-xs whitespace-pre-wrap text-rose-50/90">
+            <pre className="mt-4 max-h-48 overflow-auto rounded-lg border border-rose-200/80 bg-white p-3 text-xs whitespace-pre-wrap text-rose-800">
               {loadError}
             </pre>
             <AdminInlineNavLink href="/admin/tasks">返回學習任務設定</AdminInlineNavLink>
@@ -175,14 +175,14 @@ export default async function AdminStudentReportPage({ params, searchParams }: P
       <AdminStandaloneMain narrow>
         <div className="mb-6 space-y-2">
           <p className="text-sm text-slate-400">以下為本次學習任務的完成情況與學習表現分析</p>
-          <p className="text-sm text-slate-300">
+          <p className="text-sm text-slate-600">
             {student.name}{" "}
             <span className="font-mono text-slate-500">（{student.studentCode}）</span>
             {student.className ? ` · ${student.className} 班` : ""}
           </p>
         </div>
 
-        <Suspense fallback={<div className="h-28 animate-pulse rounded-2xl bg-white/10" />}>
+        <Suspense fallback={<div className="h-28 animate-pulse rounded-2xl bg-slate-200/70" />}>
           <ReportFilters
             studentId={studentId}
             examScopes={reportScopes}
@@ -197,7 +197,7 @@ export default async function AdminStudentReportPage({ params, searchParams }: P
         {resolved ? (
           <p className="text-sm text-slate-400">
             完成情況範圍：
-            <span className="font-medium text-slate-200">{formatReportScopeLabel(filter)}</span>
+            <span className="font-medium text-slate-700">{formatReportScopeLabel(filter)}</span>
             {report.examScope?.title ? (
               <span className="text-slate-500">（{report.examScope.title}）</span>
             ) : null}

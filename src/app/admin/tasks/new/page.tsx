@@ -37,11 +37,11 @@ export default async function AdminTaskNewPage() {
       <div>
         <Link
           href="/admin/tasks"
-          className="interactive-nav text-sm font-medium text-cyan-300 underline-offset-4 hover:underline"
+          className="interactive-nav text-sm font-medium text-cyan-700 underline-offset-4 hover:underline"
         >
           ← 返回任務列表
         </Link>
-        <h1 className="mt-3 text-2xl font-semibold text-slate-50">建立學習任務</h1>
+        <h1 className="mt-3 text-2xl font-semibold text-slate-900">建立學習任務</h1>
         <p className="mt-2 text-sm text-slate-400">
           請設定本次需完成的影片學習內容與期限
         </p>

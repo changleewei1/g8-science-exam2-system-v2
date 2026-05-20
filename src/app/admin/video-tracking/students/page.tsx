@@ -23,7 +23,7 @@ export default async function AdminStudentsIndexPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold text-slate-50">學生學習總覽</h1>
+        <h1 className="text-2xl font-semibold text-slate-900">學生學習總覽</h1>
         <p className="mt-2 text-sm leading-relaxed text-slate-400">
           查看每位學生的影片觀看進度與學習表現
         </p>
@@ -31,13 +31,13 @@ export default async function AdminStudentsIndexPage() {
 
       {!examScopeId ? (
         <div className="rounded-2xl border border-amber-200/90 bg-amber-50/90 p-6 text-amber-950 shadow-md">
-          <p className="font-medium text-slate-50">尚未完成系統設定</p>
-          <p className="mt-2 text-sm text-slate-300">
+          <p className="font-medium text-slate-900">尚未完成系統設定</p>
+          <p className="mt-2 text-sm text-slate-600">
             請先完成初始化後，即可開始使用此功能
           </p>
           <Link
             href="/admin"
-            className="interactive-nav mt-4 inline-block text-sm font-medium text-cyan-200 underline underline-offset-2"
+            className="interactive-nav mt-4 inline-block text-sm font-medium text-cyan-800 underline underline-offset-2"
           >
             返回後台首頁
           </Link>

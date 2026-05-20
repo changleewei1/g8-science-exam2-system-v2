@@ -31,7 +31,7 @@ export default async function AdminTasksPage() {
     return (
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-50">學習任務設定</h1>
+          <h1 className="text-2xl font-semibold text-slate-900">學習任務設定</h1>
           <p className="mt-2 text-sm leading-relaxed text-slate-400">
             設定學生需完成的影片學習任務，系統將自動追蹤觀看進度與學習表現
           </p>
@@ -44,7 +44,7 @@ export default async function AdminTasksPage() {
             <p className="mt-2 text-sm leading-relaxed">
               請稍後再試，或確認網路連線與帳號權限。若問題持續，請聯絡系統管理員。
             </p>
-            <details className="mt-4 rounded-lg border border-rose-400/40 bg-rose-950/35 p-3 text-xs">
+            <details className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-3 text-xs text-rose-900">
               <summary className="cursor-pointer font-medium">錯誤詳情（選讀）</summary>
               <pre className="mt-2 max-h-40 overflow-auto whitespace-pre-wrap">{loadError}</pre>
             </details>
@@ -58,7 +58,7 @@ export default async function AdminTasksPage() {
     <div className="space-y-10">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-50">學習任務設定</h1>
+          <h1 className="text-2xl font-semibold text-slate-900">學習任務設定</h1>
           <p className="mt-2 text-sm leading-relaxed text-slate-400">
             設定學生需完成的影片學習任務，系統將自動追蹤觀看進度與學習表現
           </p>
@@ -72,7 +72,7 @@ export default async function AdminTasksPage() {
       </div>
 
       <section id="task-list" className="scroll-mt-8">
-        <h2 className="mb-4 text-lg font-semibold text-slate-50">已建立的學習任務</h2>
+        <h2 className="mb-4 text-lg font-semibold text-slate-900">已建立的學習任務</h2>
         <TasksListClient tasks={tasks} />
       </section>
     </div>

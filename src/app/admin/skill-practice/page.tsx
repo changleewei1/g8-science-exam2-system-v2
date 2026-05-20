@@ -102,15 +102,15 @@ export default async function AdminSkillPracticePage({ searchParams }: Props) {
         <form
           action="/admin/skill-practice"
           method="get"
-          className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-4 shadow-sm sm:p-5"
+          className="rounded-2xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)] p-4 shadow-sm sm:p-5"
         >
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <label className="flex flex-col gap-1 text-sm">
-              <span className="font-medium text-slate-300">段考範圍</span>
+              <span className="font-medium text-slate-600">段考範圍</span>
               <select
                 name="scopeId"
                 defaultValue={scopeId}
-                className="rounded-lg border border-white/15 px-3 py-2 text-slate-50"
+                className="rounded-lg border border-slate-200/90 px-3 py-2 text-slate-900"
                 required
               >
                 {scopes.length === 0 ? (
@@ -125,8 +125,8 @@ export default async function AdminSkillPracticePage({ searchParams }: Props) {
               </select>
             </label>
             <label className="flex flex-col gap-1 text-sm">
-              <span className="font-medium text-slate-300">班級</span>
-              <select name="className" defaultValue={className} className="rounded-lg border border-white/15 px-3 py-2">
+              <span className="font-medium text-slate-600">班級</span>
+              <select name="className" defaultValue={className} className="rounded-lg border border-slate-200/90 px-3 py-2">
                 <option value="">全部班級</option>
                 {classNames.map((c) => (
                   <option key={c} value={c}>
@@ -136,8 +136,8 @@ export default async function AdminSkillPracticePage({ searchParams }: Props) {
               </select>
             </label>
             <label className="flex flex-col gap-1 text-sm">
-              <span className="font-medium text-slate-300">單元</span>
-              <select name="unitId" defaultValue={unitId} className="rounded-lg border border-white/15 px-3 py-2">
+              <span className="font-medium text-slate-600">單元</span>
+              <select name="unitId" defaultValue={unitId} className="rounded-lg border border-slate-200/90 px-3 py-2">
                 <option value="">全部單元</option>
                 {unitOptions.map((u) => (
                   <option key={u.id} value={u.id}>
@@ -147,8 +147,8 @@ export default async function AdminSkillPracticePage({ searchParams }: Props) {
               </select>
             </label>
             <label className="flex flex-col gap-1 text-sm">
-              <span className="font-medium text-slate-300">狀態（技能列／學生列）</span>
-              <select name="status" defaultValue={statusRaw} className="rounded-lg border border-white/15 px-3 py-2">
+              <span className="font-medium text-slate-600">狀態（技能列／學生列）</span>
+              <select name="status" defaultValue={statusRaw} className="rounded-lg border border-slate-200/90 px-3 py-2">
                 <option value="">不限</option>
                 {STATUSES.map((s) => (
                   <option key={s} value={s}>
@@ -158,23 +158,23 @@ export default async function AdminSkillPracticePage({ searchParams }: Props) {
               </select>
             </label>
             <label className="flex flex-col gap-1 text-sm">
-              <span className="font-medium text-slate-300">搜尋學生姓名</span>
+              <span className="font-medium text-slate-600">搜尋學生姓名</span>
               <input
                 name="studentQ"
                 type="search"
                 defaultValue={studentQ}
                 placeholder="部分關鍵字"
-                className="rounded-lg border border-white/15 px-3 py-2"
+                className="rounded-lg border border-slate-200/90 px-3 py-2"
               />
             </label>
             <label className="flex flex-col gap-1 text-sm">
-              <span className="font-medium text-slate-300">搜尋 skill</span>
+              <span className="font-medium text-slate-600">搜尋 skill</span>
               <input
                 name="skillQ"
                 type="search"
                 defaultValue={skillQ}
                 placeholder="skill_code 或名稱"
-                className="rounded-lg border border-white/15 px-3 py-2"
+                className="rounded-lg border border-slate-200/90 px-3 py-2"
               />
             </label>
           </div>
@@ -188,7 +188,7 @@ export default async function AdminSkillPracticePage({ searchParams }: Props) {
             {scopeId ? (
               <Link
                 href={`/admin/skill-practice?scopeId=${encodeURIComponent(scopeId)}`}
-                className="inline-flex min-h-10 items-center rounded-lg border border-white/15 bg-white px-4 py-2 text-sm text-slate-200 hover:bg-white/[0.04]"
+                className="inline-flex min-h-10 items-center rounded-lg border border-slate-200/90 bg-white px-4 py-2 text-sm text-slate-700 hover:bg-slate-50/80"
               >
                 清除篩選
               </Link>
@@ -202,13 +202,13 @@ export default async function AdminSkillPracticePage({ searchParams }: Props) {
           </p>
         ) : (
           <>
-            <section className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-5 shadow-sm">
-              <h2 className="text-lg font-semibold text-slate-50">班級總覽</h2>
+            <section className="rounded-2xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)] p-5 shadow-sm">
+              <h2 className="text-lg font-semibold text-slate-900">班級總覽</h2>
               <p className="text-sm text-slate-400">{overview.scope.title}</p>
               <dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-                <div className="rounded-lg bg-white/[0.04] p-3">
+                <div className="rounded-lg bg-slate-50/80 p-3">
                   <dt className="text-xs text-slate-500">全班平均熟練度</dt>
-                  <dd className="text-xl font-semibold text-slate-50">{overview.class.avg_mastery}</dd>
+                  <dd className="text-xl font-semibold text-slate-900">{overview.class.avg_mastery}</dd>
                 </div>
                 <div className="rounded-lg bg-emerald-50 p-3">
                   <dt className="text-xs text-emerald-800">已精熟（人次×技能）</dt>
@@ -218,23 +218,23 @@ export default async function AdminSkillPracticePage({ searchParams }: Props) {
                   <dt className="text-xs text-rose-800">建議加強（人次×技能）</dt>
                   <dd className="text-xl font-semibold text-rose-900">{overview.class.need_help_skill_slots}</dd>
                 </div>
-                <div className="rounded-lg bg-white/[0.08] p-3">
+                <div className="rounded-lg bg-slate-50 p-3">
                   <dt className="text-xs text-slate-400">尚未開始任何練習的學生數</dt>
-                  <dd className="text-xl font-semibold text-slate-50">{overview.class.not_started_student_count}</dd>
+                  <dd className="text-xl font-semibold text-slate-900">{overview.class.not_started_student_count}</dd>
                 </div>
-                <div className="rounded-lg bg-white/[0.04] p-3">
+                <div className="rounded-lg bg-slate-50/80 p-3">
                   <dt className="text-xs text-slate-500">篩選後學生數</dt>
-                  <dd className="text-xl font-semibold text-slate-50">{overview.class.student_count}</dd>
+                  <dd className="text-xl font-semibold text-slate-900">{overview.class.student_count}</dd>
                 </div>
               </dl>
             </section>
 
-            <section className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-5 shadow-sm">
-              <h2 className="text-lg font-semibold text-slate-50">技能別總覽</h2>
+            <section className="rounded-2xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)] p-5 shadow-sm">
+              <h2 className="text-lg font-semibold text-slate-900">技能別總覽</h2>
               <div className="mt-4 overflow-x-auto">
                 <table className="min-w-[880px] w-full border-collapse text-sm">
                   <thead>
-                    <tr className="border-b border-white/10 text-left text-slate-400">
+                    <tr className="border-b border-slate-200 text-left text-slate-400">
                       <th className="py-2 pr-3">技能</th>
                       <th className="py-2 pr-3">單元</th>
                       <th className="py-2 pr-3">類型</th>
@@ -254,13 +254,13 @@ export default async function AdminSkillPracticePage({ searchParams }: Props) {
                       </tr>
                     ) : (
                       overview.by_skill.map((row) => (
-                        <tr key={row.skill_code} className="border-b border-white/10">
-                          <td className="py-2 pr-3 font-medium text-slate-50">
+                        <tr key={row.skill_code} className="border-b border-slate-200">
+                          <td className="py-2 pr-3 font-medium text-slate-900">
                             <span className="font-mono text-xs text-slate-500">{row.skill_code}</span>
                             <br />
                             {row.skill_name}
                           </td>
-                          <td className="py-2 pr-3 text-slate-300">{row.unit_name}</td>
+                          <td className="py-2 pr-3 text-slate-600">{row.unit_name}</td>
                           <td className="py-2 pr-3">{row.category}</td>
                           <td className="py-2 pr-3">{row.avg_mastery}</td>
                           <td className="py-2 pr-3">{row.practiced_student_count}</td>
@@ -277,12 +277,12 @@ export default async function AdminSkillPracticePage({ searchParams }: Props) {
               </div>
             </section>
 
-            <section className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-5 shadow-sm">
-              <h2 className="text-lg font-semibold text-slate-50">學生別總覽</h2>
+            <section className="rounded-2xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)] p-5 shadow-sm">
+              <h2 className="text-lg font-semibold text-slate-900">學生別總覽</h2>
               <div className="mt-4 overflow-x-auto">
                 <table className="min-w-[960px] w-full border-collapse text-sm">
                   <thead>
-                    <tr className="border-b border-white/10 text-left text-slate-400">
+                    <tr className="border-b border-slate-200 text-left text-slate-400">
                       <th className="py-2 pr-3">姓名</th>
                       <th className="py-2 pr-3">班級</th>
                       <th className="py-2 pr-3">已練習技能數</th>
@@ -301,13 +301,13 @@ export default async function AdminSkillPracticePage({ searchParams }: Props) {
                       </tr>
                     ) : (
                       overview.by_student.map((row) => (
-                        <tr key={row.student_id} className="border-b border-white/10">
-                          <td className="py-2 pr-3 font-medium text-slate-50">{row.student_name}</td>
+                        <tr key={row.student_id} className="border-b border-slate-200">
+                          <td className="py-2 pr-3 font-medium text-slate-900">{row.student_name}</td>
                           <td className="py-2 pr-3">{row.class_name ?? "—"}</td>
                           <td className="py-2 pr-3">{row.practiced_skill_count}</td>
                           <td className="py-2 pr-3 text-emerald-800">{row.mastered_skill_count}</td>
                           <td className="py-2 pr-3">{row.avg_mastery}</td>
-                          <td className="py-2 pr-3 text-slate-300">
+                          <td className="py-2 pr-3 text-slate-600">
                             {row.weak_top3.length === 0
                               ? "—"
                               : row.weak_top3.map((w) => `${w.skill_code} (${w.mastery_score})`).join("、")}
@@ -315,7 +315,7 @@ export default async function AdminSkillPracticePage({ searchParams }: Props) {
                           <td className="py-2">
                             <Link
                               href={`/admin/skill-practice/students/${row.student_id}?scopeId=${encodeURIComponent(scopeId)}`}
-                              className="font-medium text-cyan-200 hover:underline"
+                              className="font-medium text-cyan-800 hover:underline"
                             >
                               詳細 skill 狀況
                             </Link>

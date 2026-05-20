@@ -150,7 +150,7 @@ export function StudentManagementClient() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold text-slate-50">學生名單管理</h1>
+        <h1 className="text-2xl font-semibold text-slate-900">學生名單管理</h1>
         <p className="mt-2 text-sm text-slate-400">管理學生帳號、班級與登入資料</p>
       </div>
 
@@ -165,14 +165,14 @@ export function StudentManagementClient() {
         <button
           type="button"
           onClick={() => setShowImport(true)}
-          className="interactive-btn rounded-xl border border-white/15 bg-white px-4 py-2.5 text-sm font-medium text-slate-200 shadow-sm"
+          className="interactive-btn rounded-xl border border-slate-200/90 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 shadow-sm"
         >
           批次匯入
         </button>
         <button
           type="button"
           onClick={exportList}
-          className="interactive-btn rounded-xl border border-white/15 bg-white px-4 py-2.5 text-sm font-medium text-slate-200 shadow-sm"
+          className="interactive-btn rounded-xl border border-slate-200/90 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 shadow-sm"
         >
           匯出帳密清單
         </button>
@@ -188,45 +188,45 @@ export function StudentManagementClient() {
       {showAdd && (
         <form
           onSubmit={onAdd}
-          className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-5 shadow-md space-y-3 max-w-md"
+          className="rounded-2xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)] p-5 shadow-md space-y-3 max-w-md"
         >
-          <h2 className="font-semibold text-slate-50">新增學生</h2>
+          <h2 className="font-semibold text-slate-900">新增學生</h2>
           <p className="text-xs text-slate-400">
             帳號為 班級+座號兩碼（例 80101），密碼自動為 SciG8-01 格式。座號留空則自動遞增。
           </p>
           <label className="block text-sm">
-            <span className="text-slate-300">姓名</span>
+            <span className="text-slate-600">姓名</span>
             <input
               required
-              className="mt-1 w-full rounded-lg border border-white/15 px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-slate-200/90 px-3 py-2"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </label>
           <label className="block text-sm">
-            <span className="text-slate-300">班級代碼</span>
+            <span className="text-slate-600">班級代碼</span>
             <input
               required
-              className="mt-1 w-full rounded-lg border border-white/15 px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-slate-200/90 px-3 py-2"
               value={className}
               onChange={(e) => setClassName(e.target.value)}
             />
           </label>
           <label className="block text-sm">
-            <span className="text-slate-300">年級</span>
+            <span className="text-slate-600">年級</span>
             <input
               type="number"
               min={1}
               max={12}
-              className="mt-1 w-full rounded-lg border border-white/15 px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-slate-200/90 px-3 py-2"
               value={grade}
               onChange={(e) => setGrade(Number(e.target.value))}
             />
           </label>
           <label className="block text-sm">
-            <span className="text-slate-300">座號（選填）</span>
+            <span className="text-slate-600">座號（選填）</span>
             <input
-              className="mt-1 w-full rounded-lg border border-white/15 px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-slate-200/90 px-3 py-2"
               value={seat}
               onChange={(e) => setSeat(e.target.value)}
               placeholder="自動"
@@ -248,14 +248,14 @@ export function StudentManagementClient() {
       )}
 
       {showImport && (
-        <form onSubmit={onImport} className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-5 shadow-md space-y-3 max-w-2xl">
-          <h2 className="font-semibold text-slate-50">批次匯入</h2>
+        <form onSubmit={onImport} className="rounded-2xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)] p-5 shadow-md space-y-3 max-w-2xl">
+          <h2 className="font-semibold text-slate-900">批次匯入</h2>
           <p className="text-xs text-slate-400">
-            每行一筆：<code className="rounded bg-white/[0.08] px-1">姓名,班級,年級</code> 或加分隔的座號{" "}
-            <code className="rounded bg-white/[0.08] px-1">姓名,班級,年級,座號</code>
+            每行一筆：<code className="rounded bg-slate-50 px-1">姓名,班級,年級</code> 或加分隔的座號{" "}
+            <code className="rounded bg-slate-50 px-1">姓名,班級,年級,座號</code>
           </p>
           <textarea
-            className="w-full min-h-[160px] rounded-lg border border-white/15 px-3 py-2 font-mono text-sm"
+            className="w-full min-h-[160px] rounded-lg border border-slate-200/90 px-3 py-2 font-mono text-sm"
             value={importText}
             onChange={(e) => setImportText(e.target.value)}
             placeholder={"陳同學,801,8\n林同學,801,8,5"}
@@ -275,9 +275,9 @@ export function StudentManagementClient() {
         </form>
       )}
 
-      <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md shadow-[0_8px_36px_-16px_rgba(0,0,0,0.45)]">
+      <div className="overflow-x-auto rounded-2xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)]">
         <table className="min-w-[800px] w-full text-left text-sm">
-          <thead className="bg-white/[0.08]/90">
+          <thead className="bg-slate-50/95">
             <tr>
               <th className="px-4 py-3 font-semibold">學生姓名</th>
               <th className="px-4 py-3 font-semibold">班級</th>
@@ -302,8 +302,8 @@ export function StudentManagementClient() {
               </tr>
             ) : (
               rows.map((r) => (
-                <tr key={r.id} className="border-t border-white/10">
-                  <td className="px-4 py-3 font-medium text-slate-50">{r.name}</td>
+                <tr key={r.id} className="border-t border-slate-200">
+                  <td className="px-4 py-3 font-medium text-slate-900">{r.name}</td>
                   <td className="px-4 py-3">{r.className ?? "—"}</td>
                   <td className="px-4 py-3 font-mono text-xs">{r.studentCode}</td>
                   <td className="px-4 py-3">{r.passwordStatus}</td>
@@ -316,14 +316,14 @@ export function StudentManagementClient() {
                     <div className="flex flex-wrap gap-2">
                       <Link
                         href={`/admin/students/${r.id}/report`}
-                        className="text-cyan-300 underline text-xs font-medium"
+                        className="text-cyan-700 underline text-xs font-medium"
                       >
                         查看學習報告
                       </Link>
                       <button
                         type="button"
                         onClick={() => void resetPassword(r.id)}
-                        className="text-xs text-slate-300 underline"
+                        className="text-xs text-slate-600 underline"
                       >
                         重設密碼
                       </button>

@@ -4,10 +4,14 @@ import Link from "next/link";
 import { useState } from "react";
 import { Megaphone } from "lucide-react";
 import type { HomeAnnouncementPayload } from "@/lib/system-announcement";
+import { adminCard, adminNavLink, adminTopHeader } from "@/lib/admin-ui";
 
 type Props = {
   initial: HomeAnnouncementPayload;
 };
+
+const inputClass =
+  "mt-2 w-full rounded-xl border border-slate-200/90 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-inner outline-none placeholder:text-slate-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-200/60";
 
 export function AnnouncementEditorClient({ initial }: Props) {
   const [title, setTitle] = useState(initial.title);
@@ -59,37 +63,29 @@ export function AnnouncementEditorClient({ initial }: Props) {
     .filter(Boolean);
 
   return (
-    <div className="relative min-h-[100dvh] overflow-hidden bg-[#050810] text-slate-100">
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_100%_70%_at_50%_-10%,#1e3a5f_0%,#0a0f1f_50%,#050810_100%)]"
-        aria-hidden
-      />
-
-      <header className="relative border-b border-white/10 bg-slate-950/50 backdrop-blur-md">
-        <div className="mx-auto flex max-w-3xl flex-col gap-2 px-4 py-4 sm:px-6">
-          <Link
-            href="/admin"
-            className="text-sm font-medium text-cyan-400/90 underline-offset-4 hover:text-cyan-300 hover:underline"
-          >
+    <div className="relative min-h-[100dvh]">
+      <header className={adminTopHeader}>
+        <div className="mx-auto flex max-w-3xl flex-col gap-2 px-4 py-3.5 sm:px-6">
+          <Link href="/admin" className={`text-sm ${adminNavLink}`}>
             ← 返回後台首頁
           </Link>
           <div className="flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-200">
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-cyan-200/80 bg-cyan-50 text-cyan-700">
               <Megaphone className="h-5 w-5" aria-hidden />
             </span>
             <div>
-              <h1 className="text-xl font-bold text-white">首頁系統公告</h1>
-              <p className="text-sm text-slate-400">編輯後即套用至首頁「系統公告」彈窗（每行一則條目）</p>
+              <h1 className="text-xl font-bold text-slate-900">首頁系統公告</h1>
+              <p className="text-sm text-slate-500">編輯後即套用至首頁「系統公告」彈窗（每行一則條目）</p>
             </div>
           </div>
         </div>
       </header>
 
       <main className="relative mx-auto max-w-3xl space-y-6 px-4 py-8 sm:px-6">
-        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-md sm:p-6">
-          <label className="block text-sm font-medium text-slate-300">標題</label>
+        <div className={`p-5 sm:p-6 ${adminCard}`}>
+          <label className="block text-sm font-medium text-slate-700">標題</label>
           <input
-            className="mt-2 w-full rounded-xl border border-white/15 bg-slate-950/60 px-3 py-2.5 text-sm text-white outline-none ring-0 placeholder:text-slate-500 focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20"
+            className={inputClass}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             maxLength={80}
@@ -97,25 +93,25 @@ export function AnnouncementEditorClient({ initial }: Props) {
           />
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-md sm:p-6">
-          <label className="block text-sm font-medium text-slate-300">公告條目</label>
+        <div className={`p-5 sm:p-6 ${adminCard}`}>
+          <label className="block text-sm font-medium text-slate-700">公告條目</label>
           <p className="mt-1 text-xs text-slate-500">每行一則，空白行會略過。最多 40 則。</p>
           <textarea
-            className="mt-3 min-h-[220px] w-full resize-y rounded-xl border border-white/15 bg-slate-950/60 px-3 py-3 text-sm leading-relaxed text-white outline-none placeholder:text-slate-500 focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20"
+            className={`${inputClass} mt-3 min-h-[220px] resize-y leading-relaxed`}
             value={bodyText}
             onChange={(e) => setBodyText(e.target.value)}
             spellCheck={false}
           />
         </div>
 
-        <div className="rounded-2xl border border-cyan-500/25 bg-cyan-950/20 p-5 sm:p-6">
-          <p className="text-xs font-medium uppercase tracking-wider text-cyan-300/80">預覽</p>
-          <h2 className="mt-2 text-lg font-semibold text-cyan-100">{title.trim() || "系統公告"}</h2>
-          <ul className="mt-3 space-y-2 text-sm leading-relaxed text-slate-300">
+        <div className={`border-cyan-200/70 bg-cyan-50/80 p-5 sm:p-6 ${adminCard}`}>
+          <p className="text-xs font-medium uppercase tracking-wider text-cyan-700">預覽</p>
+          <h2 className="mt-2 text-lg font-semibold text-slate-900">{title.trim() || "系統公告"}</h2>
+          <ul className="mt-3 space-y-2 text-sm leading-relaxed text-slate-700">
             {previewItems.length ? (
               previewItems.map((line) => (
                 <li key={line} className="flex gap-2">
-                  <span className="text-cyan-500/80" aria-hidden>
+                  <span className="text-cyan-600" aria-hidden>
                     ·
                   </span>
                   <span>{line}</span>
@@ -128,12 +124,10 @@ export function AnnouncementEditorClient({ initial }: Props) {
         </div>
 
         {err ? (
-          <p className="rounded-xl border border-rose-500/40 bg-rose-950/40 px-3 py-2 text-sm text-rose-100">{err}</p>
+          <p className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-900">{err}</p>
         ) : null}
         {msg ? (
-          <p className="rounded-xl border border-emerald-500/35 bg-emerald-950/30 px-3 py-2 text-sm text-emerald-100">
-            {msg}
-          </p>
+          <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">{msg}</p>
         ) : null}
 
         <div className="flex flex-wrap gap-3">
@@ -141,7 +135,7 @@ export function AnnouncementEditorClient({ initial }: Props) {
             type="button"
             disabled={loading}
             onClick={onSave}
-            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-gradient-to-r from-cyan-500 to-sky-600 px-6 text-sm font-semibold text-white shadow-[0_0_28px_rgba(34,211,238,0.35)] transition hover:brightness-110 disabled:opacity-50"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-gradient-to-r from-cyan-500 to-sky-600 px-6 text-sm font-semibold text-white shadow-md shadow-cyan-500/25 transition hover:brightness-105 disabled:opacity-50"
           >
             {loading ? "儲存中…" : "儲存公告"}
           </button>
@@ -149,7 +143,7 @@ export function AnnouncementEditorClient({ initial }: Props) {
             href="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/20 bg-white/5 px-5 text-sm font-medium text-slate-200 hover:border-cyan-400/40 hover:bg-white/10"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-200/90 bg-white px-5 text-sm font-medium text-slate-700 shadow-sm hover:border-cyan-300 hover:bg-cyan-50/50"
           >
             開新分頁看首頁
           </Link>

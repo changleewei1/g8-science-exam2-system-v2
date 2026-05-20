@@ -20,9 +20,9 @@ type Row = {
 };
 
 function rowClass(r: Readiness): string {
-  if (r === "ready") return "border-b border-white/10 bg-emerald-50/60";
-  if (r === "pending_review") return "border-b border-white/10 bg-amber-50/50";
-  return "border-b border-white/10 bg-rose-50/40";
+  if (r === "ready") return "border-b border-slate-200 bg-emerald-50/60";
+  if (r === "pending_review") return "border-b border-slate-200 bg-amber-50/50";
+  return "border-b border-slate-200 bg-rose-50/40";
 }
 
 export function Exam3VideoQuestionStatusClient() {
@@ -58,7 +58,7 @@ export function Exam3VideoQuestionStatusClient() {
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-8">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold text-slate-50">第三次段考 · 影片題目狀態</h1>
+          <h1 className="text-xl font-semibold text-slate-900">第三次段考 · 影片題目狀態</h1>
           <p className="mt-1 text-sm text-slate-400">
             綠色：測驗真題 ≥3，學生可作答；黃色：draft 或題庫已足待同步；紅色：題目不足。
           </p>
@@ -69,7 +69,7 @@ export function Exam3VideoQuestionStatusClient() {
         <button
           type="button"
           onClick={() => void load()}
-          className="interactive-btn rounded-lg border border-white/10 bg-white px-3 py-2 text-sm font-medium text-slate-200 shadow-sm"
+          className="interactive-btn rounded-lg border border-slate-200/90 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm"
         >
           重新整理
         </button>
@@ -77,9 +77,9 @@ export function Exam3VideoQuestionStatusClient() {
       {loading ? <p className="text-slate-400">載入中…</p> : null}
       {err ? <p className="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">{err}</p> : null}
 
-      <div className="overflow-x-auto rounded-xl border border-white/10 bg-white/[0.06] backdrop-blur-md shadow-[0_8px_32px_-16px_rgba(0,0,0,0.4)]">
+      <div className="overflow-x-auto rounded-xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)]">
         <table className="min-w-full text-left text-sm">
-          <thead className="border-b border-white/10 bg-white/[0.04] text-xs font-medium uppercase text-slate-400">
+          <thead className="border-b border-slate-200 bg-slate-50/80 text-xs font-medium uppercase text-slate-400">
             <tr>
               <th className="px-3 py-2">狀態</th>
               <th className="px-3 py-2">單元</th>
@@ -107,8 +107,8 @@ export function Exam3VideoQuestionStatusClient() {
                     {r.readinessLabel}
                   </span>
                 </td>
-                <td className="max-w-[120px] truncate px-3 py-2 text-slate-300">{r.unitTitle}</td>
-                <td className="max-w-[220px] truncate px-3 py-2 text-slate-50" title={r.title}>
+                <td className="max-w-[120px] truncate px-3 py-2 text-slate-600">{r.unitTitle}</td>
+                <td className="max-w-[220px] truncate px-3 py-2 text-slate-900" title={r.title}>
                   {r.title}
                 </td>
                 <td className="px-3 py-2">{r.hasSubtitle ? "有" : "無"}</td>

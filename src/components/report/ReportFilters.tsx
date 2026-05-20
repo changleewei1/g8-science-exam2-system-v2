@@ -15,6 +15,7 @@ import {
   type ReportExamScope,
   type StudentReportScopeFilter,
 } from "@/lib/admin/student-report-scope";
+import { adminCard } from "@/lib/admin-ui";
 import { cn } from "@/lib/utils";
 
 type Task = { id: string; title: string; startDate: string };
@@ -28,9 +29,9 @@ type Props = {
 };
 
 const selectClass =
-  "mt-1.5 h-10 w-full rounded-xl border border-white/15 bg-slate-950/50 px-3 text-sm text-slate-100 shadow-sm outline-none transition-colors focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-400/20";
+  "mt-1.5 h-10 w-full rounded-xl border border-slate-200/90 bg-white px-3 text-sm text-slate-900 shadow-inner outline-none transition-colors focus:border-cyan-400 focus:ring-2 focus:ring-cyan-200/60";
 
-const labelClass = "text-xs font-medium text-slate-400";
+const labelClass = "text-xs font-medium text-slate-600";
 
 export function ReportFilters({
   studentId,
@@ -73,9 +74,9 @@ export function ReportFilters({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-4 shadow-[0_8px_32px_-16px_rgba(0,0,0,0.4)] backdrop-blur-md sm:p-5">
-        <p className="text-sm font-semibold text-slate-100">學習範圍</p>
-        <p className="mt-0.5 text-xs text-slate-400">依年級、學期、段考與科目選擇要統計的課程範圍</p>
+      <div className={cn("p-4 sm:p-5", adminCard)}>
+        <p className="text-sm font-semibold text-slate-900">學習範圍</p>
+        <p className="mt-0.5 text-xs text-slate-500">依年級、學期、段考與科目選擇要統計的課程範圍</p>
 
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <label className="block text-sm">
@@ -139,26 +140,31 @@ export function ReportFilters({
           </label>
         </div>
 
-        <div className="mt-4 border-t border-white/10 pt-3">
+        <div className="mt-4 border-t border-slate-200/80 pt-3">
           {resolved ? (
-            <p className="text-sm text-slate-300">
+            <p className="text-sm text-slate-600">
               目前範圍：
-              <span className="ml-1 font-medium text-white">
+              <span className="ml-1 font-medium text-slate-900">
                 {formatReportScopeLabel(currentFilter)}
               </span>
             </p>
           ) : (
-            <p className="rounded-lg border border-amber-400/35 bg-amber-950/40 px-3 py-2 text-sm text-amber-100">
+            <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
               目前尚未建立此學習範圍資料
             </p>
           )}
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.06] p-4 shadow-[0_8px_32px_-16px_rgba(0,0,0,0.4)] backdrop-blur-md sm:flex-row sm:flex-wrap sm:items-end">
+      <div
+        className={cn(
+          "flex flex-col gap-4 p-4 sm:flex-row sm:flex-wrap sm:items-end",
+          adminCard,
+        )}
+      >
         <label className="block text-sm">
-          <span className="font-medium text-slate-200">任務狀態</span>
-          <p className="text-xs text-slate-400">
+          <span className="font-medium text-slate-800">任務狀態</span>
+          <p className="text-xs text-slate-500">
           僅顯示與目前段考範圍相關的學習任務（影響任務完成進度區塊）
         </p>
           <select

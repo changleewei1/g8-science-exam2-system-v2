@@ -10,8 +10,8 @@ export default async function AdminVideosPage() {
   if (!admin) {
     return (
       <AdminStandaloneMain narrow>
-        <p className="text-slate-300">請先登入老師後台。</p>
-        <Link href="/admin/login" className="mt-3 inline-block text-sm text-cyan-300 underline">
+        <p className="text-slate-600">請先登入老師後台。</p>
+        <Link href="/admin/login" className="mt-3 inline-block text-sm text-cyan-700 underline">
           前往登入
         </Link>
       </AdminStandaloneMain>
@@ -26,7 +26,7 @@ export default async function AdminVideosPage() {
       />
       <AdminStandaloneMain>
         <p className="mb-6 max-w-3xl text-sm text-slate-400">
-          新增草稿影片、AI skill 候選、候選題目審核後才生效。學生端僅看得到 <code className="rounded bg-white/[0.08] px-1">is_active</code> 且 management 為{" "}
+          新增草稿影片、AI skill 候選、候選題目審核後才生效。學生端僅看得到 <code className="rounded bg-slate-50 px-1">is_active</code> 且 management 為{" "}
           <span className="font-mono">active</span> 的影片。
         </p>
         <VideoManagementCenterClient />

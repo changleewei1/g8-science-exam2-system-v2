@@ -172,19 +172,19 @@ function SkillMultiSelect(props: {
         type="button"
         disabled={props.disabled}
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex min-h-10 w-full items-center justify-between gap-3 rounded-lg border border-white/15 bg-white px-3 py-2 text-left text-sm text-slate-200 hover:bg-white/[0.04] disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex min-h-10 w-full items-center justify-between gap-3 rounded-lg border border-slate-200/90 bg-white px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50/80 disabled:cursor-not-allowed disabled:opacity-60"
       >
         <span className="truncate">{label}</span>
         <span className="text-xs text-slate-500">{open ? "收合" : "展開"}</span>
       </button>
 
       {open ? (
-        <div className="absolute right-0 z-20 mt-2 w-[360px] max-w-[90vw] rounded-xl border border-white/10 bg-white shadow-lg">
-          <div className="border-b border-white/10 p-3">
+        <div className="absolute right-0 z-20 mt-2 w-[360px] max-w-[90vw] rounded-xl border border-slate-200/90 bg-white shadow-lg">
+          <div className="border-b border-slate-200 p-3">
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-lg border border-white/15 px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-slate-200/90 px-3 py-2 text-sm"
               placeholder="搜尋 skill_code 或名稱"
             />
             <div className="mt-2 flex items-center justify-between gap-2">
@@ -194,7 +194,7 @@ function SkillMultiSelect(props: {
               <button
                 type="button"
                 onClick={() => setShowAll((v) => !v)}
-                className="rounded-lg border border-white/10 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-300 hover:bg-white/[0.04]"
+                className="rounded-lg border border-slate-200/90 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50/80"
               >
                 {showAll ? "只顯示本單元" : "顯示全部"}
               </button>
@@ -208,7 +208,7 @@ function SkillMultiSelect(props: {
                   <button
                     type="button"
                     onClick={() => setShowAll(true)}
-                    className="mt-2 rounded-lg border border-white/10 bg-white px-3 py-2 text-sm text-slate-300 hover:bg-white/[0.04]"
+                    className="mt-2 rounded-lg border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-600 hover:bg-slate-50/80"
                   >
                     切換為顯示全部
                   </button>
@@ -220,7 +220,7 @@ function SkillMultiSelect(props: {
                 return (
                   <label
                     key={s.code}
-                    className="flex cursor-pointer items-start gap-3 rounded-lg px-2 py-2 hover:bg-white/[0.04]"
+                    className="flex cursor-pointer items-start gap-3 rounded-lg px-2 py-2 hover:bg-slate-50/80"
                   >
                     <input
                       type="checkbox"
@@ -229,9 +229,9 @@ function SkillMultiSelect(props: {
                       className="mt-1"
                     />
                     <div className="min-w-0">
-                      <div className="text-sm text-slate-50">
+                      <div className="text-sm text-slate-900">
                         <span className="font-mono font-semibold">{s.code}</span>{" "}
-                        <span className="text-slate-300">{s.name}</span>
+                        <span className="text-slate-600">{s.name}</span>
                       </div>
                       {s.unit ? <div className="text-xs text-slate-500">單元：{s.unit}</div> : null}
                     </div>
@@ -240,10 +240,10 @@ function SkillMultiSelect(props: {
               })
             )}
           </div>
-          <div className="flex items-center justify-between gap-2 border-t border-white/10 p-3">
+          <div className="flex items-center justify-between gap-2 border-t border-slate-200 p-3">
             <button
               type="button"
-              className="rounded-lg border border-white/10 bg-white px-3 py-2 text-sm text-slate-300 hover:bg-white/[0.04]"
+              className="rounded-lg border border-slate-200/90 bg-white px-3 py-2 text-sm text-slate-600 hover:bg-slate-50/80"
               onClick={() => {
                 setSearch("");
                 setOpen(false);
@@ -456,14 +456,14 @@ export function VideoSkillTagsManagerClient() {
 
   return (
     <div className="space-y-4 pb-24">
-      <section className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-4 shadow-sm sm:p-5">
+      <section className="rounded-2xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)] p-4 shadow-sm sm:p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h2 className="text-sm font-semibold text-slate-300">篩選與檢查</h2>
+            <h2 className="text-sm font-semibold text-slate-600">篩選與檢查</h2>
             <p className="mt-1 text-xs text-slate-500">修改後會標記為「尚未儲存」，按下方「儲存所有修改」才會寫入。</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full bg-white/[0.08] px-3 py-1 text-xs text-slate-300">全部 {stats.total}</span>
+            <span className="rounded-full bg-slate-50 px-3 py-1 text-xs text-slate-600">全部 {stats.total}</span>
             <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs text-emerald-700">已設定 {stats.setCount}</span>
             <span className="rounded-full bg-amber-50 px-3 py-1 text-xs text-amber-700">未設定 {stats.unsetCount}</span>
             <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs text-indigo-700">多技能 {stats.multiCount}</span>
@@ -477,7 +477,7 @@ export function VideoSkillTagsManagerClient() {
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-white/15 px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-lg border border-slate-200/90 px-3 py-2 text-sm"
               placeholder="輸入關鍵字"
             />
           </label>
@@ -486,7 +486,7 @@ export function VideoSkillTagsManagerClient() {
             <select
               value={unitId}
               onChange={(e) => setUnitId(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-white/15 px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-lg border border-slate-200/90 px-3 py-2 text-sm"
             >
               <option value="">全部單元</option>
               {units.map((u) => (
@@ -501,18 +501,18 @@ export function VideoSkillTagsManagerClient() {
             <input
               value={skillQ}
               onChange={(e) => setSkillQ(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-white/15 px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-lg border border-slate-200/90 px-3 py-2 text-sm"
               placeholder="例如 AB01 或 酸的基本性質"
             />
           </label>
         </div>
 
         <div className="mt-3 flex flex-wrap items-center gap-4">
-          <label className="inline-flex items-center gap-2 text-sm text-slate-300">
+          <label className="inline-flex items-center gap-2 text-sm text-slate-600">
             <input type="checkbox" checked={onlyUnset} onChange={(e) => setOnlyUnset(e.target.checked)} />
             只看未設定 skill
           </label>
-          <label className="inline-flex items-center gap-2 text-sm text-slate-300">
+          <label className="inline-flex items-center gap-2 text-sm text-slate-600">
             <input type="checkbox" checked={onlyDirty} onChange={(e) => setOnlyDirty(e.target.checked)} />
             只看已修改未儲存
           </label>
@@ -535,15 +535,15 @@ export function VideoSkillTagsManagerClient() {
             const title = unit ? `${unit.unit_title}（共 ${g.videos.length} 部影片）` : `未分類（共 ${g.videos.length} 部影片）`;
             const collapsed = collapsedByUnitId[g.unit_id] ?? false;
             return (
-              <section key={g.unit_id} className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md shadow-[0_8px_32px_-16px_rgba(0,0,0,0.4)]">
+              <section key={g.unit_id} className="rounded-2xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)]">
                 <button
                   type="button"
                   onClick={() => setCollapsedByUnitId((prev) => ({ ...prev, [g.unit_id]: !collapsed }))}
                   title={collapsed ? "點擊展開此單元" : "點擊折疊此單元"}
-                  className="flex w-full items-center justify-between gap-3 rounded-2xl px-4 py-3 text-left hover:bg-white/[0.04] sm:px-5"
+                  className="flex w-full items-center justify-between gap-3 rounded-2xl px-4 py-3 text-left hover:bg-slate-50/80 sm:px-5"
                 >
                   <div className="min-w-0">
-                    <div className="truncate text-sm font-semibold text-slate-50">{title}</div>
+                    <div className="truncate text-sm font-semibold text-slate-900">{title}</div>
                     <div className="mt-0.5 text-xs text-slate-500">
                       依單元分組；組內依影片順序（sort_order）排序
                     </div>
@@ -552,7 +552,7 @@ export function VideoSkillTagsManagerClient() {
                 </button>
 
                 {!collapsed ? (
-                  <div className="space-y-3 border-t border-white/10 p-4 sm:p-5">
+                  <div className="space-y-3 border-t border-slate-200 p-4 sm:p-5">
                     {g.videos.map((v, i) => {
                       const unitInfo = v.scope_units;
                       const selected = new Set((currentByVideo[v.id] ?? []).map(normCode));
@@ -563,14 +563,14 @@ export function VideoSkillTagsManagerClient() {
                       return (
                         <section
                           key={v.id}
-                          className={`rounded-2xl border bg-white/[0.06] backdrop-blur-md p-4 shadow-sm sm:p-5 ${
-                            isDirty ? "border-rose-200 ring-1 ring-rose-100" : "border-white/10"
+                          className={`rounded-2xl border bg-white backdrop-blur-md p-4 shadow-sm sm:p-5 ${
+                            isDirty ? "border-rose-200 ring-1 ring-rose-100" : "border-slate-200/90"
                           }`}
                         >
                           <div className="flex flex-wrap items-start justify-between gap-3">
                             <div className="min-w-0">
                               <div className="flex flex-wrap items-center gap-2">
-                                <h3 className="min-w-0 truncate font-medium text-slate-50">
+                                <h3 className="min-w-0 truncate font-medium text-slate-900">
                                   <span className="mr-2 text-xs text-slate-500">#{v.sort_order}</span>
                                   {v.title}
                                 </h3>
@@ -605,7 +605,7 @@ export function VideoSkillTagsManagerClient() {
                                     if (!prev) return;
                                     setVideoCodes(v.id, currentByVideo[prev.id] ?? []);
                                   }}
-                                  className="rounded-lg border border-white/10 bg-white px-3 py-2 text-xs font-medium text-slate-300 hover:bg-white/[0.04] disabled:opacity-50"
+                                  className="rounded-lg border border-slate-200/90 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50/80 disabled:opacity-50"
                                 >
                                   複製上一支影片設定
                                 </button>
@@ -613,7 +613,7 @@ export function VideoSkillTagsManagerClient() {
                                   type="button"
                                   disabled={saving}
                                   onClick={() => setVideoCodes(v.id, [])}
-                                  className="rounded-lg border border-white/10 bg-white px-3 py-2 text-xs font-medium text-slate-300 hover:bg-white/[0.04] disabled:opacity-50"
+                                  className="rounded-lg border border-slate-200/90 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50/80 disabled:opacity-50"
                                 >
                                   清空本影片設定
                                 </button>
@@ -622,7 +622,7 @@ export function VideoSkillTagsManagerClient() {
                                     type="button"
                                     disabled={saving}
                                     onClick={() => setVideoCodes(v.id, common)}
-                                    className="rounded-lg border border-white/10 bg-white px-3 py-2 text-xs font-medium text-slate-300 hover:bg-white/[0.04] disabled:opacity-50"
+                                    className="rounded-lg border border-slate-200/90 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50/80 disabled:opacity-50"
                                   >
                                     套用常用 skill
                                   </button>
@@ -640,7 +640,7 @@ export function VideoSkillTagsManagerClient() {
                                 .map((code) => (
                                   <span
                                     key={code}
-                                    className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-sm text-slate-200"
+                                    className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-slate-50/70 px-3 py-1 text-sm text-slate-700"
                                   >
                                     <span className="font-mono font-semibold">{code}</span>
                                     <span className="text-slate-400">{skillNameByCode.get(code) ?? code}</span>
@@ -657,9 +657,9 @@ export function VideoSkillTagsManagerClient() {
                             )}
                           </div>
 
-                          <div className="mt-3 rounded-xl border border-white/10 bg-white/[0.04] p-3">
+                          <div className="mt-3 rounded-xl border border-slate-200/80 bg-slate-50/70 p-3">
                             <div className="flex flex-wrap items-center justify-between gap-2">
-                              <div className="text-sm font-medium text-slate-200">建議 skill（不會自動套用）</div>
+                              <div className="text-sm font-medium text-slate-700">建議 skill（不會自動套用）</div>
                               <button
                                 type="button"
                                 disabled={saving}
@@ -674,7 +674,7 @@ export function VideoSkillTagsManagerClient() {
                                     .join("\n");
                                   alert(`系統建議：\n${msg}`);
                                 }}
-                                className="rounded-lg border border-white/10 bg-white px-3 py-2 text-xs font-medium text-slate-300 hover:bg-white/[0.04] disabled:opacity-50"
+                                className="rounded-lg border border-slate-200/90 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50/80 disabled:opacity-50"
                               >
                                 建議 skill
                               </button>
@@ -707,14 +707,14 @@ export function VideoSkillTagsManagerClient() {
             );
           })}
           {grouped.length === 0 ? (
-            <p className="rounded-xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-5 text-sm text-slate-400">沒有符合條件的影片。</p>
+            <p className="rounded-xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)] p-5 text-sm text-slate-400">沒有符合條件的影片。</p>
           ) : null}
         </div>
       ) : null}
 
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-white/10 bg-white/95 backdrop-blur">
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-3 sm:px-8">
-          <div className="text-sm text-slate-300">
+          <div className="text-sm text-slate-600">
             未儲存：<span className="font-semibold text-rose-700">{dirtyVideoIds.length}</span> 支
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -735,7 +735,7 @@ export function VideoSkillTagsManagerClient() {
                 setCurrentByVideo({ ...original });
                 setBanner(null);
               }}
-              className="inline-flex min-h-10 items-center justify-center rounded-lg border border-white/10 bg-white px-4 py-2 text-sm font-medium text-slate-300 hover:bg-white/[0.04] disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-200/90 bg-white px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50/80 disabled:cursor-not-allowed disabled:opacity-50"
             >
               放棄修改
             </button>

@@ -43,11 +43,11 @@ export default async function AdminTaskEditPage({ params }: Props) {
       <div>
         <Link
           href={`/admin/tasks/${taskId}`}
-          className="interactive-nav text-sm font-medium text-cyan-300 underline-offset-4 hover:underline"
+          className="interactive-nav text-sm font-medium text-cyan-700 underline-offset-4 hover:underline"
         >
           ← 返回任務詳情
         </Link>
-        <h1 className="mt-3 text-2xl font-semibold text-slate-50">編輯學習任務</h1>
+        <h1 className="mt-3 text-2xl font-semibold text-slate-900">編輯學習任務</h1>
         <p className="mt-2 text-sm text-slate-400">{task.title}</p>
       </div>
       <TaskCreateForm videos={videos} editTaskId={taskId} />

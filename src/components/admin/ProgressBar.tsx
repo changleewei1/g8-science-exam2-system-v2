@@ -22,9 +22,9 @@ const tierBarClass: Record<ProgressRateTier, string> = {
 };
 
 const tierLabelClass: Record<ProgressRateTier, string> = {
-  low: "text-amber-300",
-  mid: "text-cyan-200/90",
-  high: "text-emerald-300",
+  low: "text-amber-800",
+  mid: "text-cyan-800",
+  high: "text-emerald-800",
 };
 
 export function AdminProgressBar({
@@ -54,7 +54,7 @@ export function AdminProgressBar({
           </span>
         </div>
       ) : null}
-      <div className="h-2 w-full overflow-hidden rounded-full bg-white/10 ring-1 ring-white/10">
+      <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200 ring-1 ring-slate-200/90">
         <div
           className={cn(
             "h-full rounded-full bg-gradient-to-r transition-all duration-500",

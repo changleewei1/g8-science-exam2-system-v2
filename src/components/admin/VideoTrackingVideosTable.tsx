@@ -22,20 +22,20 @@ function UnitSummaryStat({ label, children }: { label: string; children: React.R
   return (
     <div className="text-center sm:text-left">
       <p className="text-[10px] font-medium uppercase tracking-wider text-slate-500">{label}</p>
-      <p className="mt-0.5 text-sm font-semibold tabular-nums text-slate-200">{children}</p>
+      <p className="mt-0.5 text-sm font-semibold tabular-nums text-slate-700">{children}</p>
     </div>
   );
 }
 
 function VideoRow({ video }: { video: VideoLearningItem }) {
   return (
-    <tr className="border-t border-white/5 transition-colors hover:bg-white/[0.03]">
+    <tr className="border-t border-slate-100 transition-colors hover:bg-slate-50">
       <td className="max-w-[min(360px,40vw)] px-4 py-3.5 pl-6 sm:pl-8">
         <p className="line-clamp-2 text-sm font-medium text-white" title={video.title}>
           {video.title}
         </p>
       </td>
-      <td className="whitespace-nowrap px-4 py-3.5 tabular-nums text-slate-300">
+      <td className="whitespace-nowrap px-4 py-3.5 tabular-nums text-slate-600">
         {video.completedCount}/{video.totalStudents}
       </td>
       <td className="min-w-[120px] px-4 py-3.5">
@@ -50,7 +50,7 @@ function VideoRow({ video }: { video: VideoLearningItem }) {
       <td className="px-4 py-3.5">
         <Link
           href={`/admin/video-tracking/videos/${video.id}`}
-          className="text-sm font-medium text-cyan-300 underline-offset-2 hover:text-cyan-200 hover:underline"
+          className="text-sm font-medium text-cyan-700 underline-offset-2 hover:text-cyan-800 hover:underline"
         >
           查看進度
         </Link>
@@ -74,20 +74,20 @@ function UnitAccordionCard({
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-2xl border bg-white/[0.04] backdrop-blur-md transition-all duration-300",
+        "overflow-hidden rounded-2xl border bg-slate-50/80 backdrop-blur-md transition-all duration-300",
         expanded
           ? "border-cyan-400/35 shadow-[0_0_32px_rgba(34,211,238,0.12)]"
-          : "border-white/10 hover:border-cyan-400/30 hover:shadow-[0_0_24px_rgba(34,211,238,0.1)]",
+          : "border-slate-200/90 hover:border-cyan-400/30 hover:shadow-[0_0_24px_rgba(34,211,238,0.1)]",
       )}
     >
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={expanded}
-        className="flex w-full flex-col gap-4 px-4 py-4 text-left transition-colors hover:bg-white/[0.03] sm:flex-row sm:items-center sm:justify-between sm:px-5"
+        className="flex w-full flex-col gap-4 px-4 py-4 text-left transition-colors hover:bg-slate-50 sm:flex-row sm:items-center sm:justify-between sm:px-5"
       >
         <div className="flex min-w-0 flex-1 items-start gap-3">
-          <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-400/25 bg-cyan-500/10 text-cyan-300">
+          <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-400/25 bg-cyan-500/10 text-cyan-700">
             <Film className="h-5 w-5" />
           </span>
           <div className="min-w-0">
@@ -101,7 +101,7 @@ function UnitAccordionCard({
             <span
               className={cn(
                 completionTier === "low" && "text-amber-300",
-                completionTier === "mid" && "text-cyan-200",
+                completionTier === "mid" && "text-cyan-800",
                 completionTier === "high" && "text-emerald-300",
               )}
             >
@@ -144,10 +144,10 @@ function UnitAccordionCard({
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
-            <div className="border-t border-white/10 bg-slate-950/30 px-2 py-2 sm:px-3 sm:py-3">
-              <div className="overflow-x-auto rounded-xl border border-white/5 bg-white/[0.02]">
+            <div className="border-t border-slate-200 bg-slate-100 px-2 py-2 sm:px-3 sm:py-3">
+              <div className="overflow-x-auto rounded-xl border border-slate-200/60 bg-slate-50">
                 <table className="min-w-[720px] w-full text-left text-sm">
-                  <thead className="bg-white/[0.04] text-xs text-slate-400">
+                  <thead className="bg-slate-50/80 text-xs text-slate-400">
                     <tr>
                       <th className="px-4 py-2.5 pl-6 font-semibold sm:pl-8">影片名稱</th>
                       <th className="px-4 py-2.5 font-semibold">完成人數</th>
@@ -186,8 +186,8 @@ export function VideoTrackingVideosTable({ videos }: Props) {
 
   if (units.length === 0) {
     return (
-      <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-6 py-12 text-center backdrop-blur-md">
-        <p className="font-medium text-slate-200">此範圍尚無影片資料</p>
+      <div className="rounded-2xl border border-cyan-200/50 bg-white px-6 py-12 text-center shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)]">
+        <p className="font-medium text-slate-700">此範圍尚無影片資料</p>
         <p className="mt-2 text-sm text-slate-500">請確認段考範圍是否已匯入影片</p>
       </div>
     );

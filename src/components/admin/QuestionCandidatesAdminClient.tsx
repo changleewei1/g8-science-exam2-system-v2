@@ -79,7 +79,7 @@ export function QuestionCandidatesAdminClient() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-8">
-      <h1 className="text-xl font-semibold text-slate-50">題目候選審核</h1>
+      <h1 className="text-xl font-semibold text-slate-900">題目候選審核</h1>
       <p className="text-sm text-slate-400">
         核准後寫入題庫並同步該影片「影片理解測驗」（須已累積至少 3 題核准且皆屬同一影片）。僅 approved 題目會進入測驗。
       </p>
@@ -88,7 +88,7 @@ export function QuestionCandidatesAdminClient() {
         <label className="text-sm">
           狀態
           <select
-            className="ml-1 rounded border border-white/10 px-2 py-1 text-sm"
+            className="ml-1 rounded border border-slate-200/90 px-2 py-1 text-sm"
             value={status}
             onChange={(e) => setStatus(e.target.value)}
           >
@@ -106,7 +106,7 @@ export function QuestionCandidatesAdminClient() {
           <label className="text-sm">
             單元標題
             <input
-              className="ml-1 rounded border border-white/10 px-2 py-1 text-sm"
+              className="ml-1 rounded border border-slate-200/90 px-2 py-1 text-sm"
               value={unitTitle}
               onChange={(e) => setUnitTitle(e.target.value)}
               placeholder="例如 酸鹼中和"
@@ -116,7 +116,7 @@ export function QuestionCandidatesAdminClient() {
         <label className="text-sm">
           video_id
           <input
-            className="ml-1 w-56 rounded border border-white/10 px-2 py-1 font-mono text-xs"
+            className="ml-1 w-56 rounded border border-slate-200/90 px-2 py-1 font-mono text-xs"
             value={videoId}
             onChange={(e) => setVideoId(e.target.value)}
           />
@@ -124,7 +124,7 @@ export function QuestionCandidatesAdminClient() {
         <label className="text-sm">
           skill_code
           <input
-            className="ml-1 w-28 rounded border border-white/10 px-2 py-1 text-xs"
+            className="ml-1 w-28 rounded border border-slate-200/90 px-2 py-1 text-xs"
             value={skillCode}
             onChange={(e) => setSkillCode(e.target.value)}
           />
@@ -146,13 +146,13 @@ export function QuestionCandidatesAdminClient() {
           const e = editing[it.id] ?? {};
           const qtext = e.question_text ?? it.question_text;
           return (
-            <li key={it.id} className="rounded-xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-4 shadow-sm">
+            <li key={it.id} className="rounded-xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)] p-4 shadow-sm">
               <p className="text-xs text-slate-500">
                 {it.id} · {it.status} · {it.skill_code} · {it.video_id}
               </p>
               {it.status === "draft" ? (
                 <textarea
-                  className="mt-2 w-full rounded border border-white/10 p-2 text-sm"
+                  className="mt-2 w-full rounded border border-slate-200/90 p-2 text-sm"
                   rows={3}
                   value={qtext}
                   onChange={(ev) =>
@@ -160,7 +160,7 @@ export function QuestionCandidatesAdminClient() {
                   }
                 />
               ) : (
-                <p className="mt-2 text-sm font-medium text-slate-50">{it.question_text}</p>
+                <p className="mt-2 text-sm font-medium text-slate-900">{it.question_text}</p>
               )}
               <p className="mt-2 text-xs text-slate-400">
                 A {it.choice_a} / B {it.choice_b} / C {it.choice_c} / D {it.choice_d} · 正解 {it.correct_answer}
@@ -169,7 +169,7 @@ export function QuestionCandidatesAdminClient() {
                 <div className="mt-3 flex flex-wrap gap-2">
                   <button
                     type="button"
-                    className="rounded-lg bg-white/[0.08] px-3 py-1 text-sm"
+                    className="rounded-lg bg-slate-50 px-3 py-1 text-sm"
                     onClick={() =>
                       void patch(it.id, {
                         action: "update",

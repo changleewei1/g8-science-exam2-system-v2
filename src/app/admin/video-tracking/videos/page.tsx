@@ -21,12 +21,12 @@ export default async function AdminVideosPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold text-slate-50">影片列表</h1>
+      <h1 className="text-2xl font-semibold text-slate-900">影片列表</h1>
       <ul className="mt-6 space-y-2">
         {videos.map((v) => (
           <li key={v.videoId}>
             <Link
-              className="interactive-nav font-medium text-cyan-300 underline decoration-teal-700/40 underline-offset-2"
+              className="interactive-nav font-medium text-cyan-700 underline decoration-teal-700/40 underline-offset-2"
               href={`/admin/video-tracking/videos/${v.videoId}`}
             >
               {v.title}

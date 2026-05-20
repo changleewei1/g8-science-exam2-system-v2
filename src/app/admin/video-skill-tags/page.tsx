@@ -9,9 +9,9 @@ export default async function AdminVideoSkillTagsPage() {
       <>
         <AdminStandaloneHeader title="影片技能對應管理" narrow />
         <AdminStandaloneMain narrow>
-          <div className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-6 shadow-sm">
-            <h1 className="text-lg font-semibold text-slate-50">影片技能對應管理</h1>
-            <p className="mt-2 text-sm text-slate-300">需要老師登入後才能使用。</p>
+          <div className="rounded-2xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)] p-6 shadow-sm">
+            <h1 className="text-lg font-semibold text-slate-900">影片技能對應管理</h1>
+            <p className="mt-2 text-sm text-slate-600">需要老師登入後才能使用。</p>
             <div className="mt-4">
               <AdminInlineNavLink href="/admin">返回後台首頁</AdminInlineNavLink>
             </div>

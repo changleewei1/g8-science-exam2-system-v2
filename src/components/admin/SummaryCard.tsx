@@ -15,28 +15,28 @@ type Props = {
 
 const accentMap = {
   cyan: {
-    border: "border-cyan-400/25",
-    glow: "hover:shadow-[0_0_32px_rgba(34,211,238,0.2)]",
-    icon: "text-cyan-300",
-    bg: "from-cyan-400/15 to-transparent",
+    border: "border-cyan-200/70",
+    glow: "hover:shadow-[0_8px_28px_-8px_rgba(14,165,233,0.2)]",
+    icon: "text-cyan-700",
+    bg: "from-cyan-100/40 to-transparent",
   },
   violet: {
-    border: "border-violet-400/25",
-    glow: "hover:shadow-[0_0_32px_rgba(139,92,246,0.2)]",
-    icon: "text-violet-300",
-    bg: "from-violet-400/15 to-transparent",
+    border: "border-violet-200/80",
+    glow: "hover:shadow-[0_8px_28px_-8px_rgba(139,92,246,0.15)]",
+    icon: "text-violet-700",
+    bg: "from-violet-100/50 to-transparent",
   },
   blue: {
-    border: "border-blue-400/25",
-    glow: "hover:shadow-[0_0_32px_rgba(59,130,246,0.2)]",
-    icon: "text-blue-300",
-    bg: "from-blue-400/15 to-transparent",
+    border: "border-blue-200/80",
+    glow: "hover:shadow-[0_8px_28px_-8px_rgba(59,130,246,0.15)]",
+    icon: "text-blue-700",
+    bg: "from-blue-100/50 to-transparent",
   },
   amber: {
-    border: "border-amber-400/25",
-    glow: "hover:shadow-[0_0_32px_rgba(251,191,36,0.15)]",
-    icon: "text-amber-300",
-    bg: "from-amber-400/15 to-transparent",
+    border: "border-amber-200/90",
+    glow: "hover:shadow-[0_8px_28px_-8px_rgba(245,158,11,0.12)]",
+    icon: "text-amber-700",
+    bg: "from-amber-100/50 to-transparent",
   },
 };
 
@@ -56,21 +56,21 @@ export function SummaryCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.05 * index, duration: 0.4 }}
       className={cn(
-        "group relative overflow-hidden rounded-2xl border bg-white/5 p-5 backdrop-blur-md transition-all duration-300",
+        "group relative overflow-hidden rounded-2xl border bg-white p-5 shadow-[0_8px_28px_-10px_rgba(14,165,233,0.1)] transition-all duration-300",
         a.border,
         a.glow,
       )}
     >
-      <div className={cn("pointer-events-none absolute inset-0 bg-gradient-to-br opacity-70", a.bg)} />
+      <div className={cn("pointer-events-none absolute inset-0 bg-gradient-to-br opacity-80", a.bg)} />
       <div className="relative flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-medium tracking-wide text-slate-400">{title}</p>
-          <p className="mt-2 text-3xl font-bold tabular-nums text-white">{value}</p>
-          <p className="mt-1 text-xs leading-relaxed text-slate-500">{description}</p>
+          <p className="text-xs font-medium tracking-wide text-slate-500">{title}</p>
+          <p className="mt-2 text-3xl font-bold tabular-nums text-slate-900">{value}</p>
+          <p className="mt-1 text-xs leading-relaxed text-slate-600">{description}</p>
         </div>
         <span
           className={cn(
-            "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5",
+            "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-cyan-200/80 bg-cyan-50",
             a.icon,
           )}
         >

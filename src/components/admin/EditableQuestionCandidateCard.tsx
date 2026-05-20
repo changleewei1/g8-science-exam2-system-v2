@@ -52,7 +52,7 @@ export function EditableQuestionCandidateCard(props: {
   }
 
   return (
-    <div className="rounded-xl border border-white/10 p-3">
+    <div className="rounded-xl border border-slate-200/90 p-3">
       <p className="text-xs font-mono text-slate-400">
         {q.skill_code} · {q.difficulty}
       </p>

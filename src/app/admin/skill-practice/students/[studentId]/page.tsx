@@ -58,7 +58,7 @@ export default async function AdminSkillPracticeStudentDetailPage({ params, sear
         <AdminStandaloneMain>
           <p className="max-w-3xl rounded-xl border border-amber-400/35 bg-amber-950/35 px-4 py-3 text-sm text-amber-100">
             請從「技能樹練習狀況」主頁選擇段考範圍後，再從學生列進入；或於網址加上{" "}
-            <code className="rounded bg-white/[0.12] px-1 font-mono text-cyan-200">?scopeId=...</code>
+            <code className="rounded bg-slate-100 px-1 font-mono text-cyan-800">?scopeId=...</code>
           </p>
           <p className="mt-4 max-w-3xl">
             <AdminInlineNavLink href="/admin/skill-practice">返回技能樹練習追蹤</AdminInlineNavLink>
@@ -103,7 +103,7 @@ export default async function AdminSkillPracticeStudentDetailPage({ params, sear
       />
       <AdminStandaloneMain>
         <section>
-          <h1 className="text-2xl font-semibold text-slate-50">
+          <h1 className="text-2xl font-semibold text-slate-900">
             {detail.student.name}
             <span className="ml-2 text-base font-normal text-slate-400">
               {detail.student.class_name ?? ""}
@@ -123,19 +123,19 @@ export default async function AdminSkillPracticeStudentDetailPage({ params, sear
           <button
             type="button"
             disabled
-            className="inline-flex min-h-10 cursor-not-allowed items-center rounded-lg border border-white/10 bg-white/[0.08] px-4 py-2 text-sm text-slate-400"
+            className="inline-flex min-h-10 cursor-not-allowed items-center rounded-lg border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm text-slate-400"
             title="此版本預留，尚未與指派流程串接"
           >
             指派補強練習
           </button>
         </section>
 
-        <section className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-5 shadow-sm">
-          <h2 className="text-lg font-semibold text-slate-50">技能明細</h2>
+        <section className="rounded-2xl border border-cyan-200/50 bg-white shadow-[0_8px_28px_-10px_rgba(14,165,233,0.12)] p-5 shadow-sm">
+          <h2 className="text-lg font-semibold text-slate-900">技能明細</h2>
           <div className="mt-4 overflow-x-auto">
             <table className="min-w-[1000px] w-full border-collapse text-sm">
               <thead>
-                <tr className="border-b border-white/10 text-left text-slate-400">
+                <tr className="border-b border-slate-200 text-left text-slate-400">
                   <th className="py-2 pr-3">skill_code</th>
                   <th className="py-2 pr-3">技能名稱</th>
                   <th className="py-2 pr-3">單元</th>
@@ -157,16 +157,16 @@ export default async function AdminSkillPracticeStudentDetailPage({ params, sear
                   </tr>
                 ) : (
                   detail.skills.map((row) => (
-                    <tr key={row.skill_code} className="border-b border-white/10">
+                    <tr key={row.skill_code} className="border-b border-slate-200">
                       <td className="py-2 pr-3 font-mono text-xs text-slate-400">{row.skill_code}</td>
-                      <td className="py-2 pr-3 font-medium text-slate-50">{row.skill_name}</td>
+                      <td className="py-2 pr-3 font-medium text-slate-900">{row.skill_name}</td>
                       <td className="py-2 pr-3">{row.unit_name}</td>
                       <td className="py-2 pr-3">{row.mastery_score}</td>
                       <td className="py-2 pr-3">{row.bank_question_count}</td>
                       <td className="py-2 pr-3">{row.answered_count}</td>
                       <td className="py-2 pr-3">{row.correct_count}</td>
                       <td className="py-2 pr-3 text-slate-400">{row.time_spent_label}</td>
-                      <td className="py-2 pr-3 text-slate-300">{fmtDateTime(row.last_practice_at)}</td>
+                      <td className="py-2 pr-3 text-slate-600">{fmtDateTime(row.last_practice_at)}</td>
                       <td className="py-2">{row.status}</td>
                     </tr>
                   ))

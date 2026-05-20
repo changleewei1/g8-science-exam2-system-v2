@@ -27,9 +27,9 @@ export function AdminStandaloneHeader({ title, right, narrow }: AdminStandaloneH
     <header className={adminTopHeader}>
       <div className={inner}>
         <div className="flex flex-wrap items-center gap-3">
-          <HomeBackLink variant="dark" href="/admin" />
-          <span className="hidden h-6 w-px bg-white/15 sm:block" aria-hidden />
-          <span className="text-sm font-semibold text-white sm:text-base">{title}</span>
+          <HomeBackLink variant="admin" href="/admin" />
+          <span className="hidden h-6 w-px bg-cyan-200/70 sm:block" aria-hidden />
+          <span className="text-sm font-semibold text-slate-900 sm:text-base">{title}</span>
         </div>
         {right ? <div className="flex flex-wrap items-center gap-2">{right}</div> : null}
       </div>

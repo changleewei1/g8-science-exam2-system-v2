@@ -16,23 +16,34 @@ function IconHome({ className }: { className?: string }) {
 type HomeBackLinkProps = {
   href?: string;
   children?: React.ReactNode;
-  /** 老師後台深色頂欄用 */
-  variant?: "light" | "dark";
+  /**
+   * light：一般淺底頁
+   * dark：深色頂欄（舊版，保留相容）
+   * admin：老師後台頂欄，與學生端「學習首頁」按鈕同款
+   */
+  variant?: "light" | "dark" | "admin";
 };
 
 /** 學生／老師區頂部「回到首頁」；學生區可改 href 指向學習首頁 */
 export function HomeBackLink({ href = "/", children = "回到首頁", variant = "light" }: HomeBackLinkProps) {
-  const isDark = variant === "dark";
+  const adminShell =
+    "inline-flex min-h-11 items-center gap-2 rounded-2xl border border-cyan-200/70 bg-white/90 px-3 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-cyan-300 hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] sm:px-4 sm:text-base";
+  const darkShell =
+    "inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm font-medium text-slate-100 shadow-sm backdrop-blur-sm transition-colors hover:border-cyan-400/35 hover:bg-white/10 sm:px-4 sm:text-base";
+  const lightShell =
+    "interactive-btn inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm sm:px-4 sm:text-base";
+
+  const shell = variant === "admin" ? adminShell : variant === "dark" ? darkShell : lightShell;
+  const iconClass =
+    variant === "admin"
+      ? "h-5 w-5 shrink-0 text-cyan-600"
+      : variant === "dark"
+        ? "h-5 w-5 shrink-0 text-cyan-300"
+        : "h-5 w-5 shrink-0 text-teal-700";
+
   return (
-    <Link
-      href={href}
-      className={
-        isDark
-          ? "inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm font-medium text-slate-100 shadow-sm backdrop-blur-sm transition-colors hover:border-cyan-400/35 hover:bg-white/10 sm:px-4 sm:text-base"
-          : "interactive-btn inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm sm:px-4 sm:text-base"
-      }
-    >
-      <IconHome className={isDark ? "h-5 w-5 shrink-0 text-cyan-300" : "h-5 w-5 shrink-0 text-teal-700"} />
+    <Link href={href} className={shell}>
+      <IconHome className={iconClass} />
       {children}
     </Link>
   );
