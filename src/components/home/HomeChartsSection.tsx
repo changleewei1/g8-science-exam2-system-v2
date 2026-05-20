@@ -2,15 +2,19 @@
  * 首頁圖表示意（假資料），純 SVG + Tailwind，無額外套件。
  * id 供頁尾 CTA「查看報告示意」錨點連結。
  */
+import { homeGlassPanel, homeLightSectionBorder } from "./homePageStyles";
+
 export function HomeChartsSection() {
   return (
     <section
       id="report-demo"
-      className="scroll-mt-20 border-t border-slate-200/80 bg-white px-4 py-14 sm:px-6 sm:py-16 md:py-20"
+      className={`relative scroll-mt-20 ${homeLightSectionBorder} bg-transparent px-4 py-14 sm:px-6 sm:py-16 md:py-20`}
     >
       <div className="mx-auto max-w-6xl">
         <header className="text-center">
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl md:text-3xl">學習數據示意</h2>
+          <h2 className="bg-gradient-to-r from-slate-900 via-cyan-800 to-slate-900 bg-clip-text text-xl font-bold tracking-tight text-transparent sm:text-2xl md:text-3xl">
+            學習數據示意
+          </h2>
           <p className="mx-auto mt-3 max-w-lg text-sm text-slate-600">
             以下為展示用假資料，實際產品將依班級與段考範圍帶入真實統計。
           </p>
@@ -18,7 +22,7 @@ export function HomeChartsSection() {
 
         <div className="mt-12 grid gap-8 lg:grid-cols-2">
           {/* 雷達圖 */}
-          <div className="rounded-2xl border border-slate-200/90 bg-gradient-to-b from-slate-50/80 to-white p-6 shadow-md shadow-slate-200/50 md:p-8">
+          <div className={`p-6 md:p-8 ${homeGlassPanel}`}>
             <h3 className="text-sm font-semibold text-slate-800">技能面向 · 雷達圖（示意）</h3>
             <p className="mt-1 text-xs text-slate-500">數值為 0–100 相對掌握度</p>
             <div className="mx-auto mt-6 flex max-w-[280px] justify-center">
@@ -26,7 +30,7 @@ export function HomeChartsSection() {
             </div>
             <ul className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-slate-500">
               <li>
-                <span className="text-teal-600">■</span> 本週
+                <span className="text-cyan-600">■</span> 本週
               </li>
               <li>
                 <span className="text-slate-300">□</span> 上週
@@ -35,7 +39,7 @@ export function HomeChartsSection() {
           </div>
 
           {/* 長條圖 */}
-          <div className="rounded-2xl border border-slate-200/90 bg-gradient-to-b from-slate-50/80 to-white p-6 shadow-md shadow-slate-200/50 md:p-8">
+          <div className={`p-6 md:p-8 ${homeGlassPanel}`}>
             <h3 className="text-sm font-semibold text-slate-800">單元影片 · 完成率（示意）</h3>
             <div className="mt-8 space-y-5">
               {[
@@ -49,9 +53,9 @@ export function HomeChartsSection() {
                     <span>{row.label}</span>
                     <span className="font-medium text-slate-800">{row.pct}%</span>
                   </div>
-                  <div className="h-2.5 overflow-hidden rounded-full bg-slate-100">
+                  <div className="h-2.5 overflow-hidden rounded-full border border-sky-100/80 bg-sky-50/80">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-teal-500 to-teal-600 transition-all"
+                      className="h-full rounded-full bg-gradient-to-r from-cyan-500 via-cyan-500 to-sky-500 transition-all shadow-[0_0_12px_rgba(6,182,212,0.35)]"
                       style={{ width: `${row.pct}%` }}
                     />
                   </div>
@@ -62,7 +66,7 @@ export function HomeChartsSection() {
         </div>
 
         {/* 甘特風格 */}
-        <div className="mt-8 rounded-2xl border border-slate-200/90 bg-gradient-to-b from-slate-50/80 to-white p-6 shadow-md shadow-slate-200/50 md:p-8">
+        <div className={`mt-8 p-6 md:p-8 ${homeGlassPanel}`}>
           <h3 className="text-sm font-semibold text-slate-800">預習任務 · 週進度（甘特風格示意）</h3>
           <p className="mt-1 text-xs text-slate-500">橫軸為本週工作日，條塊為建議完成區間</p>
           <div className="mt-6 overflow-x-auto">
@@ -132,8 +136,8 @@ function RadarChartDemo() {
       />
       <path
         d={poly(thisWeek)}
-        fill="rgba(13, 148, 136, 0.18)"
-        stroke="#0d9488"
+        fill="rgba(6, 182, 212, 0.2)"
+        stroke="#0891b2"
         strokeWidth="2"
       />
       {labels.map((label, i) => {
@@ -160,15 +164,15 @@ function RadarChartDemo() {
 function GanttDemo() {
   const days = ["一", "二", "三", "四", "五"];
   const rows = [
-    { name: "比與比例｜預習影片 A", start: 0, span: 2, tone: "bg-teal-500/90" },
-    { name: "比與比例｜預習影片 B", start: 1.5, span: 2, tone: "bg-teal-600/85" },
-    { name: "座標圖形｜預習影片", start: 2.5, span: 2.5, tone: "bg-sky-500/85" },
+    { name: "比與比例｜預習影片 A", start: 0, span: 2, tone: "bg-gradient-to-r from-cyan-500 to-cyan-600 shadow-[0_0_12px_rgba(6,182,212,0.35)]" },
+    { name: "比與比例｜預習影片 B", start: 1.5, span: 2, tone: "bg-gradient-to-r from-cyan-600 to-sky-600 shadow-[0_0_12px_rgba(8,145,178,0.3)]" },
+    { name: "座標圖形｜預習影片", start: 2.5, span: 2.5, tone: "bg-gradient-to-r from-sky-500 to-indigo-400 shadow-[0_0_12px_rgba(14,165,233,0.3)]" },
   ];
   const dayWidth = 100 / 5;
 
   return (
     <div className="min-w-[520px]">
-      <div className="mb-2 grid grid-cols-5 gap-0 border-b border-slate-200 pb-2 text-center text-xs font-medium text-slate-500">
+      <div className="mb-2 grid grid-cols-5 gap-0 border-b border-sky-200/60 pb-2 text-center text-xs font-medium text-slate-500">
         {days.map((d) => (
           <div key={d}>週{d}</div>
         ))}
@@ -177,9 +181,9 @@ function GanttDemo() {
         {rows.map((row) => (
           <div key={row.name} className="grid grid-cols-[minmax(0,1fr)_4fr] items-center gap-3 text-sm">
             <span className="truncate text-xs text-slate-600 md:text-sm">{row.name}</span>
-            <div className="relative h-9 rounded-lg bg-slate-100">
+            <div className="relative h-9 rounded-lg border border-cyan-200/40 bg-gradient-to-b from-white/70 to-sky-50/50 shadow-inner shadow-sky-200/30">
               <div
-                className={`absolute top-1/2 h-7 -translate-y-1/2 rounded-lg shadow-sm ${row.tone}`}
+                className={`absolute top-1/2 h-7 -translate-y-1/2 rounded-md ${row.tone}`}
                 style={{
                   left: `${row.start * dayWidth}%`,
                   width: `${row.span * dayWidth}%`,

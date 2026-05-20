@@ -1,4 +1,4 @@
-import { homeContentMax } from "./homePageStyles";
+import { homeContentMax, homeGlassCard, homeLightSectionBorder } from "./homePageStyles";
 
 function IconBook({ className }: { className?: string }) {
   return (
@@ -105,10 +105,12 @@ const cards = [
 
 export function LearningCycleSection() {
   return (
-    <section className="border-t border-slate-200/70 bg-white/50 px-4 py-16 backdrop-blur-[2px] sm:px-6 sm:py-20 md:py-24">
+    <section
+      className={`relative ${homeLightSectionBorder} bg-transparent px-4 py-16 sm:px-6 sm:py-20 md:py-24`}
+    >
       <div className={homeContentMax}>
         <header className="text-center">
-          <h2 className="text-balance text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl md:text-[1.875rem] md:leading-snug lg:text-[2rem]">
+          <h2 className="text-balance bg-gradient-to-r from-slate-900 via-cyan-900 to-slate-900 bg-clip-text text-2xl font-bold tracking-tight text-transparent sm:text-3xl md:text-[1.875rem] md:leading-snug lg:text-[2rem]">
             最高效率的學習模式：預習 → 聽課 → 複習
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-slate-600 md:mt-5 md:text-lg md:leading-relaxed">
@@ -122,7 +124,7 @@ export function LearningCycleSection() {
             return (
               <article
                 key={c.key}
-                className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition duration-300 ease-out hover:-translate-y-0.5 hover:border-slate-300/90 hover:shadow-md motion-reduce:transform-none motion-reduce:hover:transform-none sm:p-7"
+                className={`group relative flex flex-col overflow-hidden ${homeGlassCard} p-6 transition duration-300 ease-out hover:-translate-y-0.5 hover:border-cyan-300/70 hover:shadow-[0_16px_48px_-12px_rgba(14,165,233,0.28)] motion-reduce:transform-none motion-reduce:hover:transform-none sm:p-7`}
               >
                 <div
                   className={`absolute left-0 top-0 h-1 w-full ${c.accentBar} opacity-90`}
@@ -159,10 +161,10 @@ export function LearningCycleSection() {
           })}
         </div>
 
-        <p className="mx-auto mt-14 max-w-lg text-center text-base font-medium leading-8 text-slate-700 md:mt-16 md:text-lg md:leading-9">
-          沒有預習 → 上課聽不懂
+        <p className="mx-auto mt-14 max-w-lg text-center text-base font-medium leading-8 text-slate-600 md:mt-16 md:text-lg md:leading-9">
+          <span className="text-cyan-800/90">沒有預習</span> → 上課聽不懂
           <br />
-          沒有複習 → 很快就忘記
+          <span className="text-cyan-800/90">沒有複習</span> → 很快就忘記
         </p>
       </div>
     </section>

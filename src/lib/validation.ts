@@ -177,3 +177,12 @@ export const adminPutQuizQuestionsBodySchema = z.object({
     .min(1, "至少需要 1 題")
     .max(MAX_QUIZ_QUESTIONS, `最多 ${MAX_QUIZ_QUESTIONS} 題`),
 });
+
+/** 首頁系統公告（老師後台維護） */
+export const adminAnnouncementPutBodySchema = z.object({
+  title: z.string().trim().max(80).optional(),
+  items: z
+    .array(z.string().max(800))
+    .min(1, "至少需要一則條目")
+    .max(40, "最多 40 則條目"),
+});

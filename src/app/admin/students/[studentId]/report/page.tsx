@@ -1,3 +1,4 @@
+import { AdminInlineNavLink, AdminStandaloneHeader, AdminStandaloneMain } from "@/components/admin/AdminStandaloneHeader";
 import { ReportChartsLazy } from "@/components/report/ReportChartsLazy";
 import { ReportFilters } from "@/components/report/ReportFilters";
 import { ReportSharePanel } from "@/components/report/ReportSharePanel";
@@ -5,9 +6,17 @@ import { getAdminStudentReportUseCase } from "@/infrastructure/composition";
 import { getRepositories } from "@/infrastructure/composition";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
 import { getDefaultExamScopeId } from "@/lib/constants";
+import { filterTasksByExamScope } from "@/lib/admin/report-exam-scope-tasks";
+import {
+  DEFAULT_STUDENT_REPORT_SCOPE,
+  domainExamScopeToReport,
+  reportScopeToFilter,
+  resolveExamScopeFromReportFilter,
+  formatReportScopeLabel,
+  type ReportExamScope,
+} from "@/lib/admin/student-report-scope";
 import { getSupabaseErrorMessage } from "@/lib/supabase-user-message";
 import { getAdminSession } from "@/lib/session";
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 
@@ -15,8 +24,59 @@ export const dynamic = "force-dynamic";
 
 type Props = {
   params: Promise<{ studentId: string }>;
-  searchParams: Promise<{ examScopeId?: string; taskId?: string }>;
+  searchParams: Promise<{
+    examScopeId?: string;
+    taskId?: string;
+    grade?: string;
+    subject?: string;
+    semester?: string;
+    exam?: string;
+  }>;
 };
+
+function resolveFilterAndScopeId(
+  reportScopes: ReportExamScope[],
+  sp: {
+    examScopeId?: string;
+    grade?: string;
+    subject?: string;
+    semester?: string;
+    exam?: string;
+  },
+  envScopeId: string | undefined,
+) {
+
+  if (sp.grade && sp.subject && sp.semester && sp.exam) {
+    const filter = {
+      grade: sp.grade,
+      subject: sp.subject,
+      semester: sp.semester,
+      exam: sp.exam,
+    };
+    const resolved = resolveExamScopeFromReportFilter(reportScopes, filter);
+    return { filter, examScopeId: resolved?.id ?? null, resolved };
+  }
+
+  if (sp.examScopeId) {
+    const found = reportScopes.find((s) => s.id === sp.examScopeId);
+    if (found) {
+      const filter = reportScopeToFilter(found);
+      return { filter, examScopeId: found.id, resolved: found };
+    }
+  }
+
+  if (envScopeId) {
+    const found = reportScopes.find((s) => s.id === envScopeId);
+    if (found) {
+      const filter = reportScopeToFilter(found);
+      return { filter, examScopeId: found.id, resolved: found };
+    }
+  }
+
+  const filter = DEFAULT_STUDENT_REPORT_SCOPE;
+  const resolved = resolveExamScopeFromReportFilter(reportScopes, filter);
+  return { filter, examScopeId: resolved?.id ?? null, resolved };
+}
 
 export default async function AdminStudentReportPage({ params, searchParams }: Props) {
   const admin = await getAdminSession();
@@ -30,8 +90,10 @@ export default async function AdminStudentReportPage({ params, searchParams }: P
   if (!student) notFound();
 
   const scopes = await examScopes.findAllActive();
+  const reportScopes = scopes.map((s) => domainExamScopeToReport(s));
   const envScope = getDefaultExamScopeId();
-  const examScopeId = sp.examScopeId ?? envScope ?? scopes[0]?.id ?? null;
+
+  const { filter, examScopeId, resolved } = resolveFilterAndScopeId(reportScopes, sp, envScope);
 
   const allTasks = await learningTasks.findAll();
   let tasksForClass = allTasks.filter((t) => t.class_name === student.className);
@@ -51,14 +113,28 @@ export default async function AdminStudentReportPage({ params, searchParams }: P
     /* 未套用 assignees migration 時略過 */
   }
 
+  const taskOptions = await filterTasksByExamScope(
+    tasksForClass.map((t) => ({
+      id: t.id,
+      title: t.title,
+      startDate: t.start_date,
+    })),
+    examScopeId,
+  );
+
+  let taskId = sp.taskId ?? null;
+  if (taskId && !taskOptions.some((t) => t.id === taskId)) {
+    taskId = null;
+  }
+
   const reportUc = getAdminStudentReportUseCase();
   let report: Awaited<ReturnType<typeof reportUc.execute>> | null = null;
   let loadError: string | null = null;
   try {
     report = await reportUc.execute({
       studentId,
-      examScopeId,
-      taskId: sp.taskId ?? undefined,
+      examScopeId: examScopeId ?? undefined,
+      taskId: taskId ?? undefined,
     });
   } catch (e) {
     loadError = getSupabaseErrorMessage(e);
@@ -67,30 +143,21 @@ export default async function AdminStudentReportPage({ params, searchParams }: P
 
   if (loadError) {
     return (
-      <div className="min-h-[100dvh] bg-slate-50">
-        <header className="border-b border-slate-200 bg-white px-4 py-4 sm:px-6">
-          <div className="mx-auto max-w-5xl">
-            <h1 className="text-xl font-semibold text-slate-900">學生學習報告</h1>
-          </div>
-        </header>
-        <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-          <div className="rounded-2xl border border-red-200/90 bg-red-50/90 p-6 text-red-900 shadow-md">
+      <>
+        <AdminStandaloneHeader title="學生學習報告" narrow />
+        <AdminStandaloneMain narrow>
+          <div className="rounded-2xl border border-rose-500/35 bg-rose-950/45 p-6 text-rose-50 shadow-md">
             <p className="font-medium">無法載入學習報告</p>
-            <p className="mt-2 text-sm leading-relaxed">
+            <p className="mt-2 text-sm leading-relaxed text-rose-100/90">
               請稍後再試。若持續發生，請確認資料庫連線與 migration 是否已套用。
             </p>
-            <pre className="mt-4 max-h-48 overflow-auto rounded-lg bg-white/80 p-3 text-xs whitespace-pre-wrap">
+            <pre className="mt-4 max-h-48 overflow-auto rounded-lg bg-black/30 p-3 text-xs whitespace-pre-wrap text-rose-50/90">
               {loadError}
             </pre>
-            <Link
-              href="/admin/tasks"
-              className="mt-4 inline-block text-sm font-medium text-teal-800 underline"
-            >
-              返回學習任務設定
-            </Link>
+            <AdminInlineNavLink href="/admin/tasks">返回學習任務設定</AdminInlineNavLink>
           </div>
-        </div>
-      </div>
+        </AdminStandaloneMain>
+      </>
     );
   }
 
@@ -99,58 +166,50 @@ export default async function AdminStudentReportPage({ params, searchParams }: P
   }
 
   return (
-    <div className="min-h-[100dvh] bg-slate-50">
-      <header className="border-b border-slate-200 bg-white px-4 py-4 sm:px-6">
-        <div className="mx-auto flex max-w-5xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <Link
-              href="/admin/tasks"
-              className="interactive-nav text-sm font-medium text-teal-700 underline-offset-4 hover:underline"
-            >
-              ← 返回學習任務設定
-            </Link>
-            <h1 className="mt-2 text-xl font-semibold text-slate-900 sm:text-2xl">學生學習報告</h1>
-            <p className="mt-1 text-sm text-slate-600">
-              以下為本次學習任務的完成情況與學習表現分析
-            </p>
-            <p className="mt-2 text-sm text-slate-700">
-              {student.name}{" "}
-              <span className="font-mono text-slate-500">（{student.studentCode}）</span>
-              {student.className ? ` · ${student.className} 班` : ""}
-            </p>
-          </div>
+    <>
+      <AdminStandaloneHeader
+        title="學生學習報告"
+        narrow
+        right={<AdminInlineNavLink href="/admin/tasks">返回學習任務設定</AdminInlineNavLink>}
+      />
+      <AdminStandaloneMain narrow>
+        <div className="mb-6 space-y-2">
+          <p className="text-sm text-slate-400">以下為本次學習任務的完成情況與學習表現分析</p>
+          <p className="text-sm text-slate-300">
+            {student.name}{" "}
+            <span className="font-mono text-slate-500">（{student.studentCode}）</span>
+            {student.className ? ` · ${student.className} 班` : ""}
+          </p>
         </div>
-      </header>
 
-      <div className="mx-auto max-w-5xl space-y-6 px-4 py-6 sm:px-6 sm:py-8">
-        <Suspense fallback={<div className="h-14 animate-pulse rounded-2xl bg-slate-200/80" />}>
+        <Suspense fallback={<div className="h-28 animate-pulse rounded-2xl bg-white/10" />}>
           <ReportFilters
             studentId={studentId}
-            examScopes={scopes.map((s) => ({ id: s.id, title: s.title }))}
-            tasks={tasksForClass.map((t) => ({
-              id: t.id,
-              title: t.title,
-              startDate: t.start_date,
-            }))}
-            currentExamScopeId={examScopeId}
-            currentTaskId={sp.taskId ?? null}
+            examScopes={reportScopes}
+            tasks={taskOptions}
+            currentFilter={filter}
+            currentTaskId={taskId}
           />
         </Suspense>
 
-        <ReportSharePanel studentId={studentId} taskId={sp.taskId ?? null} />
+        <ReportSharePanel studentId={studentId} taskId={taskId} />
 
-        {report.examScope ? (
-          <p className="text-sm text-slate-600">
-            完成情況範圍：<span className="font-medium text-slate-800">{report.examScope.title}</span>
+        {resolved ? (
+          <p className="text-sm text-slate-400">
+            完成情況範圍：
+            <span className="font-medium text-slate-200">{formatReportScopeLabel(filter)}</span>
+            {report.examScope?.title ? (
+              <span className="text-slate-500">（{report.examScope.title}）</span>
+            ) : null}
           </p>
         ) : (
-          <p className="rounded-xl border border-amber-200/80 bg-amber-50/90 px-4 py-3 text-sm text-amber-900">
-            尚未設定段考範圍時，部分統計可能為空。仍可檢視任務與測驗相關資料。
+          <p className="rounded-xl border border-amber-400/35 bg-amber-950/40 px-4 py-3 text-sm text-amber-100">
+            目前尚未建立此學習範圍資料，部分統計可能為空。仍可檢視任務與測驗相關資料。
           </p>
         )}
 
         <ReportChartsLazy report={report} />
-      </div>
-    </div>
+      </AdminStandaloneMain>
+    </>
   );
 }

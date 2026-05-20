@@ -27,26 +27,26 @@ export default async function AdminTaskProgressPage({ params }: Props) {
       <div>
         <Link
           href="/admin/tasks"
-          className="interactive-nav text-sm font-medium text-teal-700 underline-offset-4 hover:underline"
+          className="interactive-nav text-sm font-medium text-cyan-300 underline-offset-4 hover:underline"
         >
           ← 返回學習任務設定
         </Link>
-        <h1 className="mt-3 text-2xl font-semibold text-slate-900">學習進度追蹤</h1>
-        <p className="mt-2 text-sm text-slate-600">
+        <h1 className="mt-3 text-2xl font-semibold text-slate-50">學習進度追蹤</h1>
+        <p className="mt-2 text-sm text-slate-400">
           顯示學生影片觀看完成情況（達 90% 視為完成）
         </p>
-        <p className="mt-2 text-lg font-medium text-slate-800">{task.title}</p>
-        <p className="text-sm text-slate-600">
+        <p className="mt-2 text-lg font-medium text-slate-200">{task.title}</p>
+        <p className="text-sm text-slate-400">
           {task.assignmentMode === "students"
             ? `指派：已選 ${task.assigneeStudentIds.length} 位學生`
             : `${task.className} 班`}{" "}
           ｜{task.startDate} — {task.endDate}
           {!task.isActive ? (
-            <span className="ml-2 rounded bg-slate-200 px-2 py-0.5 text-xs text-slate-700">未啟用</span>
+            <span className="ml-2 rounded bg-slate-200 px-2 py-0.5 text-xs text-slate-300">未啟用</span>
           ) : null}
         </p>
-        <p className="mt-2 text-sm text-slate-700">
-          整體完成率（全班平均）：<span className="font-semibold text-slate-900">{overall}%</span>
+        <p className="mt-2 text-sm text-slate-300">
+          整體完成率（全班平均）：<span className="font-semibold text-slate-50">{overall}%</span>
         </p>
       </div>
 

@@ -129,10 +129,8 @@ export class StudentReportService {
       skillNameByCode.set(row.code, row.name);
     }
 
-    const radar = await this.buildRadar(supabase, student.id, skillNameByCode);
-
     const unitIds: string[] = [];
-    const videoIdsInScope: string[] = [];
+    const examScopeVideoIds: string[] = [];
     const unitsMeta: { id: string; title: string }[] = [];
 
     if (examScopeId) {
@@ -152,44 +150,63 @@ export class StudentReportService {
           .select("id")
           .in("unit_id", unitIds)
           .order("sort_order");
-        for (const v of vids ?? []) videoIdsInScope.push((v as { id: string }).id);
+        for (const v of vids ?? []) examScopeVideoIds.push((v as { id: string }).id);
       }
     }
 
-    // 有指定學習任務時，任務完成狀況／圓餅／長條應只統計該任務的影片，而非整個段考範圍內全部影片
+    const examScopeVideoSet = new Set(examScopeVideoIds);
+    let videoIdsInScope = [...examScopeVideoIds];
+    let unitsMetaForStats = [...unitsMeta];
+
+    // 有指定學習任務時：只統計「任務影片 ∩ 目前段考範圍」，避免酸鹼等第二次段考任務出現在第三次段考報告
     if (input.taskId) {
       const { data: tvs } = await supabase
         .from("task_videos")
         .select("video_id")
         .eq("task_id", input.taskId);
       const taskVideoIds = [...new Set((tvs ?? []).map((x: { video_id: string }) => x.video_id))];
-      videoIdsInScope.length = 0;
-      unitsMeta.length = 0;
-      if (taskVideoIds.length > 0) {
-        videoIdsInScope.push(...taskVideoIds);
+      const inScope =
+        examScopeVideoSet.size === 0
+          ? taskVideoIds
+          : taskVideoIds.filter((id) => examScopeVideoSet.has(id));
+
+      videoIdsInScope = inScope;
+      unitsMetaForStats = [];
+      if (inScope.length > 0) {
         const { data: vrows } = await supabase
           .from("videos")
           .select("unit_id")
-          .in("id", taskVideoIds);
+          .in("id", inScope);
         const unitIdsInTask = [...new Set((vrows ?? []).map((x: { unit_id: string }) => x.unit_id))];
         if (unitIdsInTask.length > 0) {
-          const { data: urows } = await supabase
+          let unitQuery = supabase
             .from("scope_units")
             .select("id, unit_title")
             .in("id", unitIdsInTask)
             .order("sort_order");
+          if (examScopeId) {
+            unitQuery = unitQuery.eq("exam_scope_id", examScopeId);
+          }
+          const { data: urows } = await unitQuery;
           for (const u of urows ?? []) {
             const row = u as { id: string; unit_title: string };
-            unitsMeta.push({ id: row.id, title: row.unit_title });
+            unitsMetaForStats.push({ id: row.id, title: row.unit_title });
           }
         }
       }
     }
 
+    const radar = await this.buildRadar(
+      supabase,
+      student.id,
+      skillNameByCode,
+      examScopeVideoIds,
+    );
+
     const videoQuiz = await this.buildVideoQuizStats(
       supabase,
       student.id,
-      unitsMeta,
+      unitsMetaForStats,
       videoIdsInScope,
       input.taskId ?? null,
     );
@@ -201,6 +218,7 @@ export class StudentReportService {
       student.id,
       student.class_name,
       input.taskId ?? null,
+      examScopeVideoIds,
     );
 
     let summary = this.buildSummary(radar, pieVideo, videoQuiz.quizTotalInScope, videoQuiz.quizPassedCount);
@@ -245,11 +263,22 @@ export class StudentReportService {
     supabase: ReturnType<typeof getSupabaseAdmin>,
     studentId: string,
     skillNameByCode: Map<string, string>,
+    videoIdsInScope: string[],
   ): Promise<RadarDatum[]> {
+    if (videoIdsInScope.length === 0) return [];
+
+    const { data: quizzes } = await supabase
+      .from("quizzes")
+      .select("id")
+      .in("video_id", videoIdsInScope);
+    const quizIds = (quizzes ?? []).map((q: { id: string }) => q.id);
+    if (quizIds.length === 0) return [];
+
     const { data: attempts } = await supabase
       .from("student_quiz_attempts")
       .select("id")
       .eq("student_id", studentId)
+      .in("quiz_id", quizIds)
       .not("submitted_at", "is", null);
     const attemptIds = (attempts ?? []).map((a: { id: string }) => a.id);
     if (attemptIds.length === 0) return [];
@@ -426,7 +455,9 @@ export class StudentReportService {
     studentId: string,
     className: string | null,
     preferredTaskId: string | null,
+    examScopeVideoIds: string[],
   ): Promise<GanttBlock | null> {
+    const scopeSet = new Set(examScopeVideoIds);
     let task: {
       id: string;
       title: string;
@@ -458,22 +489,60 @@ export class StudentReportService {
         } catch {
           assigneeIds = [];
         }
+        let accepted = false;
         if (assigneeIds.length > 0) {
-          if (assigneeIds.includes(studentId)) task = row;
+          if (assigneeIds.includes(studentId)) accepted = true;
         } else if (className && row.class_name === className) {
-          task = row;
+          accepted = true;
+        }
+        if (accepted) {
+          if (scopeSet.size === 0) {
+            task = row;
+          } else {
+            const { data: tvsScope } = await supabase
+              .from("task_videos")
+              .select("video_id")
+              .eq("task_id", row.id)
+              .limit(80);
+            const inScope = (tvsScope ?? []).some((tv: { video_id: string }) =>
+              scopeSet.has(tv.video_id),
+            );
+            if (inScope) task = row;
+          }
         }
       }
     }
     if (!task && className) {
-      const { data: t } = await supabase
+      const { data: classTasks } = await supabase
         .from("learning_tasks")
         .select("id, title, start_date, end_date")
         .eq("class_name", className)
-        .order("start_date", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      task = t as typeof task;
+        .order("start_date", { ascending: false });
+
+      for (const row of classTasks ?? []) {
+        const candidate = row as {
+          id: string;
+          title: string;
+          start_date: string;
+          end_date: string;
+        };
+        if (scopeSet.size === 0) {
+          task = candidate;
+          break;
+        }
+        const { data: tvsCheck } = await supabase
+          .from("task_videos")
+          .select("video_id")
+          .eq("task_id", candidate.id)
+          .limit(50);
+        const hasScopeVideo = (tvsCheck ?? []).some((tv: { video_id: string }) =>
+          scopeSet.has(tv.video_id),
+        );
+        if (hasScopeVideo) {
+          task = candidate;
+          break;
+        }
+      }
     }
     if (!task) return null;
 
@@ -498,6 +567,8 @@ export class StudentReportService {
     const items: GanttItem[] = [];
     for (const row of tvs ?? []) {
       const tv = row as { video_id: string; day_index: number };
+      if (scopeSet.size > 0 && !scopeSet.has(tv.video_id)) continue;
+
       const plannedDate = addDaysIso(task.start_date, tv.day_index - 1);
       const { data: v } = await supabase
         .from("videos")

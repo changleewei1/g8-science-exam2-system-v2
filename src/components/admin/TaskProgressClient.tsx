@@ -41,21 +41,21 @@ export function TaskProgressClient({ taskId, detail }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-3 rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-end">
+      <div className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-end">
         <label className="block min-w-[160px] flex-1 text-sm">
-          <span className="font-medium text-slate-800">搜尋學生</span>
+          <span className="font-medium text-slate-200">搜尋學生</span>
           <input
             type="search"
-            className="mt-1.5 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"
+            className="mt-1.5 w-full rounded-xl border border-white/15 px-3 py-2 text-sm"
             placeholder="姓名或學號"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </label>
         <label className="block min-w-[120px] text-sm">
-          <span className="font-medium text-slate-800">班級</span>
+          <span className="font-medium text-slate-200">班級</span>
           <select
-            className="mt-1.5 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"
+            className="mt-1.5 w-full rounded-xl border border-white/15 px-3 py-2 text-sm"
             value={classFilter}
             onChange={(e) => setClassFilter(e.target.value)}
           >
@@ -67,19 +67,19 @@ export function TaskProgressClient({ taskId, detail }: Props) {
             ))}
           </select>
         </label>
-        <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-800">
+        <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-200">
           <input
             type="checkbox"
-            className="rounded border-slate-300"
+            className="rounded border-white/15"
             checked={onlyIncomplete}
             onChange={(e) => setOnlyIncomplete(e.target.checked)}
           />
           只看未完成
         </label>
-        <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-800">
+        <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-200">
           <input
             type="checkbox"
-            className="rounded border-slate-300"
+            className="rounded border-white/15"
             checked={onlyOverdue}
             onChange={(e) => setOnlyOverdue(e.target.checked)}
           />
@@ -87,9 +87,9 @@ export function TaskProgressClient({ taskId, detail }: Props) {
         </label>
       </div>
 
-      <div className="overflow-x-auto rounded-2xl border border-slate-200/90 bg-white shadow-md">
+      <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md shadow-[0_8px_36px_-16px_rgba(0,0,0,0.45)]">
         <table className="min-w-[1100px] w-full text-left text-sm">
-          <thead className="bg-slate-100/90 text-slate-700">
+          <thead className="bg-white/[0.08]/90 text-slate-300">
             <tr>
               <th className="px-3 py-2 font-semibold">學生姓名</th>
               <th className="px-3 py-2 font-semibold">班級</th>
@@ -105,24 +105,24 @@ export function TaskProgressClient({ taskId, detail }: Props) {
           <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={9} className="px-4 py-8 text-center text-slate-600">
+                <td colSpan={9} className="px-4 py-8 text-center text-slate-400">
                   沒有符合條件的學生
                 </td>
               </tr>
             ) : (
               filtered.map((s) => (
-                <tr key={s.studentId} className="border-t border-slate-100">
-                  <td className="px-3 py-2 font-medium text-slate-900">{s.name}</td>
-                  <td className="px-3 py-2 text-slate-700">{s.className ?? "—"}</td>
-                  <td className="px-3 py-2 text-slate-800">
+                <tr key={s.studentId} className="border-t border-white/10">
+                  <td className="px-3 py-2 font-medium text-slate-50">{s.name}</td>
+                  <td className="px-3 py-2 text-slate-300">{s.className ?? "—"}</td>
+                  <td className="px-3 py-2 text-slate-200">
                     {s.completedCount} / {s.totalVideos}
                   </td>
                   <td className="px-3 py-2">{s.completionRate}%</td>
-                  <td className="px-3 py-2 whitespace-nowrap text-slate-700">
+                  <td className="px-3 py-2 whitespace-nowrap text-slate-300">
                     {s.quizzesPassed} / {s.quizzesTotal}
                   </td>
-                  <td className="px-3 py-2 text-slate-700">{s.quizSummary}</td>
-                  <td className="px-3 py-2 whitespace-nowrap text-slate-600 text-xs">
+                  <td className="px-3 py-2 text-slate-300">{s.quizSummary}</td>
+                  <td className="px-3 py-2 whitespace-nowrap text-slate-400 text-xs">
                     {s.lastActivityAt
                       ? new Date(s.lastActivityAt).toLocaleString("zh-TW", {
                           dateStyle: "short",
@@ -134,12 +134,12 @@ export function TaskProgressClient({ taskId, detail }: Props) {
                     <span
                       className={
                         s.statusLabel === "已完成"
-                          ? "text-teal-800"
+                          ? "text-cyan-200"
                           : s.statusLabel === "逾期未完成"
                             ? "font-medium text-red-700"
                             : s.statusLabel === "尚未開始"
                               ? "text-slate-500"
-                              : "text-slate-800"
+                              : "text-slate-200"
                       }
                     >
                       {s.statusLabel}
@@ -149,7 +149,7 @@ export function TaskProgressClient({ taskId, detail }: Props) {
                     <div className="flex flex-col gap-1 sm:flex-row sm:gap-2">
                       <Link
                         href={`/admin/students/${s.studentId}/report?taskId=${encodeURIComponent(taskId)}`}
-                        className="text-teal-700 underline text-xs font-medium"
+                        className="text-cyan-300 underline text-xs font-medium"
                       >
                         查看學習報告
                       </Link>

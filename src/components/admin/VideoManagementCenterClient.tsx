@@ -260,7 +260,7 @@ export function VideoManagementCenterClient() {
           <p className="mt-2 leading-relaxed">
             若為 Vercel 部署：請至專案{" "}
             <strong>Settings → Environment Variables</strong> 新增{" "}
-            <code className="rounded bg-white/90 px-1.5 py-0.5 font-mono text-xs">OPENAI_API_KEY</code>
+            <code className="rounded bg-white/[0.12] px-1.5 py-0.5 font-mono text-xs">OPENAI_API_KEY</code>
             ，並依需求勾選 Environment（Production / Preview），儲存後觸發<strong>重新部署</strong>。
           </p>
         </div>
@@ -271,16 +271,16 @@ export function VideoManagementCenterClient() {
           className={
             notice.type === "error"
               ? "rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950"
-              : "rounded-xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-950"
+              : "rounded-xl border border-cyan-400/35 bg-cyan-500/10 px-4 py-3 text-sm text-teal-950"
           }
         >
           {notice.text}
         </div>
       ) : null}
-      <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
-        <h2 className="text-lg font-semibold text-slate-900">新增影片（草稿）</h2>
-        <p className="mt-1 text-sm text-slate-600">
-          將寫入 <code className="rounded bg-slate-100 px-1">videos</code> ，預設不啟用；核准 skill／題目並啟用後，學生端才看得到。
+      <section className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-4 shadow-sm sm:p-6">
+        <h2 className="text-lg font-semibold text-slate-50">新增影片（草稿）</h2>
+        <p className="mt-1 text-sm text-slate-400">
+          將寫入 <code className="rounded bg-white/[0.08] px-1">videos</code> ，預設不啟用；核准 skill／題目並啟用後，學生端才看得到。
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <label className="block sm:col-span-2">
@@ -288,7 +288,7 @@ export function VideoManagementCenterClient() {
             <input
               value={youtubeUrl}
               onChange={(e) => setYoutubeUrl(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-lg border border-white/15 px-3 py-2 text-sm"
               placeholder="https://www.youtube.com/watch?v=..."
             />
           </label>
@@ -297,7 +297,7 @@ export function VideoManagementCenterClient() {
             <select
               value={unitId}
               onChange={(e) => setUnitId(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-lg border border-white/15 px-3 py-2 text-sm"
             >
               {units.map((u) => (
                 <option key={u.id} value={u.id}>
@@ -311,7 +311,7 @@ export function VideoManagementCenterClient() {
             <input
               value={manualTitle}
               onChange={(e) => setManualTitle(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-lg border border-white/15 px-3 py-2 text-sm"
             />
           </label>
           <label className="block">
@@ -320,7 +320,7 @@ export function VideoManagementCenterClient() {
               type="number"
               value={sortOrder}
               onChange={(e) => setSortOrder(Number(e.target.value) || 0)}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-lg border border-white/15 px-3 py-2 text-sm"
             />
           </label>
         </div>
@@ -333,23 +333,23 @@ export function VideoManagementCenterClient() {
         </button>
       </section>
 
-      <section className="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-        <h2 className="text-lg font-semibold text-slate-900">字幕備案（手動貼上）</h2>
-        <p className="mt-1 text-sm text-slate-600">
+      <section className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5">
+        <h2 className="text-lg font-semibold text-slate-50">字幕備案（手動貼上）</h2>
+        <p className="mt-1 text-sm text-slate-400">
           無法自動取得字幕時，貼於此並按「分析影片／生成題目」時一併送出，或對焦影片後「儲存字幕到影片」。
         </p>
         <textarea
           value={subtitleDraft}
           onChange={(e) => setSubtitleDraft(e.target.value)}
           rows={6}
-          className="mt-3 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-mono"
+          className="mt-3 w-full rounded-lg border border-white/15 bg-white px-3 py-2 text-sm font-mono"
           placeholder="手動字幕文字…"
         />
       </section>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
-        <h2 className="text-lg font-semibold text-slate-900">影片列表</h2>
-        <p className="mt-1 text-sm text-slate-600">題目數為：該影片已連結之 skill_code 在題庫中的題數加總（概估）。</p>
+      <section className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-4 shadow-sm sm:p-6">
+        <h2 className="text-lg font-semibold text-slate-50">影片列表</h2>
+        <p className="mt-1 text-sm text-slate-400">題目數為：該影片已連結之 skill_code 在題庫中的題數加總（概估）。</p>
         {loading ? <p className="mt-4 text-sm text-slate-500">載入中…</p> : null}
         {error ? <p className="mt-4 text-sm text-rose-700">{error}</p> : null}
         {!loading && !error ? (
@@ -357,19 +357,19 @@ export function VideoManagementCenterClient() {
             {videos.map((v) => (
               <li
                 key={v.id}
-                className="group flex min-h-[160px] flex-col gap-4 rounded-2xl border border-slate-200 bg-slate-50/90 p-4 shadow-sm transition-shadow duration-300 hover:shadow-md lg:flex-row lg:items-stretch lg:gap-6"
+                className="group flex min-h-[160px] flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-sm transition-shadow duration-300 hover:shadow-md lg:flex-row lg:items-stretch lg:gap-6"
               >
                 <div className="min-w-0 flex-1 space-y-2">
-                  <p className="font-medium leading-snug text-slate-900">{v.title}</p>
+                  <p className="font-medium leading-snug text-slate-50">{v.title}</p>
                   <p className="text-xs text-slate-500">
                     狀態：{v.status_label} · is_active={v.is_active ? "true" : "false"} · {v.management_status}
                   </p>
                   <p className="text-xs text-slate-500">
                     單元：{v.exam_scope_title} / {v.unit_title}
                   </p>
-                  <p className="break-all text-xs font-mono text-slate-600">
+                  <p className="break-all text-xs font-mono text-slate-400">
                     Youtube: {v.youtube_video_id}{" "}
-                    <a className="text-teal-700 underline" href={v.youtube_url} target="_blank" rel="noopener noreferrer">
+                    <a className="text-cyan-300 underline" href={v.youtube_url} target="_blank" rel="noopener noreferrer">
                       開啟連結
                     </a>
                   </p>
@@ -378,7 +378,7 @@ export function VideoManagementCenterClient() {
                       v.skill_codes.map((c) => (
                         <span
                           key={c}
-                          className="inline-block max-w-full break-all rounded-md bg-white px-2 py-0.5 text-xs font-mono text-teal-900 ring-1 ring-teal-100"
+                          className="inline-block max-w-full break-all rounded-md bg-white px-2 py-0.5 text-xs font-mono text-cyan-100 ring-1 ring-cyan-400/30"
                         >
                           {c}
                         </span>
@@ -387,7 +387,7 @@ export function VideoManagementCenterClient() {
                       <span className="text-xs text-slate-500">skill：（無）</span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs text-slate-400">
                     題目數（概估）：{v.question_count_via_skills}
                     {typeof v.draft_candidate_count === "number" ? (
                       <>
@@ -404,7 +404,7 @@ export function VideoManagementCenterClient() {
                         setFocusedVideoId(v.id);
                         window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
                       }}
-                      className="w-full rounded-lg border border-slate-200 bg-white py-2 text-center text-xs font-medium hover:bg-slate-50"
+                      className="w-full rounded-lg border border-white/10 bg-white py-2 text-center text-xs font-medium hover:bg-white/[0.04]"
                     >
                       檢視候選
                     </button>
@@ -423,7 +423,7 @@ export function VideoManagementCenterClient() {
                     </button>
                     <Link
                       href="/admin/video-skill-tags"
-                      className="flex w-full items-center justify-center rounded-lg border border-slate-200 bg-white py-2 text-center text-xs font-medium text-slate-800 hover:bg-slate-50"
+                      className="flex w-full items-center justify-center rounded-lg border border-white/10 bg-white py-2 text-center text-xs font-medium text-slate-200 hover:bg-white/[0.04]"
                     >
                       編輯 skill 對應
                     </Link>
@@ -450,14 +450,14 @@ export function VideoManagementCenterClient() {
                     <button
                       type="button"
                       onClick={() => void saveSubtitleToVideo(v.id)}
-                      className="w-full rounded-lg border border-slate-200 bg-white py-2 text-center text-xs font-medium hover:bg-slate-50"
+                      className="w-full rounded-lg border border-white/10 bg-white py-2 text-center text-xs font-medium hover:bg-white/[0.04]"
                     >
                       儲存手動字幕
                     </button>
                     <button
                       type="button"
                       onClick={() => void toggleActive(v, !v.is_active)}
-                      className="w-full rounded-lg border border-slate-200 bg-white py-2 text-center text-xs font-medium hover:bg-slate-50"
+                      className="w-full rounded-lg border border-white/10 bg-white py-2 text-center text-xs font-medium hover:bg-white/[0.04]"
                     >
                       {v.is_active ? "停用" : "啟用"}
                     </button>
@@ -468,32 +468,32 @@ export function VideoManagementCenterClient() {
         ) : null}
       </section>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
-        <h2 className="text-lg font-semibold text-slate-900">題目生成與審核入口</h2>
-        <p className="mt-1 text-sm text-slate-600">
-          Skill 候選沿用 <Link className="text-teal-800 underline" href="/admin/video-skill-review">影片技能候選審核</Link>
+      <section className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-4 shadow-sm sm:p-6">
+        <h2 className="text-lg font-semibold text-slate-50">題目生成與審核入口</h2>
+        <p className="mt-1 text-sm text-slate-400">
+          Skill 候選沿用 <Link className="text-cyan-200 underline" href="/admin/video-skill-review">影片技能候選審核</Link>
           ，或在下方面板快速處理本支影片 pending。
         </p>
 
         {!focusedVideoId ? (
           <p className="mt-4 text-sm text-slate-500">請在上方列表按「檢視候選」選定影片。</p>
         ) : (
-          <div className="mt-4 space-y-6 border-t border-slate-100 pt-4">
-            <p className="text-sm text-slate-700">
+          <div className="mt-4 space-y-6 border-t border-white/10 pt-4">
+            <p className="text-sm text-slate-300">
               對焦影片 id：<span className="font-mono">{focusedVideoId}</span>
             </p>
 
             <div>
-              <h3 className="text-sm font-semibold text-slate-800">Skill 候選（pending）</h3>
+              <h3 className="text-sm font-semibold text-slate-200">Skill 候選（pending）</h3>
               {skillCand.length === 0 ? (
                 <p className="mt-2 text-xs text-slate-500">目前無 pending</p>
               ) : (
                 <ul className="mt-2 space-y-2">
                   {skillCand.map((c) => (
-                    <li key={c.id} className="rounded-lg border border-slate-100 bg-slate-50 px-3 py-2 text-sm">
+                    <li key={c.id} className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm">
                       <span className="font-mono font-semibold">{c.suggested_skill_code}</span> {c.suggested_skill_name ?? ""}{" "}
                       <span className="text-xs text-slate-500">confidence {c.confidence ?? "-"}</span>
-                      <p className="text-xs text-slate-600">{c.reason ?? ""}</p>
+                      <p className="text-xs text-slate-400">{c.reason ?? ""}</p>
                       <div className="mt-2 flex flex-wrap gap-2">
                         <button
                           type="button"
@@ -528,7 +528,7 @@ export function VideoManagementCenterClient() {
             </div>
 
             <div>
-              <h3 className="text-sm font-semibold text-slate-800">題目候選（draft）</h3>
+              <h3 className="text-sm font-semibold text-slate-200">題目候選（draft）</h3>
               {qCand.length === 0 ? (
                 <p className="mt-2 text-xs text-slate-500">目前無草稿題</p>
               ) : (

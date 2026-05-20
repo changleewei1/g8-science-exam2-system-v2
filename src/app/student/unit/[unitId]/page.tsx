@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { redirect, notFound } from "next/navigation";
-import { StudentBackLink } from "@/components/student/StudentBackLink";
+import { Info } from "lucide-react";
+import { UnitPageHero } from "@/components/student/unit/UnitPageHero";
+import { UnitVideosEmpty, UnitVideosPanel } from "@/components/student/unit/UnitVideosPanel";
 import { getListUnitVideosUseCase, getRepositories } from "@/infrastructure/composition";
 import { getStudentSession } from "@/lib/session";
-import { ProgressBar } from "@/components/ui/ProgressBar";
+import { StudentLightTechBackground } from "@/components/student/StudentLightTechBackground";
 
 export const dynamic = "force-dynamic";
 
@@ -13,86 +15,55 @@ export default async function UnitPage({ params }: Props) {
   const session = await getStudentSession();
   if (!session) redirect("/login");
   const { unitId } = await params;
-  const { scopeUnits } = getRepositories();
+  const { scopeUnits, examScopes } = getRepositories();
   const unit = await scopeUnits.findById(unitId);
   if (!unit) notFound();
+
+  const scope = await examScopes.findById(unit.examScopeId);
+  const scopeTitle = scope?.title ?? "段考範圍";
 
   const uc = getListUnitVideosUseCase();
   const rows = await uc.execute(unitId, session.studentId);
   const hasVideos = rows.length > 0;
 
-  return (
-    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
-      <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-        <StudentBackLink href={`/student/exam-scope/${unit.examScopeId}`}>返回段考範圍</StudentBackLink>
-        <StudentBackLink href="/student/dashboard#exam-scopes">返回學習總覽</StudentBackLink>
-      </div>
-      <h1 className="text-2xl font-semibold text-slate-900">{unit.unitTitle}</h1>
-      <p className="mt-1 text-sm text-slate-500">{unit.unitCode}</p>
+  const videoPayload = rows.map((r) => ({
+    videoId: r.video.id,
+    title: r.video.title,
+    completionRate: r.completionRate,
+    isCompleted: r.isCompleted,
+    canTakeQuiz: r.canTakeQuiz,
+    quizId: r.quizId,
+    quizPassed: r.quizPassed,
+  }));
 
-      <section className="mt-8">
-        <h2 className="mb-3 text-sm font-medium text-slate-700">影片列表</h2>
-        {!hasVideos ? (
-          <div className="rounded-xl border border-slate-200 bg-slate-50/80 p-5 text-sm text-slate-600 shadow-sm sm:p-6">
-            <p className="font-medium text-slate-800">此單元尚無可觀看的影片</p>
-            <p className="mt-2 leading-relaxed">
-              可能尚未從教材播放清單匯入，或影片尚未對應到本單元。請向授課老師確認；老師可在後台將 YouTube 影片匯入並指定所屬單元後，列表就會出現。
-            </p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <Link
-                href={`/student/exam-scope/${unit.examScopeId}`}
-                className="inline-flex min-h-11 items-center rounded-lg border border-teal-300 bg-white px-4 py-2 text-sm font-medium text-teal-800 hover:bg-teal-50"
-              >
-                返回段考單元總覽
-              </Link>
-              <Link
-                href="/student/dashboard#exam-scopes"
-                className="inline-flex min-h-11 items-center rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700"
-              >
-                選擇其他段考
-              </Link>
-            </div>
-          </div>
+  return (
+    <div className="relative min-h-[calc(100dvh-3.5rem)]">
+      <StudentLightTechBackground />
+
+      <main className="relative mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6 sm:py-10 md:max-w-6xl">
+        <UnitPageHero
+          unitTitle={unit.unitTitle}
+          unitCode={unit.unitCode}
+          examScopeId={unit.examScopeId}
+          scopeTitle={scopeTitle}
+        />
+
+        {hasVideos ? (
+          <UnitVideosPanel unitId={unitId} videos={videoPayload} />
         ) : (
-          <ul className="space-y-4">
-            {rows.map((r) => (
-              <li key={r.video.id} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-                <div className="flex flex-wrap items-start justify-between gap-2">
-                  <div>
-                    <Link
-                      href={`/student/video/${r.video.id}`}
-                      className="interactive-nav font-medium text-teal-700 underline-offset-4 hover:underline"
-                    >
-                      {r.video.title}
-                    </Link>
-                    <p className="mt-1 text-xs text-slate-500">
-                      完成率 {r.completionRate.toFixed(0)}%
-                      {r.isCompleted ? " · 已觀看完畢" : ""}
-                      {r.quizPassed ? " · 測驗通過" : r.canTakeQuiz ? " · 可測驗" : ""}
-                    </p>
-                  </div>
-                  {r.quizId && (
-                    <Link
-                      href={`/student/quiz/${r.quizId}?unitId=${encodeURIComponent(unitId)}`}
-                      className={`inline-flex min-h-9 items-center rounded-lg px-3 py-1.5 text-sm font-medium ${
-                        r.canTakeQuiz
-                          ? "interactive-btn bg-teal-600 text-white"
-                          : "pointer-events-none cursor-not-allowed bg-slate-200 text-slate-500"
-                      }`}
-                      aria-disabled={!r.canTakeQuiz}
-                    >
-                      AI學習診斷
-                    </Link>
-                  )}
-                </div>
-                <div className="mt-3">
-                  <ProgressBar value={r.completionRate} />
-                </div>
-              </li>
-            ))}
-          </ul>
+          <UnitVideosEmpty examScopeId={unit.examScopeId} />
         )}
-      </section>
-    </main>
+
+        <section
+          className="mt-10 flex gap-3 rounded-2xl border border-sky-200/70 bg-sky-50/90 p-4 shadow-[0_4px_24px_-8px_rgba(14,165,233,0.2)] backdrop-blur-sm sm:p-5"
+          aria-label="使用說明"
+        >
+          <Info className="mt-0.5 h-5 w-5 shrink-0 text-sky-600" aria-hidden />
+          <p className="text-sm font-medium leading-relaxed text-slate-800">
+            建議依由上而下的順序觀看影片；完成觀看後再進行 AI 學習診斷。若要練習整段考技能樹，請使用上方「查看段考技能樹」。
+          </p>
+        </section>
+      </main>
+    </div>
   );
 }

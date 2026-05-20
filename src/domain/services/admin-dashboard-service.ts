@@ -16,9 +16,23 @@ export type StudentOverviewRow = {
 export type VideoWatchStats = {
   videoId: string;
   title: string;
+  unitTitle: string;
   totalStudents: number;
   completedCount: number;
   completionRate: number;
+  avgQuizPassRate: number;
+};
+
+export type OverviewQueryOptions = {
+  classId?: string;
+  keyword?: string;
+};
+
+export type TrackingSummary = {
+  studentCount: number;
+  avgVideoCompletion: number;
+  avgQuizPassRate: number;
+  incompleteCount: number;
 };
 
 export type SkillPerformanceRow = {
@@ -32,13 +46,22 @@ export type SkillPerformanceRow = {
  * 老師儀表板：全班完成／通過概況、單支影片統計、skill 答題表現。
  */
 export class AdminDashboardService {
-  async getOverview(examScopeId: string): Promise<StudentOverviewRow[]> {
+  async getOverview(
+    examScopeId: string,
+    options: OverviewQueryOptions = {},
+  ): Promise<StudentOverviewRow[]> {
     const supabase = getSupabaseAdmin();
-    const { data: students } = await supabase
+    let studentQuery = supabase
       .from("students")
       .select("id, student_code, name, class_name")
       .eq("is_active", true)
       .order("student_code");
+
+    if (options.classId && options.classId !== "all") {
+      studentQuery = studentQuery.eq("class_name", options.classId);
+    }
+
+    const { data: students } = await studentQuery;
 
     const { data: units } = await supabase
       .from("scope_units")
@@ -54,13 +77,24 @@ export class AdminDashboardService {
     const { data: quizzes } = await supabase.from("quizzes").select("id").in("video_id", videoIds);
     const quizIds = (quizzes ?? []).map((q: { id: string }) => q.id);
 
-    const studentRows = (students ?? []) as {
+    let studentRows = (students ?? []) as {
       id: string;
       student_code: string;
       name: string;
       class_name: string | null;
     }[];
+
+    const kw = options.keyword?.trim().toLowerCase();
+    if (kw) {
+      studentRows = studentRows.filter(
+        (s) =>
+          s.name.toLowerCase().includes(kw) ||
+          s.student_code.toLowerCase().includes(kw),
+      );
+    }
+
     const studentIdList = studentRows.map((s) => s.id);
+    const taskRateByStudent = await this.buildTaskCompletionRates(studentRows, videoIds);
 
     const lastActivityByStudent = new Map<string, string>();
     if (studentIdList.length > 0 && videoIds.length > 0) {
@@ -116,9 +150,105 @@ export class AdminDashboardService {
         className: st.class_name,
         videoCompletionRate,
         quizPassRate,
-        taskCompletionRate: null,
+        taskCompletionRate: taskRateByStudent.get(st.id) ?? null,
         lastActivityAt: lastActivityByStudent.get(st.id) ?? null,
       });
+    }
+    return out;
+  }
+
+  computeSummary(rows: StudentOverviewRow[]): TrackingSummary {
+    if (rows.length === 0) {
+      return {
+        studentCount: 0,
+        avgVideoCompletion: 0,
+        avgQuizPassRate: 0,
+        incompleteCount: 0,
+      };
+    }
+    const avgVideo =
+      Math.round(
+        (rows.reduce((s, r) => s + r.videoCompletionRate, 0) / rows.length) * 10,
+      ) / 10;
+    const avgQuiz =
+      Math.round((rows.reduce((s, r) => s + r.quizPassRate, 0) / rows.length) * 10) / 10;
+    const incompleteCount = rows.filter(
+      (r) => r.videoCompletionRate < 100 || r.quizPassRate < 100,
+    ).length;
+    return {
+      studentCount: rows.length,
+      avgVideoCompletion: avgVideo,
+      avgQuizPassRate: avgQuiz,
+      incompleteCount,
+    };
+  }
+
+  private async buildTaskCompletionRates(
+    students: { id: string; class_name: string | null }[],
+    videoIds: string[],
+  ): Promise<Map<string, number | null>> {
+    const out = new Map<string, number | null>();
+    if (videoIds.length === 0 || students.length === 0) {
+      for (const s of students) out.set(s.id, null);
+      return out;
+    }
+
+    const supabase = getSupabaseAdmin();
+    const { data: tvRows } = await supabase
+      .from("task_videos")
+      .select("task_id, video_id")
+      .in("video_id", videoIds);
+    const taskIds = [...new Set((tvRows ?? []).map((r: { task_id: string }) => r.task_id))];
+    if (taskIds.length === 0) {
+      for (const s of students) out.set(s.id, null);
+      return out;
+    }
+
+    const { data: tasks } = await supabase
+      .from("learning_tasks")
+      .select("id, class_name, start_date")
+      .in("id", taskIds)
+      .order("start_date", { ascending: false });
+
+    const videosByTask = new Map<string, string[]>();
+    for (const row of tvRows ?? []) {
+      const r = row as { task_id: string; video_id: string };
+      const list = videosByTask.get(r.task_id) ?? [];
+      list.push(r.video_id);
+      videosByTask.set(r.task_id, list);
+    }
+
+    const latestTaskByClass = new Map<string, { id: string; videoIds: string[] }>();
+    for (const t of tasks ?? []) {
+      const row = t as { id: string; class_name: string };
+      if (latestTaskByClass.has(row.class_name)) continue;
+      const vids = videosByTask.get(row.id) ?? [];
+      if (vids.length === 0) continue;
+      latestTaskByClass.set(row.class_name, { id: row.id, videoIds: vids });
+    }
+
+    for (const s of students) {
+      const cls = s.class_name;
+      if (!cls) {
+        out.set(s.id, null);
+        continue;
+      }
+      const task = latestTaskByClass.get(cls);
+      if (!task) {
+        out.set(s.id, null);
+        continue;
+      }
+
+      const { data: stp } = await supabase
+        .from("student_task_progress")
+        .select("is_completed")
+        .eq("student_id", s.id)
+        .eq("task_id", task.id)
+        .in("video_id", task.videoIds);
+
+      const total = task.videoIds.length;
+      const done = (stp ?? []).filter((x: { is_completed: boolean }) => x.is_completed).length;
+      out.set(s.id, total === 0 ? null : Math.round((done / total) * 1000) / 10);
     }
     return out;
   }
@@ -170,42 +300,99 @@ export class AdminDashboardService {
     };
   }
 
-  async getVideoWatchStats(examScopeId: string): Promise<VideoWatchStats[]> {
+  async getVideoWatchStats(
+    examScopeId: string,
+    options: OverviewQueryOptions = {},
+  ): Promise<VideoWatchStats[]> {
     const supabase = getSupabaseAdmin();
     const { data: units } = await supabase
       .from("scope_units")
-      .select("id")
+      .select("id, unit_title")
       .eq("exam_scope_id", examScopeId);
-    const unitIds = (units ?? []).map((u: { id: string }) => u.id);
+    const unitById = new Map<string, string>();
+    for (const u of units ?? []) {
+      const row = u as { id: string; unit_title: string };
+      unitById.set(row.id, row.unit_title);
+    }
+    const unitIds = [...unitById.keys()];
     const { data: videos } = await supabase
       .from("videos")
-      .select("id, title")
+      .select("id, title, unit_id")
       .in("unit_id", unitIds)
       .order("sort_order");
 
-    const { count: totalStudents } = await supabase
+    let studentCountQuery = supabase
       .from("students")
       .select("*", { count: "exact", head: true })
       .eq("is_active", true);
+    if (options.classId && options.classId !== "all") {
+      studentCountQuery = studentCountQuery.eq("class_name", options.classId);
+    }
+    const { count: totalStudents } = await studentCountQuery;
 
     const ts = totalStudents ?? 0;
+
+    let scopedStudentQuery = supabase
+      .from("students")
+      .select("id")
+      .eq("is_active", true);
+    if (options.classId && options.classId !== "all") {
+      scopedStudentQuery = scopedStudentQuery.eq("class_name", options.classId);
+    }
+    const { data: scopedStudents } = await scopedStudentQuery;
+    const scopedStudentIds = new Set(
+      (scopedStudents ?? []).map((s: { id: string }) => s.id),
+    );
+
     const out: VideoWatchStats[] = [];
+    const scopedIds = [...scopedStudentIds];
 
     for (const v of videos ?? []) {
-      const vid = v as { id: string; title: string };
-      const { data: vp } = await supabase
-        .from("student_video_progress")
-        .select("is_completed")
-        .eq("video_id", vid.id);
-      const completed = (vp ?? []).filter((x: { is_completed: boolean }) => x.is_completed)
-        .length;
+      const vid = v as { id: string; title: string; unit_id: string };
+      let progressRows: { student_id: string; is_completed: boolean }[] = [];
+      if (scopedIds.length > 0) {
+        const { data: vp } = await supabase
+          .from("student_video_progress")
+          .select("student_id, is_completed")
+          .eq("video_id", vid.id)
+          .in("student_id", scopedIds);
+        progressRows = (vp ?? []) as { student_id: string; is_completed: boolean }[];
+      }
+
+      const completed = progressRows.filter((x) => x.is_completed).length;
       const completionRate = ts === 0 ? 0 : Math.round((completed / ts) * 1000) / 10;
+
+      const { data: quiz } = await supabase
+        .from("quizzes")
+        .select("id")
+        .eq("video_id", vid.id)
+        .maybeSingle();
+
+      let avgQuizPassRate = 0;
+      if (quiz && scopedIds.length > 0) {
+        const quizId = (quiz as { id: string }).id;
+        const { data: att } = await supabase
+          .from("student_quiz_attempts")
+          .select("student_id, is_passed")
+          .eq("quiz_id", quizId)
+          .not("submitted_at", "is", null)
+          .in("student_id", scopedIds);
+
+        const attempts = (att ?? []) as { student_id: string; is_passed: boolean }[];
+        if (attempts.length > 0) {
+          const passed = attempts.filter((x: { is_passed: boolean }) => x.is_passed).length;
+          avgQuizPassRate = Math.round((passed / attempts.length) * 1000) / 10;
+        }
+      }
+
       out.push({
         videoId: vid.id,
         title: vid.title,
+        unitTitle: unitById.get(vid.unit_id) ?? "—",
         totalStudents: ts,
         completedCount: completed,
         completionRate,
+        avgQuizPassRate,
       });
     }
     return out;

@@ -1,0 +1,86 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useCallback, useState } from "react";
+import { LogOut } from "lucide-react";
+
+function IconHome({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M3 10.5L12 4l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5z"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function navLinkClass(active: boolean) {
+  return [
+    "interactive-nav relative flex min-h-11 items-center px-1 text-sm font-semibold transition sm:text-base",
+    active
+      ? "text-cyan-700 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:rounded-full after:bg-cyan-500"
+      : "text-slate-600 hover:text-cyan-800",
+  ].join(" ");
+}
+
+export function StudentTopNav() {
+  const pathname = usePathname() ?? "";
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  const onLogout = useCallback(async () => {
+    setLoggingOut(true);
+    try {
+      const res = await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+      if (!res.ok) throw new Error("logout failed");
+      window.location.assign("/login");
+    } catch {
+      setLoggingOut(false);
+      window.alert("登出失敗，請稍後再試。");
+    }
+  }, []);
+
+  const isOverview =
+    pathname === "/student/dashboard" ||
+    pathname.startsWith("/student/exam-scope/") ||
+    pathname.startsWith("/student/unit/") ||
+    pathname.startsWith("/student/video/") ||
+    pathname.startsWith("/student/lab") ||
+    pathname.startsWith("/student/quiz");
+
+  const isTasks = pathname.startsWith("/student/tasks");
+
+  return (
+    <header className="sticky top-0 z-30 border-b border-cyan-200/40 bg-white/80 px-4 pt-[env(safe-area-inset-top)] shadow-[0_4px_24px_-12px_rgba(14,165,233,0.15)] backdrop-blur-xl sm:px-6">
+      <nav className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 py-2.5 text-sm sm:gap-4 sm:text-base">
+        <Link
+          href="/student/dashboard#exam-scopes"
+          className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-cyan-200/70 bg-white/90 px-3 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-cyan-300 hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] sm:px-4 sm:text-base"
+        >
+          <IconHome className="h-5 w-5 shrink-0 text-cyan-600" />
+          學習首頁
+        </Link>
+        <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 sm:gap-x-8">
+          <Link href="/student/dashboard#exam-scopes" className={navLinkClass(isOverview && !isTasks)}>
+            學習總覽
+          </Link>
+          <Link href="/student/tasks" className={navLinkClass(isTasks)}>
+            學習任務
+          </Link>
+          <button
+            type="button"
+            onClick={() => void onLogout()}
+            disabled={loggingOut}
+            className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-slate-200/90 bg-white/85 px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-rose-300/80 hover:bg-rose-50/90 hover:text-rose-900 disabled:opacity-60 sm:px-4 sm:text-base"
+          >
+            <LogOut className="h-4 w-4 shrink-0" aria-hidden />
+            {loggingOut ? "登出中…" : "登出"}
+          </button>
+        </div>
+      </nav>
+    </header>
+  );
+}

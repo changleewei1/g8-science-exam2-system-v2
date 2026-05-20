@@ -1,4 +1,5 @@
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import exam3SkillTree from "../../data/g8_science_exam3_skill_tree.json";
 
 export type SkillStatus = "尚未開始" | "練習中" | "已達精熟" | "建議加強";
 
@@ -60,6 +61,21 @@ export const SKILL_NAME_MAP: Record<string, string> = {
   RS11: "條件改變下的速率比較",
 };
 
+type Exam3SkillTreeRow = { skill_code?: string; skill_name?: string };
+
+const EXAM3_SKILL_NAME_MAP: Record<string, string> = {};
+for (const row of exam3SkillTree as Exam3SkillTreeRow[]) {
+  const code = (row.skill_code ?? "").trim();
+  const name = (row.skill_name ?? "").trim();
+  if (code && name) EXAM3_SKILL_NAME_MAP[code] = name;
+}
+
+export type SkillNameSources = {
+  name?: string | null;
+  skill_name?: string | null;
+  title?: string | null;
+};
+
 function scoreToStatus(score: number, hasAnyAnswer: boolean): SkillStatus {
   if (!hasAnyAnswer) return "尚未開始";
   if (score >= 90) return "已達精熟";
@@ -84,10 +100,23 @@ function pickDifficulty(fromTag: string | null | undefined, fromBank: string[]):
   return "基礎";
 }
 
-export function resolveSkillName(code: string, name: string | undefined): string {
-  const trimmed = (name ?? "").trim();
-  if (!trimmed || trimmed === code) return SKILL_NAME_MAP[code] ?? code;
-  return trimmed;
+/** 顯示用技能名稱：優先 name → skill_name → title，再對照內建表，最後才回傳 code */
+export function resolveSkillName(
+  code: string,
+  nameOrSources?: string | SkillNameSources | null,
+): string {
+  const sources: SkillNameSources =
+    typeof nameOrSources === "string" ? { name: nameOrSources } : (nameOrSources ?? {});
+
+  for (const raw of [sources.name, sources.skill_name, sources.title]) {
+    const trimmed = (raw ?? "").trim();
+    if (trimmed && trimmed !== code) return trimmed;
+  }
+
+  const fromMap = SKILL_NAME_MAP[code] ?? EXAM3_SKILL_NAME_MAP[code];
+  if (fromMap?.trim() && fromMap.trim() !== code) return fromMap.trim();
+
+  return code;
 }
 
 export async function getStudentSkillTreeData(
@@ -250,7 +279,7 @@ export async function getStudentSkillTreeData(
 
     unit.skills.push({
       skill_code: code,
-      skill_name: resolveSkillName(code, tag?.name),
+      skill_name: resolveSkillName(code, { name: tag?.name }),
       category: normalizeCategory(tag?.category),
       difficulty: pickDifficulty(tag?.difficulty, bankInfo.difficulties),
       domain: tag?.domain ?? "chemistry",

@@ -1,4 +1,5 @@
 import { redirect, notFound } from "next/navigation";
+import { StudentLightTechBackground } from "@/components/student/StudentLightTechBackground";
 import { getVideoDetailUseCase } from "@/infrastructure/composition";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
 import { ensureExam3VideoQuizReady } from "@/lib/admin/ensure-exam3-video-quiz-ready";
@@ -29,18 +30,21 @@ export default async function VideoPage({ params, searchParams }: Props) {
   const quiz = data.quiz;
 
   return (
-    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
-      <VideoPageClient
-        unitId={v.unitId}
-        videoId={v.id}
-        youtubeVideoId={v.youtubeVideoId}
-        title={v.title}
-        initialPosition={progress?.lastPositionSeconds ?? 0}
-        quizId={quiz?.id ?? null}
-        canTakeQuiz={progress?.canTakeQuiz() ?? false}
-        fromTask={fromTask}
-        taskId={taskId}
-      />
-    </main>
+    <div className="relative min-h-[calc(100dvh-3.5rem)]">
+      <StudentLightTechBackground />
+      <main className="relative mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6 sm:py-10 md:max-w-6xl">
+        <VideoPageClient
+          unitId={v.unitId}
+          videoId={v.id}
+          youtubeVideoId={v.youtubeVideoId}
+          title={v.title}
+          initialPosition={progress?.lastPositionSeconds ?? 0}
+          quizId={quiz?.id ?? null}
+          canTakeQuiz={progress?.canTakeQuiz() ?? false}
+          fromTask={fromTask}
+          taskId={taskId}
+        />
+      </main>
+    </div>
   );
 }

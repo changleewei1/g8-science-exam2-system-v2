@@ -13,6 +13,7 @@ import {
   UserRound,
   X,
 } from "lucide-react";
+import type { HomeAnnouncementPayload } from "@/lib/system-announcement";
 import { HeroBackground } from "@/components/home/HeroBackground";
 import { HeroDecorations } from "@/components/home/HeroDecorations";
 import { Button } from "@/components/ui/button";
@@ -51,7 +52,7 @@ const fadeUp = {
   }),
 };
 
-export function HeroSection() {
+export function HeroSection({ announcement }: { announcement: HomeAnnouncementPayload }) {
   const reduceMotion = useReducedMotion();
   const [announceOpen, setAnnounceOpen] = useState(false);
 
@@ -254,13 +255,12 @@ export function HeroSection() {
               <X className="h-5 w-5" />
             </button>
             <h2 id="announce-title" className="text-lg font-semibold text-cyan-100">
-              系統公告
+              {announcement.title}
             </h2>
             <ul className="mt-4 space-y-3 text-sm leading-relaxed text-slate-300">
-              <li>國中理化 AI 智慧學習測試系統已開放第二次、第三次段考預習範圍。</li>
-              <li>學生請由「學生登入」進入，依段考範圍觀看影片並完成 AI 理解測驗。</li>
-              <li>老師請由「老師登入」查看班級學習進度與診斷數據。</li>
-              <li>如有帳號或技術問題，請洽名貫補習班櫃台。</li>
+              {announcement.items.map((line, i) => (
+                <li key={`${i}-${line.slice(0, 24)}`}>{line}</li>
+              ))}
             </ul>
             <Button variant="glass" className="mt-6 w-full" type="button" onClick={() => setAnnounceOpen(false)}>
               我知道了

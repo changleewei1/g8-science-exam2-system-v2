@@ -52,8 +52,8 @@ export function EditableQuestionCandidateCard(props: {
   }
 
   return (
-    <div className="rounded-xl border border-slate-200 p-3">
-      <p className="text-xs font-mono text-slate-600">
+    <div className="rounded-xl border border-white/10 p-3">
+      <p className="text-xs font-mono text-slate-400">
         {q.skill_code} · {q.difficulty}
       </p>
       <textarea value={text} onChange={(e) => setText(e.target.value)} className="mt-2 w-full rounded border px-2 py-1 text-sm" rows={2} />

@@ -24,9 +24,9 @@ function formatLastLearned(iso: string | null): string {
 
 export function StudentLearningOverviewTable({ rows, examScopeId }: Props) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-slate-200/90 bg-white shadow-md">
+    <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md shadow-[0_8px_36px_-16px_rgba(0,0,0,0.45)]">
       <table className="min-w-[720px] w-full text-left text-sm">
-        <thead className="bg-slate-100/90 text-slate-700">
+        <thead className="bg-white/[0.08]/90 text-slate-300">
           <tr>
             <th className="px-4 py-3 font-semibold">學生姓名</th>
             <th className="px-4 py-3 font-semibold">任務完成率</th>
@@ -39,29 +39,29 @@ export function StudentLearningOverviewTable({ rows, examScopeId }: Props) {
         <tbody>
           {rows.length === 0 ? (
             <tr>
-              <td colSpan={6} className="px-4 py-10 text-center text-slate-600">
-                <p className="font-medium text-slate-800">目前尚無學習資料</p>
-                <p className="mt-2 text-sm text-slate-600">
+              <td colSpan={6} className="px-4 py-10 text-center text-slate-400">
+                <p className="font-medium text-slate-200">目前尚無學習資料</p>
+                <p className="mt-2 text-sm text-slate-400">
                   待學生開始觀看影片與完成測驗後，系統將自動產生學習紀錄
                 </p>
               </td>
             </tr>
           ) : (
             rows.map((s) => (
-              <tr key={s.studentId} className="border-t border-slate-100 align-top">
+              <tr key={s.studentId} className="border-t border-white/10 align-top">
                 <td className="px-4 py-3">
-                  <span className="font-medium text-slate-900">{s.name}</span>
+                  <span className="font-medium text-slate-50">{s.name}</span>
                   <span className="mt-0.5 block font-mono text-xs text-slate-500">{s.studentCode}</span>
                   {s.className ? (
                     <span className="mt-0.5 block text-xs text-slate-500">{s.className} 班</span>
                   ) : null}
                 </td>
-                <td className="px-4 py-3 text-slate-800">
+                <td className="px-4 py-3 text-slate-200">
                   {s.taskCompletionRate == null ? "—" : `${s.taskCompletionRate}%`}
                 </td>
-                <td className="px-4 py-3 text-slate-800">{s.videoCompletionRate}%</td>
-                <td className="px-4 py-3 text-slate-800">{s.quizPassRate}%</td>
-                <td className="px-4 py-3 whitespace-nowrap text-slate-700">
+                <td className="px-4 py-3 text-slate-200">{s.videoCompletionRate}%</td>
+                <td className="px-4 py-3 text-slate-200">{s.quizPassRate}%</td>
+                <td className="px-4 py-3 whitespace-nowrap text-slate-300">
                   {formatLastLearned(s.lastActivityAt)}
                 </td>
                 <td className="px-4 py-3">

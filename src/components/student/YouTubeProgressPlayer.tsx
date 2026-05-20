@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { Play } from "lucide-react";
 
 declare global {
   interface Window {
@@ -122,14 +124,23 @@ export function YouTubeProgressPlayer({
   }, [apiLoaded, videoId, initialSeconds, onProgressSync, sync]);
 
   return (
-    <div className="space-y-3">
-      <h2 className="text-lg font-semibold text-slate-800">{title}</h2>
-      <div className="aspect-video w-full overflow-hidden rounded-xl bg-black shadow-md">
+    <motion.section
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="overflow-hidden rounded-3xl border border-cyan-200/60 bg-white/80 p-4 shadow-[0_8px_40px_-12px_rgba(14,165,233,0.22)] backdrop-blur-xl sm:p-6"
+    >
+      <div className="flex items-start gap-3">
+        <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-200 bg-gradient-to-br from-cyan-50 to-sky-50 text-cyan-700 shadow-inner">
+          <Play className="h-5 w-5 fill-current" aria-hidden />
+        </div>
+        <div className="min-w-0 flex-1">
+          <h2 className="text-lg font-bold text-slate-900 sm:text-xl">{title}</h2>
+          {!ready && <p className="mt-2 text-sm font-medium text-slate-500">正在載入播放器…</p>}
+        </div>
+      </div>
+      <div className="mt-4 aspect-video w-full overflow-hidden rounded-2xl bg-slate-950 shadow-inner ring-1 ring-cyan-200/30">
         <div ref={containerRef} className="h-full w-full" />
       </div>
-      {!ready && (
-        <p className="text-sm text-slate-500">正在載入播放器…</p>
-      )}
-    </div>
+    </motion.section>
   );
 }

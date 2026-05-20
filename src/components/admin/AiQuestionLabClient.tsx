@@ -70,9 +70,9 @@ function ProgressBar({ pct, success }: { pct: number; success?: boolean }) {
   const w = Math.max(0, Math.min(100, pct));
   return (
     <div className="space-y-1">
-      <div className="flex justify-between text-xs text-slate-600">
+      <div className="flex justify-between text-xs text-slate-400">
         <span>進度</span>
-        <span className="font-mono font-medium text-slate-800">{Math.round(w)}%</span>
+        <span className="font-mono font-medium text-slate-200">{Math.round(w)}%</span>
       </div>
       <div
         className={`relative h-2.5 w-full overflow-hidden rounded-full bg-slate-200/90 ${
@@ -471,16 +471,16 @@ export function AiQuestionLabClient() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6">
-      <div className="flex flex-col gap-4 rounded-2xl border border-teal-200/60 bg-gradient-to-br from-white via-teal-50/30 to-cyan-50/40 p-5 shadow-[0_0_40px_-12px_rgba(13,148,136,0.35)] sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 rounded-2xl border border-cyan-400/35/60 bg-gradient-to-br from-white via-teal-50/30 to-cyan-50/40 p-5 shadow-[0_0_40px_-12px_rgba(13,148,136,0.35)] sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl">AI 題庫管理中心</h1>
-          <p className="mt-1 max-w-2xl text-sm text-slate-600">
+          <h1 className="text-xl font-semibold tracking-tight text-slate-50 sm:text-2xl">AI 題庫管理中心</h1>
+          <p className="mt-1 max-w-2xl text-sm text-slate-400">
             第三次段考影片理解題：分析字幕、比對技能樹、產出 draft 候選；核准後學生端才會看到測驗。
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <span className="text-sm text-slate-600">
-            已選 <strong className="text-slate-900">{selectedCount}</strong> 部
+          <span className="text-sm text-slate-400">
+            已選 <strong className="text-slate-50">{selectedCount}</strong> 部
           </span>
           <button
             type="button"
@@ -502,56 +502,56 @@ export function AiQuestionLabClient() {
       ) : null}
       {err ? <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">{err}</p> : null}
 
-      <section className="rounded-2xl border border-slate-200/80 bg-white/90 p-4 shadow-sm backdrop-blur sm:p-5">
-        <div className="flex flex-wrap items-center gap-2 border-b border-slate-100 pb-4">
+      <section className="rounded-2xl border border-white/10 bg-white/[0.12] p-4 shadow-sm backdrop-blur sm:p-5">
+        <div className="flex flex-wrap items-center gap-2 border-b border-white/10 pb-4">
           <button
             type="button"
             onClick={selectAllVisible}
-            className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-100"
+            className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-200 hover:bg-white/[0.08]"
           >
             全選（目前載入）
           </button>
           <button
             type="button"
             onClick={clearSelection}
-            className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
+            className="rounded-lg border border-white/10 bg-white px-3 py-1.5 text-xs font-medium text-slate-300 hover:bg-white/[0.04]"
           >
             取消全選
           </button>
           <button
             type="button"
             onClick={selectUngenerated}
-            className="rounded-lg border border-teal-200 bg-teal-50/80 px-3 py-1.5 text-xs font-medium text-teal-900 hover:bg-teal-100"
+            className="rounded-lg border border-cyan-400/35 bg-cyan-500/10/80 px-3 py-1.5 text-xs font-medium text-cyan-100 hover:bg-teal-100"
           >
             只選未生成
           </button>
           <button
             type="button"
             onClick={() => void load()}
-            className="ml-auto rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
+            className="ml-auto rounded-lg border border-white/10 px-3 py-1.5 text-xs font-medium text-slate-300 hover:bg-white/[0.04]"
           >
             重新整理資料
           </button>
         </div>
 
-        <h2 className="mt-4 text-sm font-semibold text-slate-800">手動字幕（選填）</h2>
+        <h2 className="mt-4 text-sm font-semibold text-slate-200">手動字幕（選填）</h2>
         <p className="text-xs text-slate-500">分析／生成時一併送出；或於卡片按「儲存字幕」寫入該片。</p>
         <textarea
           value={subtitleDraft}
           onChange={(e) => setSubtitleDraft(e.target.value)}
           rows={4}
-          className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm font-mono"
+          className="mt-2 w-full rounded-xl border border-white/10 bg-white/[0.04]/50 px-3 py-2 text-sm font-mono"
           placeholder="VTT 或純文字…"
         />
       </section>
 
       <section className="space-y-4">
-        {loading ? <p className="text-slate-600">載入影片…</p> : null}
+        {loading ? <p className="text-slate-400">載入影片…</p> : null}
         {!loading &&
           displayed.map((v) => (
             <article
               key={v.id}
-              className="group flex min-h-[168px] flex-col gap-4 rounded-2xl border border-slate-200/90 bg-white/95 p-4 shadow-sm transition-shadow duration-300 [content-visibility:auto] hover:shadow-[0_12px_40px_-16px_rgba(15,23,42,0.18)] sm:p-5 lg:flex-row lg:items-stretch lg:gap-6"
+              className="group flex min-h-[168px] flex-col gap-4 rounded-2xl border border-white/10 bg-white/95 p-4 shadow-sm transition-shadow duration-300 [content-visibility:auto] hover:shadow-[0_12px_40px_-16px_rgba(15,23,42,0.18)] sm:p-5 lg:flex-row lg:items-stretch lg:gap-6"
             >
               <div className="flex min-w-0 flex-1 flex-col gap-2">
                 <div className="flex flex-wrap items-start gap-3">
@@ -559,27 +559,27 @@ export function AiQuestionLabClient() {
                     type="checkbox"
                     checked={selected.has(v.id)}
                     onChange={() => toggleSelect(v.id)}
-                    className="mt-1 size-4 shrink-0 rounded border-slate-300"
+                    className="mt-1 size-4 shrink-0 rounded border-white/15"
                     aria-label={`選取 ${v.title}`}
                   />
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-base font-semibold leading-snug text-slate-900">{v.title}</h3>
+                    <h3 className="text-base font-semibold leading-snug text-slate-50">{v.title}</h3>
                     <p className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs text-slate-500">
                       <span className="inline-flex items-center gap-1">
                         狀態
-                        <span className="rounded-full bg-slate-100 px-2 py-0.5 font-medium text-slate-700">
+                        <span className="rounded-full bg-white/[0.08] px-2 py-0.5 font-medium text-slate-300">
                           {v.status_label}
                         </span>
                       </span>
                       <span>{v.exam_scope_title} · {v.unit_title}</span>
                     </p>
-                    <p className="mt-1 font-mono text-xs text-slate-600 break-all">YouTube：{v.youtube_video_id}</p>
+                    <p className="mt-1 font-mono text-xs text-slate-400 break-all">YouTube：{v.youtube_video_id}</p>
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {v.skill_codes.length ? (
                         v.skill_codes.map((c) => (
                           <span
                             key={c}
-                            className="inline-block max-w-full break-all rounded-md bg-teal-50 px-2 py-0.5 text-xs font-mono text-teal-900 ring-1 ring-teal-100"
+                            className="inline-block max-w-full break-all rounded-md bg-cyan-500/10 px-2 py-0.5 text-xs font-mono text-cyan-100 ring-1 ring-cyan-400/30"
                           >
                             {c}
                           </span>
@@ -588,7 +588,7 @@ export function AiQuestionLabClient() {
                         <span className="text-xs text-amber-700">（尚無 skill tags）</span>
                       )}
                     </div>
-                    <p className="mt-2 text-xs text-slate-600">
+                    <p className="mt-2 text-xs text-slate-400">
                       題庫題數（概估）：<strong>{v.question_count_via_skills}</strong>
                       <span className="mx-2 text-slate-300">|</span>
                       draft 候選：<strong>{v.draft_candidate_count}</strong>
@@ -615,7 +615,7 @@ export function AiQuestionLabClient() {
                       document.getElementById("ai-lab-candidates")?.scrollIntoView({ behavior: "smooth" });
                     }, 0);
                   }}
-                  className="interactive-btn w-full rounded-xl border border-slate-200 bg-white py-2 text-center text-xs font-medium text-slate-800 shadow-sm"
+                  className="interactive-btn w-full rounded-xl border border-white/10 bg-white py-2 text-center text-xs font-medium text-slate-200 shadow-sm"
                 >
                   檢視候選
                 </button>
@@ -629,7 +629,7 @@ export function AiQuestionLabClient() {
                 </button>
                 <Link
                   href="/admin/video-skill-tags"
-                  className="interactive-btn flex w-full items-center justify-center rounded-xl border border-slate-200 bg-white py-2 text-center text-xs font-medium text-slate-800 shadow-sm"
+                  className="interactive-btn flex w-full items-center justify-center rounded-xl border border-white/10 bg-white py-2 text-center text-xs font-medium text-slate-200 shadow-sm"
                 >
                   編輯 skill
                 </Link>
@@ -649,14 +649,14 @@ export function AiQuestionLabClient() {
                 <button
                   type="button"
                   onClick={() => void saveSubtitleToVideo(v.id)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 text-center text-xs font-medium text-slate-800 hover:bg-slate-100"
+                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 text-center text-xs font-medium text-slate-200 hover:bg-white/[0.08]"
                 >
                   儲存字幕
                 </button>
                 <button
                   type="button"
                   onClick={() => void toggleActive(v, !v.is_active)}
-                  className="w-full rounded-xl border border-slate-200 py-2 text-center text-xs font-medium text-slate-800 hover:bg-slate-50"
+                  className="w-full rounded-xl border border-white/10 py-2 text-center text-xs font-medium text-slate-200 hover:bg-white/[0.04]"
                 >
                   {v.is_active ? "停用" : "啟用"}
                 </button>
@@ -668,22 +668,22 @@ export function AiQuestionLabClient() {
           <button
             type="button"
             onClick={() => setVisibleCount((n) => Math.min(n + PAGE_SIZE, videos.length))}
-            className="w-full rounded-xl border border-dashed border-slate-300 py-3 text-sm font-medium text-slate-600 hover:border-teal-400 hover:bg-teal-50/40 hover:text-teal-900"
+            className="w-full rounded-xl border border-dashed border-white/15 py-3 text-sm font-medium text-slate-400 hover:border-teal-400 hover:bg-cyan-500/10/40 hover:text-cyan-100"
           >
             載入更多（{visibleCount} / {videos.length}）
           </button>
         ) : null}
       </section>
 
-      <section id="ai-lab-candidates" className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
-        <h2 className="text-lg font-semibold text-slate-900">候選審核面板</h2>
-        <p className="mt-1 text-sm text-slate-600">
+      <section id="ai-lab-candidates" className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-4 shadow-sm sm:p-6">
+        <h2 className="text-lg font-semibold text-slate-50">候選審核面板</h2>
+        <p className="mt-1 text-sm text-slate-400">
           Skill 候選亦可至{" "}
-          <Link href="/admin/video-skill-review" className="text-teal-700 underline">
+          <Link href="/admin/video-skill-review" className="text-cyan-300 underline">
             影片技能候選審核
           </Link>
           ；題目候選至{" "}
-          <Link href="/admin/question-candidates" className="text-teal-700 underline">
+          <Link href="/admin/question-candidates" className="text-cyan-300 underline">
             題目候選審核
           </Link>
           。
@@ -691,21 +691,21 @@ export function AiQuestionLabClient() {
         {!focusedVideoId ? (
           <p className="mt-4 text-sm text-slate-500">請在上方卡片按「檢視候選」選定影片。</p>
         ) : (
-          <div className="mt-4 space-y-6 border-t border-slate-100 pt-4">
-            <p className="text-sm text-slate-700">
+          <div className="mt-4 space-y-6 border-t border-white/10 pt-4">
+            <p className="text-sm text-slate-300">
               對焦：<span className="font-mono text-xs">{focusedVideoId}</span>
             </p>
             <div>
-              <h3 className="text-sm font-semibold text-slate-800">Skill 候選（pending）</h3>
+              <h3 className="text-sm font-semibold text-slate-200">Skill 候選（pending）</h3>
               {skillCand.length === 0 ? (
                 <p className="mt-2 text-xs text-slate-500">目前無 pending</p>
               ) : (
                 <ul className="mt-2 space-y-2">
                   {skillCand.map((c) => (
-                    <li key={c.id} className="rounded-lg border border-slate-100 bg-slate-50 px-3 py-2 text-sm">
+                    <li key={c.id} className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm">
                       <span className="font-mono font-semibold">{c.suggested_skill_code}</span> {c.suggested_skill_name ?? ""}{" "}
                       <span className="text-xs text-slate-500">confidence {c.confidence ?? "-"}</span>
-                      <p className="text-xs text-slate-600">{c.reason ?? ""}</p>
+                      <p className="text-xs text-slate-400">{c.reason ?? ""}</p>
                       <div className="mt-2 flex flex-wrap gap-2">
                         <button
                           type="button"
@@ -739,7 +739,7 @@ export function AiQuestionLabClient() {
               )}
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-slate-800">題目候選（draft）</h3>
+              <h3 className="text-sm font-semibold text-slate-200">題目候選（draft）</h3>
               {qCand.length === 0 ? (
                 <p className="mt-2 text-xs text-slate-500">目前無草稿題</p>
               ) : (
@@ -769,8 +769,8 @@ export function AiQuestionLabClient() {
           aria-modal="true"
           aria-labelledby="batch-modal-title"
         >
-          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl">
-            <h2 id="batch-modal-title" className="text-lg font-semibold text-slate-900">
+          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md p-5 shadow-2xl">
+            <h2 id="batch-modal-title" className="text-lg font-semibold text-slate-50">
               批次生成中
             </h2>
             <ul className="mt-4 space-y-4">
@@ -778,11 +778,11 @@ export function AiQuestionLabClient() {
                 const row = batchRows[id];
                 const title = videos.find((x) => x.id === id)?.title ?? id;
                 return (
-                  <li key={id} className="rounded-xl border border-slate-100 bg-slate-50/80 p-3">
-                    <p className="text-sm font-medium text-slate-900 line-clamp-2">{title}</p>
+                  <li key={id} className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
+                    <p className="text-sm font-medium text-slate-50 line-clamp-2">{title}</p>
                     {row ? (
                       <>
-                        <p className="mt-1 text-xs text-slate-600">{row.label}</p>
+                        <p className="mt-1 text-xs text-slate-400">{row.label}</p>
                         <div className="mt-2">
                           <ProgressBar
                             pct={row.pct}
@@ -799,7 +799,7 @@ export function AiQuestionLabClient() {
               })}
             </ul>
             {batchSummary ? (
-              <p className="mt-4 rounded-lg bg-slate-100 px-3 py-2 text-sm text-slate-800">
+              <p className="mt-4 rounded-lg bg-white/[0.08] px-3 py-2 text-sm text-slate-200">
                 已完成：{batchSummary.ok}　失敗：{batchSummary.fail}
               </p>
             ) : null}
@@ -811,7 +811,7 @@ export function AiQuestionLabClient() {
                 setBatchRows({});
                 setBatchSummary(null);
               }}
-              className="interactive-btn mt-4 w-full rounded-xl border border-slate-200 py-2 text-sm font-medium text-slate-800 disabled:opacity-50"
+              className="interactive-btn mt-4 w-full rounded-xl border border-white/10 py-2 text-sm font-medium text-slate-200 disabled:opacity-50"
             >
               {batchRunning ? "請稍候…" : "關閉"}
             </button>

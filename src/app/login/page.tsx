@@ -1,8 +1,14 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
-import { HomeBackLink } from "@/components/ui/HomeBackLink";
+import { motion } from "framer-motion";
+import { GraduationCap, Home, LogIn } from "lucide-react";
 import { PasswordField } from "@/components/ui/PasswordField";
+import { StudentLightTechBackground } from "@/components/student/StudentLightTechBackground";
+
+const glassInputClass =
+  "min-h-11 w-full rounded-xl border border-slate-200/90 bg-white/80 px-3 py-2.5 text-base text-slate-900 shadow-inner outline-none transition placeholder:text-slate-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-200/60";
 
 export default function LoginPage() {
   const [code, setCode] = useState("");
@@ -38,7 +44,6 @@ export default function LoginPage() {
         setErr(data.error === "LOGIN_FAILED" ? "帳號或密碼錯誤，或帳號停用" : "登入失敗");
         return;
       }
-      // 完整導向：避免手機 Safari 在 fetch 後立即 client-side 導覽時 Cookie 尚未生效
       window.location.assign("/student/dashboard");
     } finally {
       setLoading(false);
@@ -46,50 +51,83 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-[100dvh] w-full max-w-md flex-col justify-center px-4 py-10 sm:px-6">
-      <div className="mb-6 flex justify-center sm:justify-start">
-        <HomeBackLink />
-      </div>
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-        <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">學生登入</h1>
-        <p className="mt-2 text-sm text-slate-600 sm:text-base">請輸入帳號（學號）與密碼</p>
-        <form onSubmit={onSubmit} className="mt-6 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-700">帳號（學號）</label>
-            <input
-              className="mt-1 min-h-11 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-base text-slate-900 outline-none ring-teal-500 focus:ring-2"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              placeholder="例：80121（請輸入數字學號，勿填姓名）"
-              autoComplete="username"
-              inputMode="numeric"
-              required
-            />
-            <p className="mt-1 text-xs text-slate-500">
-              系統以<strong className="font-medium text-slate-700">學號</strong>驗證身分，與密碼組合需與學校提供的一致。
-            </p>
-          </div>
-          <PasswordField
-            label="密碼"
-            value={password}
-            onChange={setPassword}
-            autoComplete="current-password"
-            hint={
-              <p className="text-xs text-slate-500">
-                未設定密碼的示範帳號可只填學號登入。
-              </p>
-            }
-          />
-          {err && <p className="text-sm text-red-600">{err}</p>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="interactive-btn min-h-12 w-full rounded-lg bg-teal-600 py-3 text-base font-medium text-white disabled:pointer-events-none disabled:opacity-60"
+    <div className="relative min-h-[100dvh]">
+      <StudentLightTechBackground />
+
+      <main className="relative mx-auto flex min-h-[100dvh] w-full max-w-md flex-col justify-center px-4 py-10 sm:px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 flex justify-center sm:justify-start"
+        >
+          <Link
+            href="/"
+            className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-cyan-200/70 bg-white/85 px-4 py-2.5 text-sm font-semibold text-cyan-900 shadow-[0_4px_20px_-8px_rgba(14,165,233,0.25)] backdrop-blur-sm transition hover:border-cyan-300 hover:bg-white hover:shadow-[0_8px_28px_-8px_rgba(34,211,238,0.3)]"
           >
-            {loading ? "登入中…" : "登入"}
-          </button>
-        </form>
-      </div>
-    </main>
+            <Home className="h-5 w-5 shrink-0 text-cyan-600" aria-hidden />
+            回到首頁
+          </Link>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.06, duration: 0.45 }}
+          className="rounded-3xl border border-cyan-200/60 bg-white/75 p-6 shadow-[0_12px_48px_-16px_rgba(14,165,233,0.28)] backdrop-blur-xl sm:p-8"
+        >
+          <div className="flex items-start gap-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-cyan-200 bg-gradient-to-br from-cyan-50 to-sky-50 text-cyan-700 shadow-inner">
+              <GraduationCap className="h-5 w-5" aria-hidden />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">學生登入</h1>
+              <p className="mt-1 text-sm text-slate-600 sm:text-base">請輸入帳號（學號）與密碼</p>
+            </div>
+          </div>
+
+          <form onSubmit={onSubmit} className="mt-6 space-y-5">
+            <div>
+              <label className="block text-sm font-semibold text-slate-800">帳號（學號）</label>
+              <input
+                className={`mt-1.5 ${glassInputClass}`}
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                placeholder="例：80121（請輸入數字學號，勿填姓名）"
+                autoComplete="username"
+                inputMode="numeric"
+                required
+              />
+              <p className="mt-1.5 text-xs leading-relaxed text-slate-500">
+                系統以<strong className="font-semibold text-slate-700">學號</strong>
+                驗證身分，與密碼組合需與學校提供的一致。
+              </p>
+            </div>
+            <PasswordField
+              label="密碼"
+              value={password}
+              onChange={setPassword}
+              autoComplete="current-password"
+              inputClassName={`${glassInputClass} pr-11`}
+              hint={
+                <p className="text-xs leading-relaxed text-slate-500">未設定密碼的示範帳號可只填學號登入。</p>
+              }
+            />
+            {err ? (
+              <p className="rounded-2xl border border-rose-200/80 bg-rose-50/90 px-3 py-2.5 text-sm font-medium text-rose-900">
+                {err}
+              </p>
+            ) : null}
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 to-sky-600 py-3 text-base font-semibold text-white shadow-[0_6px_28px_-6px_rgba(8,145,178,0.55)] transition hover:brightness-105 disabled:pointer-events-none disabled:opacity-55"
+            >
+              <LogIn className="h-5 w-5 opacity-90" aria-hidden />
+              {loading ? "登入中…" : "登入"}
+            </button>
+          </form>
+        </motion.div>
+      </main>
+    </div>
   );
 }

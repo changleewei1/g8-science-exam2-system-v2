@@ -98,6 +98,21 @@ async function loadScopeSkillDefs(scopeId: string): Promise<{ scopeTitle: string
     new Set([...(tagRows ?? []).map((t) => t.code as string), ...(bankRows ?? []).map((b) => b.skill_code as string)]),
   );
 
+  const videoSkillNameByCode = new Map<string, string>();
+  if (skillCodes.length > 0) {
+    const { data: vstRows, error: vstErr } = await supabase
+      .from("video_skill_tags")
+      .select("skill_code, skill_name")
+      .in("skill_code", skillCodes);
+    if (vstErr && !vstErr.message.includes("does not exist")) throw new Error(vstErr.message);
+    (vstRows ?? []).forEach((r) => {
+      const c = r.skill_code as string;
+      const n = (r.skill_name as string | null)?.trim() ?? "";
+      if (!n || n === c || videoSkillNameByCode.has(c)) return;
+      videoSkillNameByCode.set(c, n);
+    });
+  }
+
   const skills: SkillDef[] = [];
   for (const code of skillCodes.sort()) {
     const map = skillUnitMap.get(code);
@@ -107,7 +122,10 @@ async function loadScopeSkillDefs(scopeId: string): Promise<{ scopeTitle: string
     const tag = tagByCode.get(code);
     skills.push({
       skill_code: code,
-      skill_name: resolveSkillName(code, tag?.name),
+      skill_name: resolveSkillName(code, {
+        name: tag?.name,
+        skill_name: videoSkillNameByCode.get(code),
+      }),
       category: normalizeCategory(tag?.category),
       unit_id: uid,
       unit_name: map.unit_title,

@@ -19,8 +19,8 @@ export default async function AdminVideoQuizzesIndexPage() {
   if (!examScopeId) {
     return (
       <div className="rounded-2xl border border-amber-200/90 bg-amber-50/90 p-6 text-amber-950 shadow-md">
-        <p className="font-medium text-slate-900">尚未設定段考範圍</p>
-        <p className="mt-2 text-sm text-slate-700">請設定 NEXT_PUBLIC_DEFAULT_EXAM_SCOPE_ID 或於資料庫建立 scope。</p>
+        <p className="font-medium text-slate-50">尚未設定段考範圍</p>
+        <p className="mt-2 text-sm text-slate-300">請設定 NEXT_PUBLIC_DEFAULT_EXAM_SCOPE_ID 或於資料庫建立 scope。</p>
       </div>
     );
   }
@@ -51,33 +51,33 @@ export default async function AdminVideoQuizzesIndexPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold text-slate-900">影片測驗題</h1>
-        <p className="mt-2 text-sm text-slate-600">
+        <h1 className="text-2xl font-semibold text-slate-50">影片測驗題</h1>
+        <p className="mt-2 text-sm text-slate-400">
           依學習單元與播放順序列出影片；若有測驗即可編輯題目與正解（表單或頁面上方{" "}
-          <strong className="text-slate-800">JSON 批次編輯</strong>
+          <strong className="text-slate-200">JSON 批次編輯</strong>
           ，可增減題數）。儲存後學生端立即套用。
         </p>
         {scopeTitle ? (
           <p className="mt-2 text-xs text-slate-500">
-            段考範圍：<span className="font-medium text-slate-700">{scopeTitle}</span>
+            段考範圍：<span className="font-medium text-slate-300">{scopeTitle}</span>
           </p>
         ) : null}
       </div>
 
       <div className="space-y-10">
         {rows.map((block) => (
-          <section key={block.unitId} className="rounded-2xl border border-slate-200/90 bg-white shadow-md">
-            <h2 className="border-b border-slate-100 px-4 py-3 text-lg font-semibold text-slate-900 sm:px-5">
+          <section key={block.unitId} className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-md shadow-[0_8px_36px_-16px_rgba(0,0,0,0.45)]">
+            <h2 className="border-b border-white/10 px-4 py-3 text-lg font-semibold text-slate-50 sm:px-5">
               {block.unitTitle}
             </h2>
-            <ul className="divide-y divide-slate-100">
+            <ul className="divide-y divide-white/10">
               {block.videos.map((v) => (
                 <li
                   key={v.id}
                   className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5"
                 >
                   <div>
-                    <p className="font-medium text-slate-900">
+                    <p className="font-medium text-slate-50">
                       <span className="mr-2 text-xs font-normal text-slate-500">#{v.sortOrder}</span>
                       {v.title}
                     </p>
@@ -89,7 +89,7 @@ export default async function AdminVideoQuizzesIndexPage() {
                     {v.quizId ? (
                       <Link
                         href={`/admin/video-quizzes/edit/${v.quizId}`}
-                        className="interactive-btn inline-flex min-h-10 items-center rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm"
+                        className="interactive-btn inline-flex min-h-10 items-center rounded-lg bg-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm"
                       >
                         編輯 3 題測驗
                       </Link>

@@ -57,11 +57,11 @@ export function ReportShareInline({ studentId, taskId }: Props) {
         type="button"
         disabled={loading}
         onClick={() => void createParentLink()}
-        className="text-left text-xs font-medium text-slate-700 underline decoration-slate-400 underline-offset-2 disabled:opacity-50"
+        className="text-left text-xs font-medium text-slate-300 underline decoration-slate-400 underline-offset-2 disabled:opacity-50"
       >
         {loading ? "處理中…" : "產生家長連結"}
       </button>
-      {notice ? <span className="text-[10px] text-teal-800">{notice}</span> : null}
+      {notice ? <span className="text-[10px] text-cyan-200">{notice}</span> : null}
       {err ? <span className="text-[10px] text-red-600">{err}</span> : null}
     </span>
   );

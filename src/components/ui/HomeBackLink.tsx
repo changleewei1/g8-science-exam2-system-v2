@@ -16,16 +16,23 @@ function IconHome({ className }: { className?: string }) {
 type HomeBackLinkProps = {
   href?: string;
   children?: React.ReactNode;
+  /** 老師後台深色頂欄用 */
+  variant?: "light" | "dark";
 };
 
 /** 學生／老師區頂部「回到首頁」；學生區可改 href 指向學習首頁 */
-export function HomeBackLink({ href = "/", children = "回到首頁" }: HomeBackLinkProps) {
+export function HomeBackLink({ href = "/", children = "回到首頁", variant = "light" }: HomeBackLinkProps) {
+  const isDark = variant === "dark";
   return (
     <Link
       href={href}
-      className="interactive-btn inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm sm:px-4 sm:text-base"
+      className={
+        isDark
+          ? "inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm font-medium text-slate-100 shadow-sm backdrop-blur-sm transition-colors hover:border-cyan-400/35 hover:bg-white/10 sm:px-4 sm:text-base"
+          : "interactive-btn inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm sm:px-4 sm:text-base"
+      }
     >
-      <IconHome className="h-5 w-5 shrink-0 text-teal-700" />
+      <IconHome className={isDark ? "h-5 w-5 shrink-0 text-cyan-300" : "h-5 w-5 shrink-0 text-teal-700"} />
       {children}
     </Link>
   );
