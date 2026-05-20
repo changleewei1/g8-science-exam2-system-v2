@@ -17,6 +17,7 @@ export default async function StudentDashboardPage() {
   const data = await buildStudentDashboardPayload(
     session.studentId,
     student?.name ?? "同學",
+    student?.grade ?? 8,
     scopes,
     scopeUnits,
   );

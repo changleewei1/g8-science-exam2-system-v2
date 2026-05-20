@@ -20,3 +20,12 @@ export function resolvePublicOriginWithoutRequest(): string {
   );
 }
 
+/** 家長信連結用：不拋錯；若無法推斷則回傳空字串（由模板顯示提示文案）。 */
+export function resolveStudentAppBaseUrlSafe(): string {
+  try {
+    return resolvePublicOriginWithoutRequest();
+  } catch {
+    return "";
+  }
+}
+

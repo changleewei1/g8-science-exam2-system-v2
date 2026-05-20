@@ -17,7 +17,7 @@ export function SemesterSection({ title, cards, baseIndex = 0 }: Props) {
         initial={{ opacity: 0, x: -8 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        className="text-sm font-semibold text-cyan-100/90"
+        className="text-sm font-semibold tracking-wide text-teal-800"
       >
         {title}
       </motion.h3>

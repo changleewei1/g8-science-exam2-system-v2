@@ -19,17 +19,17 @@ export function GradeSection({ block, sectionIndex = 0 }: Props) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5, delay: sectionIndex * 0.05 }}
-      className="scroll-mt-24 space-y-6 rounded-3xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-sm sm:p-7"
+      className="scroll-mt-24 space-y-6 rounded-3xl border border-slate-200/90 bg-white/95 p-5 shadow-sm backdrop-blur-sm sm:p-7"
     >
       <motion.div
-        className="flex flex-wrap items-end justify-between gap-2 border-b border-white/10 pb-4"
+        className="flex flex-wrap items-end justify-between gap-2 border-b border-slate-200 pb-4"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
       >
         <div>
-          <h2 className="text-xl font-bold text-white sm:text-2xl">{block.gradeLabel}</h2>
-          <p className="mt-1 text-sm text-slate-400">
+          <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">{block.gradeLabel}</h2>
+          <p className="mt-1 text-sm text-slate-600">
             {openCount > 0 ? `已開放 ${openCount} 個段考範圍` : "目前尚無開放範圍，請留意老師公告"}
           </p>
         </div>

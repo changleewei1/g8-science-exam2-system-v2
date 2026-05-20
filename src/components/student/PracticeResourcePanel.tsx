@@ -16,8 +16,8 @@ export function PracticeResourcePanel({
   onPracticeNext,
   isMastered,
   skillCode,
-  returnHref = "/student/lab",
-  returnLabel = "返回技能樹練習",
+  returnHref = "/student/dashboard#learning-overview",
+  returnLabel = "回到學習總覽",
 }: PracticeResourcePanelProps) {
   const router = useRouter();
   const [videoHint, setVideoHint] = useState<string | null>(null);

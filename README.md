@@ -18,6 +18,17 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+## 老師學習追蹤（`/admin/video-tracking`）
+
+登入後 JWT 可帶入班級白名單（選用）。未設定時與舊版相同可查所有班級；設定後僅能開啟白名單內班級，且 `overview` API 會拒絕 `classId=all`。
+
+| 環境變數 | 說明 |
+|----------|------|
+| `TEACHER_TRACKING_LABEL` | 首頁標題用，預設 `國二理化` |
+| `TEACHER_TRACKING_CLASSES` | 逗號分隔班級代碼（對應 `students.class_name`），例：`801,802,803` |
+| `TEACHER_TRACKING_GRADE` | 篩選段考用年級文字，預設 `國二` |
+| `TEACHER_TRACKING_SUBJECT` | 篩選段考用科目，預設 `理化` |
+
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More

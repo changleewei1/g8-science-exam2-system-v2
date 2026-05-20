@@ -25,7 +25,11 @@ export default async function AdminStudentsIndexPage() {
       <div>
         <h1 className="text-2xl font-semibold text-slate-900">學生學習總覽</h1>
         <p className="mt-2 text-sm leading-relaxed text-slate-400">
-          查看每位學生的影片觀看進度與學習表現
+          查看每位學生的影片觀看進度與學習表現（舊版全校單一段考列表）。建議改由{" "}
+          <Link href="/admin/video-tracking" className="font-medium text-cyan-800 underline underline-offset-2">
+            學習追蹤首頁
+          </Link>{" "}
+          依班級進入。
         </p>
       </div>
 

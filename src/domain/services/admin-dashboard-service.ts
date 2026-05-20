@@ -1,5 +1,15 @@
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
 
+/** PostgREST 可能把 int/smallint 序列化成字串，不可只用 typeof === "number" */
+function parseDbSortOrder(value: unknown, fallback: number): number {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string" && value.trim() !== "") {
+    const n = Number(value);
+    if (Number.isFinite(n)) return n;
+  }
+  return fallback;
+}
+
 export type StudentOverviewRow = {
   studentId: string;
   studentCode: string;
@@ -17,6 +27,10 @@ export type VideoWatchStats = {
   videoId: string;
   title: string;
   unitTitle: string;
+  /** 對應 scope_units.sort_order，供單元排序 */
+  unitSortOrder: number;
+  /** 對應 videos.sort_order，供同單元內影片排序 */
+  videoSortOrder: number;
   totalStudents: number;
   completedCount: number;
   completionRate: number;
@@ -307,17 +321,20 @@ export class AdminDashboardService {
     const supabase = getSupabaseAdmin();
     const { data: units } = await supabase
       .from("scope_units")
-      .select("id, unit_title")
+      .select("id, unit_title, sort_order")
       .eq("exam_scope_id", examScopeId);
-    const unitById = new Map<string, string>();
+    const unitById = new Map<string, { title: string; sortOrder: number }>();
     for (const u of units ?? []) {
-      const row = u as { id: string; unit_title: string };
-      unitById.set(row.id, row.unit_title);
+      const row = u as { id: string; unit_title: string; sort_order: number | null };
+      unitById.set(row.id, {
+        title: row.unit_title,
+        sortOrder: parseDbSortOrder(row.sort_order, 9999),
+      });
     }
     const unitIds = [...unitById.keys()];
     const { data: videos } = await supabase
       .from("videos")
-      .select("id, title, unit_id")
+      .select("id, title, unit_id, sort_order")
       .in("unit_id", unitIds)
       .order("sort_order");
 
@@ -348,7 +365,11 @@ export class AdminDashboardService {
     const scopedIds = [...scopedStudentIds];
 
     for (const v of videos ?? []) {
-      const vid = v as { id: string; title: string; unit_id: string };
+      const vid = v as { id: string; title: string; unit_id: string; sort_order: number | null };
+      const unitMeta = unitById.get(vid.unit_id);
+      const unitTitle = unitMeta?.title ?? "—";
+      const unitSortOrder = unitMeta?.sortOrder ?? 9999;
+      const videoSortOrder = parseDbSortOrder(vid.sort_order, 9999);
       let progressRows: { student_id: string; is_completed: boolean }[] = [];
       if (scopedIds.length > 0) {
         const { data: vp } = await supabase
@@ -388,7 +409,9 @@ export class AdminDashboardService {
       out.push({
         videoId: vid.id,
         title: vid.title,
-        unitTitle: unitById.get(vid.unit_id) ?? "—",
+        unitTitle,
+        unitSortOrder,
+        videoSortOrder,
         totalStudents: ts,
         completedCount: completed,
         completionRate,

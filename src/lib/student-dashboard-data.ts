@@ -115,9 +115,18 @@ async function enrichOpenCard(
   return { completionRate, masteredSkills, totalSkills, averageMastery };
 }
 
+function collectSpringExam2And3Options(
+  springCards: ExamCard[],
+): { id: string; label: string }[] {
+  return springCards
+    .filter((c) => c.isOpen && (c.exam === "第二次段考" || c.exam === "第三次段考"))
+    .map((c) => ({ id: c.id, label: `${c.semester} · ${c.exam}` }));
+}
+
 export async function buildStudentDashboardPayload(
   studentId: string,
   studentName: string,
+  studentGrade: number,
   scopes: ExamScope[],
   scopeUnits: ScopeUnitRepository,
 ): Promise<StudentDashboardPayload> {
@@ -223,5 +232,10 @@ export async function buildStudentDashboardPayload(
     { gradeLabel: "國三理化 AI 學習", gradeNumber: 9, fall: g9Fall, spring: g9Spring },
   ];
 
-  return { studentName, summary, hero, grades };
+  const myGradeBlock = grades.find((g) => g.gradeNumber === studentGrade);
+  const overviewScopeOptions = collectSpringExam2And3Options(myGradeBlock?.spring ?? []);
+  const defaultOverviewScopeId =
+    overviewScopeOptions[0]?.id ?? hero.recommendedScopeId ?? openCards[0]?.id ?? null;
+
+  return { studentName, summary, hero, grades, overviewScopeOptions, defaultOverviewScopeId };
 }

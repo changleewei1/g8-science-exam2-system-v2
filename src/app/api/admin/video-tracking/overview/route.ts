@@ -17,6 +17,18 @@ export async function GET(req: Request) {
   const classId = url.searchParams.get("classId") ?? "all";
   const keyword = url.searchParams.get("keyword") ?? "";
 
+  if (admin.allowedClasses?.length) {
+    if (classId === "all") {
+      return NextResponse.json(
+        { error: "CLASS_REQUIRED", message: "已啟用班級限制，請指定班級代碼。" },
+        { status: 400 },
+      );
+    }
+    if (!admin.allowedClasses.includes(classId)) {
+      return NextResponse.json({ error: "FORBIDDEN_CLASS" }, { status: 403 });
+    }
+  }
+
   const options = {
     classId,
     keyword: keyword.trim() || undefined,

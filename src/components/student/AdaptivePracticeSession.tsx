@@ -38,13 +38,18 @@ type AdaptivePracticeSessionProps = {
   skillLabel: string;
   /** 預設：智慧練習 API */
   apiBase?: string;
-  /** 預設：返回智慧練習首頁 */
+  /** 預設：學習總覽（個人總覽區塊） */
   backHref?: string;
 };
 
 export function AdaptivePracticeSession(props: AdaptivePracticeSessionProps) {
-  const { skillCode, skillLabel, apiBase = "/api/lab/practice", backHref = "/student/lab" } = props;
-  const returnLabel = backHref.includes("/student/exam-scope/") ? "返回技能樹練習" : "返回智慧練習首頁";
+  const {
+    skillCode,
+    skillLabel,
+    apiBase = "/api/lab/practice",
+    backHref = "/student/dashboard#learning-overview",
+  } = props;
+  const returnLabel = backHref.includes("/student/exam-scope/") ? "返回技能樹練習" : "回到學習總覽";
 
   const [fatalError, setFatalError] = useState<string | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);

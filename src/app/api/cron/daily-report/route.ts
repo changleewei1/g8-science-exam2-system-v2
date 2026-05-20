@@ -1,9 +1,14 @@
 import { NextResponse } from "next/server";
 
+import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
 import { getEnv } from "@/lib/env";
-import { sendDailyReportEmail } from "@/lib/notifications/sendDailyReportEmail";
-import { buildDailyOverviewReport } from "@/lib/report/buildDailyOverviewReport";
-import { buildTaskTrackingReport } from "@/lib/report/buildTaskTrackingReport";
+import { buildDailyOverviewPayload } from "@/lib/report/buildDailyOverviewPayload";
+import { buildParentDailyEmailReport } from "@/lib/report/buildParentDailyEmailReport";
+import { buildTeacherDailyEmailReport } from "@/lib/report/buildTeacherDailyEmailReport";
+import {
+  sendParentDailyReportEmail,
+  sendTeacherDailyReportEmail,
+} from "@/lib/report/sendDailyReportEmail";
 
 export const runtime = "nodejs";
 
@@ -20,75 +25,13 @@ function isAuthorized(req: Request): boolean {
   return auth === `Bearer ${cronSecret}`;
 }
 
-async function runDailyReport() {
-  const resendApiKey = getEnv("RESEND_API_KEY") as string;
-  const adminEmail = getEnv("ADMIN_NOTIFY_EMAIL") as string;
-  const emailFrom = getEnv("EMAIL_FROM") as string;
-
-  const warnings: string[] = [];
-
-  let dailyHtml = "";
-  let dailyContent = "";
-  let dailyWarnings: string[] = [];
-  let dailyTitle = "【國二理化】每日學習分析總覽";
-  try {
-    const daily = await buildDailyOverviewReport();
-    dailyTitle = daily.title;
-    dailyHtml = daily.html;
-    dailyContent = daily.content;
-    dailyWarnings = daily.warnings;
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    warnings.push(`每日總覽產生失敗：${msg}`);
-  }
-
-  let taskHtml = "";
-  let taskWarnings: string[] = [];
-  let taskCount = 0;
-  let hasRecentTasks = false;
-  try {
-    const task = await buildTaskTrackingReport();
-    hasRecentTasks = task.hasRecentTasks;
-    taskHtml = task.html;
-    taskWarnings = task.warnings;
-    taskCount = task.tasks.length;
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    warnings.push(`任務追蹤產生失敗：${msg}`);
-  }
-
-  warnings.push(...dailyWarnings, ...taskWarnings);
-
-  const warningHtml = warnings.length
-    ? `<div style="margin-top:12px;color:#9a3412"><strong>系統提醒：</strong><ul>${warnings
-        .map((w) => `<li>${w.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")}</li>`)
-        .join("")}</ul></div>`
-    : "";
-
-  const content = `
-${dailyContent || dailyHtml || "今日無法產生每日總覽。"}
-${taskHtml && hasRecentTasks ? `\n\n━━━━━━━━━━━━━━━━━━\n\n${taskHtml}` : ""}
-${warningHtml ? `\n\n${warningHtml}` : ""}
-  `.trim();
-
-  const subject = taskCount > 0 ? `${dailyTitle}（含任務追蹤 ${taskCount} 筆）` : dailyTitle;
-
-  const emailResult = await sendDailyReportEmail({
-    resendApiKey,
-    from: emailFrom,
-    to: adminEmail,
-    subject,
-    content,
-  });
-
-  return {
-    ok: true,
-    emailId: emailResult.id ?? null,
-    totals: {
-      taskCount,
-    },
-    warnings,
-  };
+function parseBoolParam(url: URL, key: string, defaultValue: boolean): boolean {
+  const raw = url.searchParams.get(key);
+  if (raw === null) return defaultValue;
+  const v = raw.trim().toLowerCase();
+  if (v === "true" || v === "1" || v === "yes") return true;
+  if (v === "false" || v === "0" || v === "no") return false;
+  return defaultValue;
 }
 
 export async function GET(req: Request) {
@@ -103,26 +46,135 @@ export async function GET(req: Request) {
     );
   }
 
-  const envCheck = requireEnvList([
-    "CRON_SECRET",
-    "RESEND_API_KEY",
-    "ADMIN_NOTIFY_EMAIL",
-    "EMAIL_FROM",
-  ]);
-  if (!envCheck.ok) {
+  const url = new URL(req.url);
+  const sendTeacherReport = parseBoolParam(url, "sendTeacherReport", true);
+  const sendParentReports = parseBoolParam(url, "sendParentReports", false);
+
+  if (!sendTeacherReport && !sendParentReports) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "NOOP",
+        message: "sendTeacherReport 與 sendParentReports 不可同時為 false。",
+      },
+      { status: 400 },
+    );
+  }
+
+  const transactionalEnv = requireEnvList(["RESEND_API_KEY", "EMAIL_FROM"]);
+  if (!transactionalEnv.ok) {
     return NextResponse.json(
       {
         ok: false,
         error: "MISSING_ENV",
-        message: `系統設定未完成，缺少環境變數：${envCheck.missing.join(", ")}`,
+        message: `系統設定未完成，缺少環境變數：${transactionalEnv.missing.join(", ")}`,
       },
       { status: 500 },
     );
   }
 
+  if (sendTeacherReport) {
+    const adminEnv = requireEnvList(["ADMIN_NOTIFY_EMAIL"]);
+    if (!adminEnv.ok) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "MISSING_ENV",
+          message: `寄送老師版需要：${adminEnv.missing.join(", ")}`,
+        },
+        { status: 500 },
+      );
+    }
+  }
+
+  const cronSecret = getEnv("CRON_SECRET");
+  if (!cronSecret) {
+    return NextResponse.json(
+      { ok: false, error: "MISSING_ENV", message: "缺少環境變數：CRON_SECRET" },
+      { status: 500 },
+    );
+  }
+
+  const resendApiKey = getEnv("RESEND_API_KEY") as string;
+  const emailFrom = getEnv("EMAIL_FROM") as string;
+  const adminEmail = getEnv("ADMIN_NOTIFY_EMAIL");
+
+  const parentStats = {
+    success: 0,
+    failed: 0,
+    skipped: 0,
+    errors: [] as string[],
+  };
+
+  let teacherEmailId: string | null = null;
+  let teacherSubject: string | null = null;
+
   try {
-    const result = await runDailyReport();
-    return NextResponse.json(result);
+    if (sendTeacherReport) {
+      const teacherReport = await buildTeacherDailyEmailReport();
+      const baseSubject = teacherReport.mailTitle;
+      teacherSubject =
+        teacherReport.taskCount > 0 ? `${baseSubject}（含任務追蹤 ${teacherReport.taskCount} 筆）` : baseSubject;
+      const sent = await sendTeacherDailyReportEmail({
+        resendApiKey,
+        from: emailFrom,
+        to: adminEmail!,
+        subject: teacherSubject,
+        report: teacherReport,
+      });
+      teacherEmailId = sent.id ?? null;
+    }
+
+    let sharedPayload: Awaited<ReturnType<typeof buildDailyOverviewPayload>> | null = null;
+    if (sendParentReports) {
+      const supabase = getSupabaseAdmin();
+      sharedPayload = await buildDailyOverviewPayload();
+
+      const { data: rows } = await supabase
+        .from("students")
+        .select("id, parent_email, is_active")
+        .eq("is_active", true);
+
+      for (const r of rows ?? []) {
+        const row = r as { id: string; parent_email: string | null };
+        const pe = (row.parent_email ?? "").trim();
+        if (!pe) {
+          parentStats.skipped += 1;
+          continue;
+        }
+
+        const built = await buildParentDailyEmailReport(row.id, sharedPayload);
+        if (!built.ok) {
+          parentStats.skipped += 1;
+          continue;
+        }
+
+        try {
+          await sendParentDailyReportEmail({
+            resendApiKey,
+            from: emailFrom,
+            to: built.data.toEmail,
+            subject: built.data.subject,
+            report: built.data,
+          });
+          parentStats.success += 1;
+        } catch (e) {
+          parentStats.failed += 1;
+          const msg = e instanceof Error ? e.message : String(e);
+          parentStats.errors.push(`${row.id}: ${msg}`);
+        }
+      }
+    }
+
+    return NextResponse.json({
+      ok: true,
+      sendTeacherReport,
+      sendParentReports,
+      teacher: sendTeacherReport
+        ? { emailId: teacherEmailId, subject: teacherSubject }
+        : { skipped: true },
+      parentEmails: sendParentReports ? parentStats : { skipped: true },
+    });
   } catch (error) {
     const message = error instanceof Error ? error.message : "未知錯誤";
     return NextResponse.json(

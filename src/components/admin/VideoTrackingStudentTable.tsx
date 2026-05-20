@@ -54,7 +54,7 @@ export function VideoTrackingStudentTable({ rows, examScopeId }: Props) {
                 className="border-t border-slate-100 align-top transition-colors hover:bg-slate-50"
               >
                 <td className="px-4 py-4">
-                  <p className="font-semibold text-white">{s.name}</p>
+                  <p className="font-semibold text-slate-900">{s.name}</p>
                   <p className="mt-0.5 font-mono text-xs text-slate-400">{s.studentCode}</p>
                   {s.className ? (
                     <span className="mt-2 inline-flex rounded-md border border-cyan-400/30 bg-cyan-500/10 px-2 py-0.5 text-xs font-medium text-cyan-800">

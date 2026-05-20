@@ -6,6 +6,7 @@ import { DashboardHashScroll } from "@/components/student/DashboardHashScroll";
 import { DashboardHero } from "@/components/student/dashboard/DashboardHero";
 import { DashboardTechBackground } from "@/components/student/dashboard/DashboardTechBackground";
 import { GradeSection } from "@/components/student/dashboard/GradeSection";
+import { PersonalLearningOverview } from "@/components/student/dashboard/PersonalLearningOverview";
 import { SummaryCard } from "@/components/student/dashboard/SummaryCard";
 import type { StudentDashboardPayload } from "@/lib/student-dashboard-types";
 
@@ -14,7 +15,7 @@ type Props = {
 };
 
 export function StudentDashboard({ data }: Props) {
-  const { summary, hero, grades, studentName } = data;
+  const { summary, hero, grades, studentName, overviewScopeOptions, defaultOverviewScopeId } = data;
 
   return (
     <>
@@ -29,10 +30,10 @@ export function StudentDashboard({ data }: Props) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="mt-8"
+            className="mt-8 rounded-3xl border border-slate-200/90 bg-white/95 p-5 shadow-sm backdrop-blur-sm sm:p-6"
             aria-labelledby="summary-heading"
           >
-            <h2 id="summary-heading" className="mb-4 text-sm font-semibold uppercase tracking-wider text-cyan-200/80">
+            <h2 id="summary-heading" className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-600">
               學習進度總覽
             </h2>
             <motion.div
@@ -74,6 +75,23 @@ export function StudentDashboard({ data }: Props) {
                 index={3}
               />
             </motion.div>
+          </motion.section>
+
+          <motion.section
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.05 }}
+            className="mt-10"
+            aria-labelledby="personal-overview-heading"
+          >
+            <h2 id="personal-overview-heading" className="sr-only">
+              個人學習總覽
+            </h2>
+            <PersonalLearningOverview
+              initialScopeId={defaultOverviewScopeId}
+              scopeOptions={overviewScopeOptions}
+            />
           </motion.section>
 
           <div className="mt-10 space-y-10">

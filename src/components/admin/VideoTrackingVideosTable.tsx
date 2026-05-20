@@ -31,7 +31,7 @@ function VideoRow({ video }: { video: VideoLearningItem }) {
   return (
     <tr className="border-t border-slate-100 transition-colors hover:bg-slate-50">
       <td className="max-w-[min(360px,40vw)] px-4 py-3.5 pl-6 sm:pl-8">
-        <p className="line-clamp-2 text-sm font-medium text-white" title={video.title}>
+        <p className="line-clamp-2 text-sm font-medium text-slate-900" title={video.title}>
           {video.title}
         </p>
       </td>
@@ -91,7 +91,7 @@ function UnitAccordionCard({
             <Film className="h-5 w-5" />
           </span>
           <div className="min-w-0">
-            <h3 className="text-base font-bold text-white sm:text-lg">【{group.unitName}】</h3>
+            <h3 className="text-base font-bold text-slate-900 sm:text-lg">【{group.unitName}】</h3>
             <p className="mt-1 text-xs text-slate-500">影片數：{group.videoCount}</p>
           </div>
         </div>
@@ -100,9 +100,9 @@ function UnitAccordionCard({
           <UnitSummaryStat label="平均完成率">
             <span
               className={cn(
-                completionTier === "low" && "text-amber-300",
+                completionTier === "low" && "text-amber-800",
                 completionTier === "mid" && "text-cyan-800",
-                completionTier === "high" && "text-emerald-300",
+                completionTier === "high" && "text-emerald-800",
               )}
             >
               {group.averageCompletionRate}%
@@ -111,9 +111,9 @@ function UnitAccordionCard({
           <UnitSummaryStat label="平均測驗表現">
             <span
               className={cn(
-                quizTier === "low" && "text-amber-300",
-                quizTier === "mid" && "text-violet-200",
-                quizTier === "high" && "text-emerald-300",
+                quizTier === "low" && "text-amber-800",
+                quizTier === "mid" && "text-violet-800",
+                quizTier === "high" && "text-emerald-800",
               )}
             >
               {group.averageQuizScore}%
@@ -147,7 +147,7 @@ function UnitAccordionCard({
             <div className="border-t border-slate-200 bg-slate-100 px-2 py-2 sm:px-3 sm:py-3">
               <div className="overflow-x-auto rounded-xl border border-slate-200/60 bg-slate-50">
                 <table className="min-w-[720px] w-full text-left text-sm">
-                  <thead className="bg-slate-50/80 text-xs text-slate-400">
+                  <thead className="bg-slate-50/80 text-xs font-semibold text-slate-600">
                     <tr>
                       <th className="px-4 py-2.5 pl-6 font-semibold sm:pl-8">影片名稱</th>
                       <th className="px-4 py-2.5 font-semibold">完成人數</th>

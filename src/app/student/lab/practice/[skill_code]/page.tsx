@@ -23,8 +23,10 @@ export default async function StudentLabPracticePage({
   const sp = (await searchParams) ?? {};
   const scopeIdRaw = sp.scopeId;
   const scopeId = (Array.isArray(scopeIdRaw) ? scopeIdRaw[0] : scopeIdRaw)?.trim() || "";
-  const backHref = scopeId ? `/student/exam-scope/${encodeURIComponent(scopeId)}/skills` : "/student/lab";
-  const backLabel = scopeId ? "返回段考技能樹" : "返回智慧練習首頁";
+  const backHref = scopeId
+    ? `/student/exam-scope/${encodeURIComponent(scopeId)}/skills`
+    : "/student/dashboard#learning-overview";
+  const backLabel = scopeId ? "返回段考技能樹" : "回到學習總覽";
 
   const { skill_code: raw } = await params;
   const skillCode = decodeURIComponent(raw).trim();

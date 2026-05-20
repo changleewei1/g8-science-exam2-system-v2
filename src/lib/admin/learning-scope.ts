@@ -53,7 +53,7 @@ export function examLabelToNumber(exam: string): number | null {
   return null;
 }
 
-function subjectMatches(scopeSubject: string, filterSubject: string): boolean {
+export function subjectMatches(scopeSubject: string, filterSubject: string): boolean {
   const s = scopeSubject.toLowerCase();
   if (filterSubject === "理化") {
     return s.includes("理化") || s.includes("自然");

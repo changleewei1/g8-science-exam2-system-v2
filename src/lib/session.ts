@@ -16,6 +16,10 @@ export type StudentSessionPayload = {
 
 export type AdminSessionPayload = {
   role: "admin";
+  /** 有值時：老師僅可查看這些 students.class_name */
+  allowedClasses?: string[];
+  /** 首頁顯示用，例如「國二理化」 */
+  teacherLabel?: string;
 };
 
 export async function signStudentSession(studentId: string): Promise<string> {
@@ -25,8 +29,13 @@ export async function signStudentSession(studentId: string): Promise<string> {
     .sign(getSecret());
 }
 
-export async function signAdminSession(): Promise<string> {
-  return new SignJWT({ role: "admin" })
+export async function signAdminSession(
+  claims?: Partial<Pick<AdminSessionPayload, "allowedClasses" | "teacherLabel">>,
+): Promise<string> {
+  const payload: Record<string, unknown> = { role: "admin" };
+  if (claims?.teacherLabel) payload.teacherLabel = claims.teacherLabel;
+  if (claims?.allowedClasses?.length) payload.allowedClasses = claims.allowedClasses;
+  return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setExpirationTime("1d")
     .sign(getSecret());
@@ -46,7 +55,15 @@ export async function verifyAdminToken(token: string): Promise<AdminSessionPaylo
   try {
     const { payload } = await jwtVerify(token, getSecret());
     if (payload.role !== "admin") return null;
-    return { role: "admin" };
+    const out: AdminSessionPayload = { role: "admin" };
+    if (typeof payload.teacherLabel === "string" && payload.teacherLabel.trim()) {
+      out.teacherLabel = payload.teacherLabel.trim();
+    }
+    if (Array.isArray(payload.allowedClasses) && payload.allowedClasses.length > 0) {
+      const list = payload.allowedClasses.filter((x): x is string => typeof x === "string").map((s) => s.trim());
+      if (list.length > 0) out.allowedClasses = list;
+    }
+    return out;
   } catch {
     return null;
   }
