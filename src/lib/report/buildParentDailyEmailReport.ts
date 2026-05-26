@@ -1,4 +1,10 @@
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import {
+  DEFAULT_PARENT_SECTIONS,
+  loadTeacherReportPreferences,
+  mergeDailyReportPayloadOptionsFromPreferences,
+  type ParentEmailSectionKey,
+} from "@/lib/admin/teacher-report-preferences";
 import { getStudentWeakSkillSummaries } from "@/lib/report/analysis";
 import type { DailyOverviewPayload } from "@/lib/report/buildDailyOverviewPayload";
 import { buildDailyOverviewPayload } from "@/lib/report/buildDailyOverviewPayload";
@@ -14,17 +20,32 @@ export type ParentDailyEmailReportData = {
   studentName: string;
   classDisplay: string;
   examScopeTitle: string;
+  parentSectionVisibility: Record<ParentEmailSectionKey, boolean>;
+  teacherMessage: string | null;
   completionRate: number;
   classAveragePercent: number | null;
   todayWatchedVideos: number;
   todayAnsweredQuestions: number;
   todayAccuracyPercent: number | null;
+  incompleteVideosHint: string;
   weakSkillLines: string[];
   weakSkillsInsufficient: boolean;
   recommendedVideoTitle: string;
   recommendedSkillLabel: string;
   studentLoginUrl: string;
   toneMode: ParentToneMode;
+};
+
+export type BuildParentDailyEmailReportOptions = {
+  /** 指定段考 scope（與 sharedPayload 不同時會重算 payload） */
+  examScopeId?: string | null;
+  /** 覆寫家長信區塊 */
+  parentSectionsOverride?: Partial<Record<ParentEmailSectionKey, boolean>>;
+  /** cron 已載入之完整區塊（若提供則不再查 teacher_report_preferences） */
+  parentSectionsResolved?: Record<ParentEmailSectionKey, boolean>;
+  /** 預覽用：無 parent_email 時仍組出 HTML（不可搭配實際寄送） */
+  previewBypassMissingParentEmail?: boolean;
+  teacherMessage?: string | null;
 };
 
 function parseSort(v: unknown, fallback: number): number {
@@ -81,10 +102,12 @@ export type BuildParentReportSuccess = { ok: true; data: ParentDailyEmailReportD
 
 /**
  * 家長版：僅單一學生視角。若未傳入 sharedPayload，會自行載入全班 payload（較慢，cron 建議共用一筆）。
+ * 不含其他學生姓名、全班排名、後台連結；內容區塊依 parentSectionVisibility。
  */
 export async function buildParentDailyEmailReport(
   studentId: string,
   sharedPayload?: DailyOverviewPayload,
+  options?: BuildParentDailyEmailReportOptions,
 ): Promise<BuildParentReportSuccess | BuildParentReportFailure> {
   const supabase = getSupabaseAdmin();
   const { data: raw } = await supabase
@@ -109,17 +132,50 @@ export async function buildParentDailyEmailReport(
     return { ok: false, reason: "INACTIVE", message: "學生已停用，不寄送家長信。" };
   }
   const toEmail = (st.parent_email ?? "").trim();
-  if (!toEmail) {
+  const previewBypass = options?.previewBypassMissingParentEmail === true;
+  if (!toEmail && !previewBypass) {
     return {
       ok: false,
       reason: "NO_PARENT_EMAIL",
       message: "此學生尚未設定 parent_email，已跳過家長摘要。",
     };
   }
+  const resolvedToEmail = toEmail || "(尚未設定家長信箱)";
 
-  const p = sharedPayload ?? (await buildDailyOverviewPayload());
+  const prefs = await loadTeacherReportPreferences();
+  const parentVis: Record<ParentEmailSectionKey, boolean> = {
+    ...DEFAULT_PARENT_SECTIONS,
+    ...(options?.parentSectionsResolved ?? prefs.parentSections),
+    ...(options?.parentSectionsOverride ?? {}),
+  };
+
+  let p = sharedPayload ?? null;
+  const scopeOverride = options?.examScopeId?.trim();
+  if (scopeOverride) {
+    if (!p || p.examScopeId !== scopeOverride) {
+      const unitIdsForPayload =
+        prefs.selectedScopeId &&
+        scopeOverride === prefs.selectedScopeId &&
+        prefs.selectedUnitIds.length > 0
+          ? prefs.selectedUnitIds
+          : undefined;
+      p = await buildDailyOverviewPayload({ examScopeId: scopeOverride, scopeUnitIds: unitIdsForPayload });
+    }
+  } else if (!p) {
+    p = await buildDailyOverviewPayload(mergeDailyReportPayloadOptionsFromPreferences(prefs, null));
+  }
+
   const mine = p.studentCompletions.find((s) => s.studentId === studentId);
   const completionRate = mine?.overallCompletion ?? 0;
+  const incompleteVideosHint =
+    p.scopeVideoTotal > 0
+      ? (() => {
+          const left = Math.max(0, p.scopeVideoTotal - (mine?.completedVideos ?? 0));
+          return left > 0
+            ? `此段考範圍尚有 ${left} 部預習影片尚未標記為完成，建議依序觀看。`
+            : "此段考範圍內的預習影片皆已標記完成，可安排複習與測驗。";
+        })()
+      : "段考範圍尚未建立影片資料。";
 
   let classAveragePercent: number | null = null;
   if (st.class_name) {
@@ -158,22 +214,25 @@ export async function buildParentDailyEmailReport(
   let todayAnsweredQuestions = 0;
   let todayCorrect = 0;
   try {
-    const { data: attempts } = await supabase
-      .from("student_quiz_attempts")
-      .select("id")
-      .eq("student_id", studentId)
-      .not("submitted_at", "is", null);
-    const attemptIds = (attempts ?? []).map((a: { id: string }) => a.id);
-    if (attemptIds.length > 0) {
-      const { data: ans } = await supabase
-        .from("student_quiz_answers")
-        .select("is_correct")
-        .in("attempt_id", attemptIds)
-        .gte("created_at", start)
-        .lte("created_at", end);
-      for (const row of ans ?? []) {
-        todayAnsweredQuestions += 1;
-        if ((row as { is_correct: boolean }).is_correct) todayCorrect += 1;
+    if (p.scopeQuizIds.length > 0) {
+      const { data: attempts } = await supabase
+        .from("student_quiz_attempts")
+        .select("id")
+        .eq("student_id", studentId)
+        .in("quiz_id", p.scopeQuizIds)
+        .not("submitted_at", "is", null);
+      const attemptIds = (attempts ?? []).map((a: { id: string }) => a.id);
+      if (attemptIds.length > 0) {
+        const { data: ans } = await supabase
+          .from("student_quiz_answers")
+          .select("is_correct")
+          .in("attempt_id", attemptIds)
+          .gte("created_at", start)
+          .lte("created_at", end);
+        for (const row of ans ?? []) {
+          todayAnsweredQuestions += 1;
+          if ((row as { is_correct: boolean }).is_correct) todayCorrect += 1;
+        }
       }
     }
   } catch {
@@ -188,7 +247,13 @@ export async function buildParentDailyEmailReport(
 
   let weakSkillLines: string[] = [];
   try {
-    weakSkillLines = await getStudentWeakSkillSummaries(supabase, p.examScopeId, studentId, 3);
+    weakSkillLines = await getStudentWeakSkillSummaries(
+      supabase,
+      p.examScopeId,
+      studentId,
+      3,
+      p.appliedScopeUnitIds.length > 0 ? p.appliedScopeUnitIds : undefined,
+    );
   } catch {
     weakSkillLines = [];
   }
@@ -245,18 +310,21 @@ export async function buildParentDailyEmailReport(
   return {
     ok: true,
     data: {
-      toEmail,
+      toEmail: resolvedToEmail,
       guardianName: st.guardian_name?.trim() || null,
       subject: "名貫補習班｜孩子今日 AI 學習摘要",
       dateLabel: today,
       studentName: st.name,
       classDisplay,
       examScopeTitle: p.examScopeTitle,
+      parentSectionVisibility: parentVis,
+      teacherMessage: options?.teacherMessage?.trim() || null,
       completionRate,
       classAveragePercent,
       todayWatchedVideos,
       todayAnsweredQuestions,
       todayAccuracyPercent,
+      incompleteVideosHint,
       weakSkillLines,
       weakSkillsInsufficient,
       recommendedVideoTitle,

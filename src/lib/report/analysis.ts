@@ -27,12 +27,17 @@ function toPercent(numerator: number, denominator: number): number {
   return numerator / denominator;
 }
 
-async function scopeQuizIdsForExam(supabase: SupabaseClient, examScopeId: string): Promise<string[]> {
-  const { data: units } = await supabase
-    .from("scope_units")
-    .select("id")
-    .eq("exam_scope_id", examScopeId);
-  const unitIds = (units ?? []).map((u: { id: string }) => u.id);
+async function scopeQuizIdsForScopeUnits(
+  supabase: SupabaseClient,
+  examScopeId: string,
+  scopeUnitIds?: string[] | null,
+): Promise<string[]> {
+  const { data: units } = await supabase.from("scope_units").select("id").eq("exam_scope_id", examScopeId);
+  let unitIds = (units ?? []).map((u: { id: string }) => u.id);
+  if (scopeUnitIds && scopeUnitIds.length > 0) {
+    const allow = new Set(scopeUnitIds);
+    unitIds = unitIds.filter((id) => allow.has(id));
+  }
   if (unitIds.length === 0) return [];
   const { data: videos } = await supabase.from("videos").select("id").in("unit_id", unitIds);
   const videoIds = (videos ?? []).map((v: { id: string }) => v.id);
@@ -49,8 +54,9 @@ async function scopeQuizIdsForExam(supabase: SupabaseClient, examScopeId: string
 export async function getWeakSkills(
   supabase: SupabaseClient,
   examScopeId: string,
+  scopeUnitIds?: string[] | null,
 ): Promise<WeakSkill[]> {
-  const quizIds = await scopeQuizIdsForExam(supabase, examScopeId);
+  const quizIds = await scopeQuizIdsForScopeUnits(supabase, examScopeId, scopeUnitIds);
   if (quizIds.length === 0) return [];
 
   const { data: attempts } = await supabase
@@ -105,8 +111,9 @@ export async function getWeakSkillsDetailed(
   supabase: SupabaseClient,
   examScopeId: string,
   topN = 3,
+  scopeUnitIds?: string[] | null,
 ): Promise<WeakSkillDetail[]> {
-  const quizIds = await scopeQuizIdsForExam(supabase, examScopeId);
+  const quizIds = await scopeQuizIdsForScopeUnits(supabase, examScopeId, scopeUnitIds);
   if (quizIds.length === 0) return [];
 
   const { data: attempts } = await supabase
@@ -197,8 +204,9 @@ export async function getStudentWeakSkillDetails(
   examScopeId: string,
   studentId: string,
   max = 3,
+  scopeUnitIds?: string[] | null,
 ): Promise<StudentWeakSkillDetail[]> {
-  const quizIds = await scopeQuizIdsForExam(supabase, examScopeId);
+  const quizIds = await scopeQuizIdsForScopeUnits(supabase, examScopeId, scopeUnitIds);
   if (quizIds.length === 0) return [];
 
   const { data: attempts } = await supabase
@@ -267,8 +275,9 @@ export async function getStudentWeakSkillSummaries(
   examScopeId: string,
   studentId: string,
   max = 3,
+  scopeUnitIds?: string[] | null,
 ): Promise<string[]> {
-  const details = await getStudentWeakSkillDetails(supabase, examScopeId, studentId, max);
+  const details = await getStudentWeakSkillDetails(supabase, examScopeId, studentId, max, scopeUnitIds);
   return details.map((x) => `${x.skillName}（錯誤率 ${(x.wrongRate * 100).toFixed(0)}%）`);
 }
 
@@ -321,5 +330,32 @@ export function buildTeacherSuggestions(
   }
 
   return suggestions;
+}
+
+/** 段考範圍內累計答錯題數（歷史，非僅今日） */
+export async function countWrongAnswersInScopeQuizzes(
+  supabase: SupabaseClient,
+  quizIds: string[],
+): Promise<number> {
+  if (quizIds.length === 0) return 0;
+  const { data: attempts, error } = await supabase
+    .from("student_quiz_attempts")
+    .select("id")
+    .in("quiz_id", quizIds)
+    .not("submitted_at", "is", null);
+  if (error || !attempts?.length) return 0;
+  const attemptIds = attempts.map((a: { id: string }) => a.id);
+  const batch = 400;
+  let sum = 0;
+  for (let i = 0; i < attemptIds.length; i += batch) {
+    const part = attemptIds.slice(i, i + batch);
+    const { count, error: cErr } = await supabase
+      .from("student_quiz_answers")
+      .select("id", { count: "exact", head: true })
+      .in("attempt_id", part)
+      .eq("is_correct", false);
+    if (!cErr) sum += count ?? 0;
+  }
+  return sum;
 }
 

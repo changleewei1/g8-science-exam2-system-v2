@@ -16,7 +16,7 @@ insert into public.exam_scopes (
   2,
   '國二理化第二次段考',
   '酸鹼中和、反應速率｜預習影片與AI學習診斷',
-  true
+  false
 ) on conflict (id) do update set
   subject = excluded.subject,
   grade = excluded.grade,
@@ -25,6 +25,8 @@ insert into public.exam_scopes (
   title = excluded.title,
   description = excluded.description,
   is_active = excluded.is_active;
+
+-- 與 migration 20260522130000 一致：第二次預設非 active
 
 -- scope_units.id 說明：
 -- …000002 = 酸鹼中和（skill_tags 以 acid_base 標示之內容所屬「學習單元」）

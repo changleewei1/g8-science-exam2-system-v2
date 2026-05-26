@@ -10,7 +10,7 @@ export function listMissingTransactionalEmailEnv(): string[] {
   return ["RESEND_API_KEY", "EMAIL_FROM"].filter((n) => !getEnv(n));
 }
 
-function wrapEmailBody(innerHtml: string): string {
+export function wrapEmailBody(innerHtml: string): string {
   return `<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8" /></head><body style="margin:0;background:#f1f5f9">${innerHtml}</body></html>`;
 }
 

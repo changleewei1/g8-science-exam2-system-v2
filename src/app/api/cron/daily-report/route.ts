@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 
+import {
+  loadTeacherReportPreferences,
+  mergeDailyReportPayloadOptionsFromPreferences,
+  type ParentSendMode,
+} from "@/lib/admin/teacher-report-preferences";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
 import { getEnv } from "@/lib/env";
+import type { StudentScopeCompletionRow } from "@/lib/report/buildDailyOverviewPayload";
 import { buildDailyOverviewPayload } from "@/lib/report/buildDailyOverviewPayload";
 import { buildParentDailyEmailReport } from "@/lib/report/buildParentDailyEmailReport";
 import { buildTeacherDailyEmailReport } from "@/lib/report/buildTeacherDailyEmailReport";
@@ -34,6 +40,23 @@ function parseBoolParam(url: URL, key: string, defaultValue: boolean): boolean {
   return defaultValue;
 }
 
+function isScopeIncomplete(mine: StudentScopeCompletionRow | undefined): boolean {
+  if (!mine) return true;
+  return !(mine.videoCompletionRate >= 100 && mine.quizCompletionRate >= 100);
+}
+
+function shouldSendParentInCron(
+  mode: ParentSendMode,
+  mine: StudentScopeCompletionRow | undefined,
+): boolean {
+  if (mode === "manual") return false;
+  if (mode === "all") return true;
+  const completion = mine?.overallCompletion ?? 0;
+  if (mode === "risk_only") return completion < 30;
+  if (mode === "incomplete_only") return isScopeIncomplete(mine);
+  return false;
+}
+
 export async function GET(req: Request) {
   if (!isAuthorized(req)) {
     return NextResponse.json(
@@ -49,6 +72,11 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const sendTeacherReport = parseBoolParam(url, "sendTeacherReport", true);
   const sendParentReports = parseBoolParam(url, "sendParentReports", false);
+  const examScopeOverride =
+    url.searchParams.get("examScopeId")?.trim() || url.searchParams.get("scopeId")?.trim() || null;
+
+  const prefs = await loadTeacherReportPreferences();
+  const payloadOptions = mergeDailyReportPayloadOptionsFromPreferences(prefs, examScopeOverride);
 
   if (!sendTeacherReport && !sendParentReports) {
     return NextResponse.json(
@@ -59,6 +87,27 @@ export async function GET(req: Request) {
       },
       { status: 400 },
     );
+  }
+
+  const willSendTeacher = sendTeacherReport && prefs.emailEnabled;
+  const willSendParent =
+    sendParentReports && prefs.parentSummaryEnabled && prefs.parentSendMode !== "manual";
+
+  if (!willSendTeacher && !willSendParent) {
+    return NextResponse.json({
+      ok: true,
+      skipped: true,
+      reason: "PREFERENCES_OR_FLAGS",
+      message:
+        "依後台設定或查詢參數，本次不寄送老師信與家長信（例如 email_enabled=false、家長摘要未啟用、或 parent_send_mode=manual）。",
+      sendTeacherReport,
+      sendParentReports,
+      preferences: {
+        emailEnabled: prefs.emailEnabled,
+        parentSummaryEnabled: prefs.parentSummaryEnabled,
+        parentSendMode: prefs.parentSendMode,
+      },
+    });
   }
 
   const transactionalEnv = requireEnvList(["RESEND_API_KEY", "EMAIL_FROM"]);
@@ -73,7 +122,7 @@ export async function GET(req: Request) {
     );
   }
 
-  if (sendTeacherReport) {
+  if (willSendTeacher) {
     const adminEnv = requireEnvList(["ADMIN_NOTIFY_EMAIL"]);
     if (!adminEnv.ok) {
       return NextResponse.json(
@@ -108,10 +157,12 @@ export async function GET(req: Request) {
 
   let teacherEmailId: string | null = null;
   let teacherSubject: string | null = null;
+  let teacherReportSnapshot: Awaited<ReturnType<typeof buildTeacherDailyEmailReport>> | null = null;
 
   try {
-    if (sendTeacherReport) {
-      const teacherReport = await buildTeacherDailyEmailReport();
+    if (willSendTeacher) {
+      const teacherReport = await buildTeacherDailyEmailReport(payloadOptions, prefs);
+      teacherReportSnapshot = teacherReport;
       const baseSubject = teacherReport.mailTitle;
       teacherSubject =
         teacherReport.taskCount > 0 ? `${baseSubject}（含任務追蹤 ${teacherReport.taskCount} 筆）` : baseSubject;
@@ -126,9 +177,9 @@ export async function GET(req: Request) {
     }
 
     let sharedPayload: Awaited<ReturnType<typeof buildDailyOverviewPayload>> | null = null;
-    if (sendParentReports) {
+    if (willSendParent) {
       const supabase = getSupabaseAdmin();
-      sharedPayload = await buildDailyOverviewPayload();
+      sharedPayload = await buildDailyOverviewPayload(payloadOptions);
 
       const { data: rows } = await supabase
         .from("students")
@@ -143,7 +194,15 @@ export async function GET(req: Request) {
           continue;
         }
 
-        const built = await buildParentDailyEmailReport(row.id, sharedPayload);
+        const mine = sharedPayload.studentCompletions.find((s) => s.studentId === row.id);
+        if (!shouldSendParentInCron(prefs.parentSendMode, mine)) {
+          parentStats.skipped += 1;
+          continue;
+        }
+
+        const built = await buildParentDailyEmailReport(row.id, sharedPayload, {
+          parentSectionsResolved: prefs.parentSections,
+        });
         if (!built.ok) {
           parentStats.skipped += 1;
           continue;
@@ -170,10 +229,27 @@ export async function GET(req: Request) {
       ok: true,
       sendTeacherReport,
       sendParentReports,
-      teacher: sendTeacherReport
-        ? { emailId: teacherEmailId, subject: teacherSubject }
-        : { skipped: true },
-      parentEmails: sendParentReports ? parentStats : { skipped: true },
+      appliedPreferences: {
+        emailEnabled: prefs.emailEnabled,
+        teacherReportSent: willSendTeacher,
+        parentSummaryEnabled: prefs.parentSummaryEnabled,
+        parentSendMode: prefs.parentSendMode,
+        parentBatchSent: willSendParent,
+        reportMode: prefs.reportMode,
+        selectedScopeId: prefs.selectedScopeId,
+        selectedUnitIds: prefs.selectedUnitIds,
+      },
+      examScopeId: sharedPayload?.examScopeId ?? teacherReportSnapshot?.examScopeId ?? null,
+      examScopeTitle: sharedPayload?.examScopeTitle ?? teacherReportSnapshot?.examScopeTitle ?? null,
+      teacher: willSendTeacher
+        ? {
+            emailId: teacherEmailId,
+            subject: teacherSubject,
+            examScopeId: teacherReportSnapshot?.examScopeId,
+            examScopeTitle: teacherReportSnapshot?.examScopeTitle,
+          }
+        : { skipped: true, reason: sendTeacherReport ? "email_disabled_in_preferences" : "query_disabled" },
+      parentEmails: willSendParent ? parentStats : { skipped: true, reason: "preferences_or_query" },
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "未知錯誤";

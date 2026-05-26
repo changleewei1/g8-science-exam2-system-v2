@@ -12,7 +12,7 @@ insert into public.exam_scopes (
   2,
   '國二理化第二次段考',
   '酸鹼中和、反應速率｜預習影片與AI學習診斷',
-  true
+  false
 ) on conflict (id) do update set
   subject = excluded.subject,
   grade = excluded.grade,

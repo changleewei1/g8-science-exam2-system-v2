@@ -13,7 +13,9 @@ import {
   GitBranch,
   Layers,
   ListChecks,
+  Mail,
   Megaphone,
+  Settings,
   Sparkles,
   Tags,
   Users,
@@ -90,6 +92,8 @@ const MAIN_FEATURES: MainFeature[] = [
 const SHORTCUTS: Shortcut[] = [
   { label: "首頁系統公告", href: "/admin/announcement", icon: Megaphone },
   { label: "學生名單管理", href: "/admin/students", icon: Users },
+  { label: "每日報表設定", href: "/admin/report-settings", icon: Settings },
+  { label: "家長摘要預覽", href: "/admin/reports/parent-preview", icon: Mail },
   { label: "影片測驗題編輯", href: "/admin/video-quizzes", icon: BookOpenCheck },
   { label: "題目候選審核", href: "/admin/question-candidates", icon: FileCheck2 },
   { label: "影片技能候選審核", href: "/admin/video-skill-review", icon: ListChecks },

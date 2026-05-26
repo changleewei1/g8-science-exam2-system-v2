@@ -32,7 +32,6 @@ export function VideoPageClient({
 }: Props) {
   const [status, setStatus] = useState<string | null>(null);
   const [unlocked, setUnlocked] = useState(canTakeQuiz);
-  const [quizPassedTick, setQuizPassedTick] = useState(0);
 
   const onProgressSync = useCallback(
     async (payload: {
@@ -55,9 +54,8 @@ export function VideoPageClient({
         setUnlocked(true);
         setStatus("觀看進度已達標，可開始影片理解測驗。");
       }
-      if (res.ok && data.isCompleted) {
-        setQuizPassedTick((n) => n + 1);
-      }
+      // 勿在每次進度同步且 isCompleted 時 remount 測驗：播放器每 12s 會同步，isCompleted 會持續為 true，
+      // 否則 key 變動會整段重置，作答第一題後易被跳回題首。
     },
     [videoId],
   );
@@ -97,12 +95,11 @@ export function VideoPageClient({
       ) : null}
 
       <VideoComprehensionQuizClient
-        key={`${quizId ?? "none"}-${quizPassedTick}-${unlocked ? "u" : "l"}`}
+        key={quizId ?? "no-quiz"}
         quizId={quizId}
         unlocked={unlocked}
         onPassed={() => {
           setStatus("已完成本影片預習");
-          setQuizPassedTick((n) => n + 1);
         }}
       />
     </div>

@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 
 import { getEnv } from "@/lib/env";
+import type { BuildDailyOverviewPayloadOptions } from "@/lib/report/buildDailyOverviewPayload";
 import { buildTeacherDailyEmailReport } from "@/lib/report/buildTeacherDailyEmailReport";
 import { sendTeacherDailyReportEmail } from "@/lib/report/sendDailyReportEmail";
 import { getAdminSession } from "@/lib/session";
 
 export const runtime = "nodejs";
 
-export async function POST() {
+export async function POST(req: Request) {
   const admin = await getAdminSession();
   if (!admin) {
     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
@@ -21,8 +22,17 @@ export async function POST() {
     );
   }
 
+  let payloadOptions: BuildDailyOverviewPayloadOptions | undefined;
   try {
-    const report = await buildTeacherDailyEmailReport();
+    const body = (await req.json().catch(() => null)) as { examScopeId?: string } | null;
+    const id = typeof body?.examScopeId === "string" ? body.examScopeId.trim() : "";
+    if (id) payloadOptions = { examScopeId: id };
+  } catch {
+    payloadOptions = undefined;
+  }
+
+  try {
+    const report = await buildTeacherDailyEmailReport(payloadOptions);
     const subject = `[測試] ${report.mailTitle}`;
     const sent = await sendTeacherDailyReportEmail({
       resendApiKey: getEnv("RESEND_API_KEY")!,

@@ -321,6 +321,7 @@ export async function getAdminSkillPracticeOverview(
   opts: {
     className?: string | null;
     unitId?: string | null;
+    unitIds?: string[] | null;
     studentQ?: string | null;
     skillQ?: string | null;
     statusFilter?: SkillPracticeStatus | "" | null;
@@ -330,7 +331,12 @@ export async function getAdminSkillPracticeOverview(
   if (!base) return null;
 
   let defs = base.skills;
-  if (opts.unitId) defs = defs.filter((d) => d.unit_id === opts.unitId);
+  if (opts.unitIds && opts.unitIds.length > 0) {
+    const allow = new Set(opts.unitIds);
+    defs = defs.filter((d) => allow.has(d.unit_id));
+  } else if (opts.unitId) {
+    defs = defs.filter((d) => d.unit_id === opts.unitId);
+  }
   const sq = (opts.skillQ ?? "").trim().toLowerCase();
   if (sq) {
     defs = defs.filter(
