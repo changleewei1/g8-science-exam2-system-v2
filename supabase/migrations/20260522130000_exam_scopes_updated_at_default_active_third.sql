@@ -1,5 +1,11 @@
 -- exam_scopes：updated_at（多筆 active 時取最新）、預設僅第三次段考 active
 -- 欄位對照：grade=8（國二）、term=2（下學期）、exam_no=3（第三次）、subject=自然（理化）
+-- 若 production 尚未跑過 20260520180000，須先具備 sort_order，本檔一併補上（IF NOT EXISTS）。
+
+alter table public.exam_scopes
+  add column if not exists sort_order int not null default 0;
+
+comment on column public.exam_scopes.sort_order is '同條件下優先序，數字越小越優先（搭配報表段考挑選）';
 
 alter table public.exam_scopes
   add column if not exists updated_at timestamptz not null default now();
