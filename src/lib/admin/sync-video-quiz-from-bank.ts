@@ -8,6 +8,40 @@ function shuffleInPlace<T>(arr: T[]) {
   }
 }
 
+function normalizeCorrectLetter(raw: unknown): "A" | "B" | "C" | "D" {
+  const c = String(raw ?? "")
+    .trim()
+    .toUpperCase()
+    .charAt(0);
+  return c === "B" || c === "C" || c === "D" ? c : "A";
+}
+
+/** 盡量讓三題的正解字母分散（A/B/C 優先各一題），再補滿至 3 題 */
+function pickThreeWithSpreadCorrectLetters<T extends { id: string; correct_answer?: unknown }>(
+  rows: T[],
+): T[] {
+  if (rows.length <= 3) return [...rows];
+  const pool = [...rows];
+  shuffleInPlace(pool);
+  const chosen: T[] = [];
+  const used = new Set<string>();
+  for (const want of ["A", "B", "C"] as const) {
+    const hit = pool.find((r) => !used.has(r.id) && normalizeCorrectLetter(r.correct_answer) === want);
+    if (hit) {
+      chosen.push(hit);
+      used.add(hit.id);
+    }
+  }
+  for (const r of pool) {
+    if (chosen.length >= 3) break;
+    if (!used.has(r.id)) {
+      chosen.push(r);
+      used.add(r.id);
+    }
+  }
+  return chosen.slice(0, 3);
+}
+
 /**
  * 以「已核准入庫」且帶有 video_id 的 question_bank_items 隨機抽 3 筆，同步該影片的 quizzes／quiz_questions。
  * 僅影響該 video_id；第二次段考題庫列通常無 video_id，不會被掃入。
@@ -41,8 +75,7 @@ export async function syncVideoComprehensionQuizFromBank(
   }
 
   const pool = [...bank];
-  shuffleInPlace(pool);
-  const three = pool.slice(0, 3);
+  const three = pickThreeWithSpreadCorrectLetters(pool);
 
   const { data: existingQuiz, error: qFindErr } = await supabase
     .from("quizzes")

@@ -208,6 +208,7 @@ export class PlaylistImportService {
       }
 
       const skill = input.defaultSkillCode ?? "EL01";
+      const correctLetters: Array<"A" | "B" | "C"> = ["A", "B", "C"];
       const questions: QuizQuestionInsert[] = [1, 2, 3].map((n, idx) => ({
         quiz_id: quizId,
         question_text: `（第 ${n} 題）請依據本影片內容選出最適當的答案。`,
@@ -216,7 +217,7 @@ export class PlaylistImportService {
         choice_b: "選項 B",
         choice_c: "選項 C",
         choice_d: "選項 D",
-        correct_answer: "A",
+        correct_answer: correctLetters[idx % 3],
         explanation: "請依教學內容修正本題與選項。",
         sort_order: idx,
         difficulty: "基礎",

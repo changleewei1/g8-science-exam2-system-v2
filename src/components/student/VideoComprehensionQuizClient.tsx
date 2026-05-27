@@ -1,8 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Brain } from "lucide-react";
+import { Brain, Clapperboard, ListVideo } from "lucide-react";
+
+import type { VideoQuizChoicePerm } from "@/lib/student/shuffle-video-quiz-choices";
+import { shuffleChoicesForVideoQuiz } from "@/lib/student/shuffle-video-quiz-choices";
 
 type Q = {
   id: string;
@@ -29,14 +33,73 @@ type Props = {
   quizId: string | null;
   unlocked: boolean;
   onPassed?: () => void;
+  /** 完成測驗或想換片時：前往單元影片列表 */
+  moreVideosHref?: string;
+  moreVideosLabel?: string;
+  /** 從任務進入時可選：返回任務頁 */
+  taskReturnHref?: string;
+  taskReturnLabel?: string;
 };
 
 const INCOMPLETE_MSG = "此影片的理解測驗尚未建立完成，請稍後再試。";
 
-export function VideoComprehensionQuizClient({ quizId, unlocked, onPassed }: Props) {
+function FollowUpNavCard({
+  moreVideosHref,
+  moreVideosLabel,
+  taskReturnHref,
+  taskReturnLabel,
+}: {
+  moreVideosHref?: string;
+  moreVideosLabel: string;
+  taskReturnHref?: string;
+  taskReturnLabel?: string;
+}) {
+  if (!moreVideosHref && !taskReturnHref) return null;
+  return (
+    <div className="mt-4 rounded-2xl border border-cyan-200/80 bg-gradient-to-br from-white to-cyan-50/90 p-4 shadow-sm">
+      <p className="text-sm font-semibold text-slate-800">接下來要做什麼？</p>
+      <p className="mt-1 text-xs text-slate-600">可返回單元挑選其他影片，或從任務列表繼續學習。</p>
+      <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+        {moreVideosHref ? (
+          <Link
+            href={moreVideosHref}
+            className="flex flex-1 items-center gap-3 rounded-xl border border-cyan-300/80 bg-white px-4 py-3 text-sm font-semibold text-cyan-900 shadow-sm transition hover:border-cyan-400 hover:bg-cyan-50/80"
+          >
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-cyan-100 text-cyan-700">
+              <ListVideo className="h-5 w-5" aria-hidden />
+            </span>
+            <span>{moreVideosLabel}</span>
+          </Link>
+        ) : null}
+        {taskReturnHref ? (
+          <Link
+            href={taskReturnHref}
+            className="flex flex-1 items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-slate-300 hover:bg-slate-50"
+          >
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
+              <Clapperboard className="h-5 w-5" aria-hidden />
+            </span>
+            <span>{taskReturnLabel ?? "返回學習任務"}</span>
+          </Link>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+export function VideoComprehensionQuizClient({
+  quizId,
+  unlocked,
+  onPassed,
+  moreVideosHref,
+  moreVideosLabel = "返回單元 · 選其他影片",
+  taskReturnHref,
+  taskReturnLabel,
+}: Props) {
   const [loading, setLoading] = useState(Boolean(quizId));
   const [err, setErr] = useState<string | null>(null);
   const [questions, setQuestions] = useState<Q[]>([]);
+  const [choicePermByQuestionId, setChoicePermByQuestionId] = useState<Record<string, VideoQuizChoicePerm>>({});
   const [step, setStep] = useState(0);
   const [selected, setSelected] = useState<string>("");
   const [feedbackByQ, setFeedbackByQ] = useState<Record<string, Feedback>>({});
@@ -49,12 +112,14 @@ export function VideoComprehensionQuizClient({ quizId, unlocked, onPassed }: Pro
     if (!quizId) {
       setLoading(false);
       setQuestions([]);
+      setChoicePermByQuestionId({});
       setErr(INCOMPLETE_MSG);
       return;
     }
     if (!unlocked) {
       setLoading(false);
       setQuestions([]);
+      setChoicePermByQuestionId({});
       setErr(null);
       return;
     }
@@ -71,6 +136,7 @@ export function VideoComprehensionQuizClient({ quizId, unlocked, onPassed }: Pro
             : "無法載入測驗",
       );
       setQuestions([]);
+      setChoicePermByQuestionId({});
       setLoading(false);
       return;
     }
@@ -81,10 +147,18 @@ export function VideoComprehensionQuizClient({ quizId, unlocked, onPassed }: Pro
           : INCOMPLETE_MSG,
       );
       setQuestions([]);
+      setChoicePermByQuestionId({});
     } else {
       const qs = (data.questions ?? []) as Q[];
       qs.sort((a, b) => a.sortOrder - b.sortOrder);
-      setQuestions(qs);
+      const perms: Record<string, VideoQuizChoicePerm> = {};
+      const shuffled = qs.map((q) => {
+        const { question, perm } = shuffleChoicesForVideoQuiz(q);
+        perms[q.id] = perm;
+        return question;
+      });
+      setChoicePermByQuestionId(perms);
+      setQuestions(shuffled);
       setErr(null);
     }
     setStep(0);
@@ -108,26 +182,33 @@ export function VideoComprehensionQuizClient({ quizId, unlocked, onPassed }: Pro
   async function confirmChoice() {
     if (!current || !selected || !quizId) return;
     setErr(null);
+    const perm = choicePermByQuestionId[current.id];
+    const originalLetter = perm?.displayToOriginal[selected] ?? selected;
     const res = await fetch(`/api/quizzes/${quizId}/question-feedback`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ questionId: current.id, selectedAnswer: selected }),
+      body: JSON.stringify({ questionId: current.id, selectedAnswer: originalLetter }),
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
       setErr(data.error === "VIDEO_NOT_COMPLETED" ? "請先將影片觀看到 90% 以上" : "無法取得回饋");
       return;
     }
+    const apiCorrect = String(data.correctAnswer ?? "")
+      .trim()
+      .toUpperCase()
+      .charAt(0);
+    const displayCorrect = perm?.originalToDisplay[apiCorrect] ?? apiCorrect;
     setFeedbackByQ((m) => ({
       ...m,
       [current.id]: {
         isCorrect: Boolean(data.isCorrect),
         explanation: String(data.explanation ?? ""),
-        correctAnswer: String(data.correctAnswer ?? ""),
+        correctAnswer: displayCorrect,
       },
     }));
-    setAnswers((a) => ({ ...a, [current.id]: selected }));
+    setAnswers((a) => ({ ...a, [current.id]: originalLetter }));
   }
 
   async function submitAll() {
@@ -190,9 +271,17 @@ export function VideoComprehensionQuizClient({ quizId, unlocked, onPassed }: Pro
           載入測驗題目…
         </p>
       ) : donePassed ? (
-        <div className="mt-4 rounded-2xl border border-emerald-200/80 bg-emerald-50/90 px-4 py-4 shadow-sm">
-          <p className="text-base font-bold text-emerald-900">已完成本影片預習</p>
-          <p className="mt-1 text-sm text-emerald-800">影片理解測驗已通過（3 題中至少答對 2 題）。</p>
+        <div className="mt-4 space-y-1">
+          <div className="rounded-2xl border border-emerald-200/80 bg-emerald-50/90 px-4 py-4 shadow-sm">
+            <p className="text-base font-bold text-emerald-900">已完成本影片預習</p>
+            <p className="mt-1 text-sm text-emerald-800">影片理解測驗已通過（3 題中至少答對 2 題）。</p>
+          </div>
+          <FollowUpNavCard
+            moreVideosHref={moreVideosHref}
+            moreVideosLabel={moreVideosLabel}
+            taskReturnHref={taskReturnHref}
+            taskReturnLabel={taskReturnLabel}
+          />
         </div>
       ) : questions.length === 0 ? (
         <p className="mt-4 rounded-2xl border border-amber-200/80 bg-amber-50/90 px-4 py-3 text-sm font-medium text-amber-950 shadow-sm">
@@ -211,6 +300,15 @@ export function VideoComprehensionQuizClient({ quizId, unlocked, onPassed }: Pro
               {err}
             </p>
           )}
+
+          {failedAttempt ? (
+            <FollowUpNavCard
+              moreVideosHref={moreVideosHref}
+              moreVideosLabel={moreVideosLabel}
+              taskReturnHref={taskReturnHref}
+              taskReturnLabel={taskReturnLabel}
+            />
+          ) : null}
 
           {current && (
             <div className="mt-6 space-y-4">

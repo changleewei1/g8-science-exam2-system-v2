@@ -98,6 +98,10 @@ export function VideoPageClient({
         key={quizId ?? "no-quiz"}
         quizId={quizId}
         unlocked={unlocked}
+        moreVideosHref={`/student/unit/${unitId}`}
+        moreVideosLabel="返回單元 · 選其他影片"
+        taskReturnHref={fromTask ? backHref : undefined}
+        taskReturnLabel="返回學習任務"
         onPassed={() => {
           setStatus("已完成本影片預習");
         }}
