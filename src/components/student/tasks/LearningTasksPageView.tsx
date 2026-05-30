@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { CalendarRange, CheckCircle2, Circle, ListTodo, Play } from "lucide-react";
+import { CalendarRange, CheckCircle2, Circle, ListTodo, Play, Sparkles } from "lucide-react";
 import { StudentBackLink } from "@/components/student/StudentBackLink";
 import { buildVideoPageQuery } from "@/lib/student-video-context";
 import { cn } from "@/lib/utils";
@@ -33,10 +35,15 @@ export type LearningTaskPageTask = {
   completedCount: number;
   totalVideos: number;
   completionRate: number;
+  quizzesPassed: number;
+  quizzesTotal: number;
+  taskOpenedAt: string | null;
 };
 
 type Props = {
-  tasks: LearningTaskPageTask[];
+  newTasks: LearningTaskPageTask[];
+  inProgressTasks: LearningTaskPageTask[];
+  completedTasks: LearningTaskPageTask[];
 };
 
 function phaseBadgeClass(phase: string): string {
@@ -65,7 +72,181 @@ function TaskCompletionBar({ rate }: { rate: number }) {
   );
 }
 
-export function LearningTasksPageView({ tasks }: Props) {
+function TaskCard({
+  task,
+  taskIndex,
+  badge,
+}: {
+  task: LearningTaskPageTask;
+  taskIndex: number;
+  badge?: string;
+}) {
+  return (
+    <motion.li
+      key={task.id}
+      id={`learning-task-${task.id}`}
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.06 * taskIndex, duration: 0.4 }}
+      whileHover={{ y: -2, scale: 1.005 }}
+      className={cn(
+        "scroll-mt-24 rounded-3xl border border-cyan-200/60 bg-white/85 p-5 shadow-[0_8px_32px_-12px_rgba(14,165,233,0.18)] backdrop-blur-md transition",
+        "hover:border-cyan-300 hover:shadow-[0_12px_40px_-8px_rgba(34,211,238,0.22)] sm:p-6",
+      )}
+    >
+      <div className="flex flex-col gap-4 border-b border-cyan-100/60 pb-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <h2 className="text-lg font-bold text-slate-900 sm:text-xl">{task.title}</h2>
+            {badge ? (
+              <span className="inline-flex items-center gap-1 rounded-full border border-amber-300/80 bg-amber-50 px-2 py-0.5 text-xs font-bold text-amber-900">
+                <Sparkles className="h-3.5 w-3.5" aria-hidden />
+                {badge}
+              </span>
+            ) : null}
+          </div>
+          <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-slate-600">
+            <span>
+              {task.startDate} — {task.endDate}
+            </span>
+            <span
+              className={cn(
+                "inline-flex rounded-full border px-2.5 py-0.5 text-xs font-bold",
+                phaseBadgeClass(task.phase),
+              )}
+            >
+              {phaseLabel[task.phase] ?? task.phase}
+            </span>
+          </p>
+          {task.description ? (
+            <p className="mt-2 text-sm leading-relaxed text-slate-700">{task.description}</p>
+          ) : null}
+          <dl className="mt-3 grid gap-2 text-xs text-slate-600 sm:grid-cols-2">
+            <div>
+              <dt className="font-medium text-slate-500">影片進度</dt>
+              <dd className="font-semibold text-slate-800">
+                已完成 {task.completedCount} / {task.totalVideos} 支
+              </dd>
+            </div>
+            <div>
+              <dt className="font-medium text-slate-500">測驗通過</dt>
+              <dd className="font-semibold text-slate-800">
+                {task.quizzesTotal === 0
+                  ? "尚無測驗"
+                  : `${task.quizzesPassed} / ${task.quizzesTotal} 題組通過`}
+              </dd>
+            </div>
+          </dl>
+        </div>
+        <div className="shrink-0 text-left sm:text-right">
+          <p className="text-sm font-semibold text-slate-800">
+            完成 {task.completedCount}/{task.totalVideos}
+            <span className="ml-1 text-cyan-800">（{task.completionRate}%）</span>
+          </p>
+          <TaskCompletionBar rate={task.completionRate} />
+        </div>
+      </div>
+
+      <div className="mt-5 space-y-5">
+        {task.days.map((day) => (
+          <div key={day.dayIndex}>
+            <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-cyan-900/90">
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_#06b6d4]" />
+              第 {day.dayIndex} 天
+            </h3>
+            <ul className="space-y-2">
+              {day.videos.map((v) => (
+                <li
+                  key={v.videoId}
+                  className="flex flex-col gap-3 rounded-2xl border border-slate-200/70 bg-white/70 px-4 py-3 shadow-sm backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <span className="min-w-0 flex-1 text-sm font-medium leading-snug text-slate-800">
+                    {v.title}
+                  </span>
+                  <span className="flex shrink-0 flex-wrap items-center gap-3">
+                    {v.isCompleted ? (
+                      <span className="inline-flex items-center gap-1 text-sm font-semibold text-emerald-700">
+                        <CheckCircle2 className="h-4 w-4" aria-hidden />
+                        已觀看完畢
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 text-sm font-medium text-slate-500">
+                        <Circle className="h-4 w-4 text-slate-400" aria-hidden />
+                        未完成
+                      </span>
+                    )}
+                    <Link
+                      href={`/student/video/${v.videoId}${buildVideoPageQuery({
+                        fromTask: true,
+                        taskId: task.id,
+                      })}`}
+                      className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-cyan-600 to-sky-600 px-4 text-sm font-semibold text-white shadow-[0_4px_16px_-4px_rgba(8,145,178,0.45)] transition hover:brightness-105"
+                    >
+                      <Play className="h-3.5 w-3.5 fill-current" aria-hidden />
+                      前往觀看
+                    </Link>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </motion.li>
+  );
+}
+
+function TaskSection({
+  title,
+  tasks,
+  badge,
+  startIndex,
+}: {
+  title: string;
+  tasks: LearningTaskPageTask[];
+  badge?: string;
+  startIndex: number;
+}) {
+  if (tasks.length === 0) return null;
+  return (
+    <section className="space-y-3">
+      <h2 className="text-sm font-bold uppercase tracking-wide text-cyan-900">{title}</h2>
+      <ul className="space-y-6">
+        {tasks.map((task, i) => (
+          <TaskCard key={task.id} task={task} taskIndex={startIndex + i} badge={badge} />
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+export function LearningTasksPageView({ newTasks, inProgressTasks, completedTasks }: Props) {
+  const router = useRouter();
+  const newIds = useMemo(() => newTasks.map((t) => t.id).join(","), [newTasks]);
+
+  useEffect(() => {
+    if (newTasks.length === 0) return;
+    let cancelled = false;
+    void (async () => {
+      await Promise.all(
+        newTasks.map((t) =>
+          fetch("/api/student/tasks/mark-opened", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ taskId: t.id }),
+          }),
+        ),
+      );
+      if (!cancelled) router.refresh();
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [newIds, router]);
+
+  const totalCount = newTasks.length + inProgressTasks.length + completedTasks.length;
+
   return (
     <div className="space-y-6">
       <motion.div
@@ -90,13 +271,13 @@ export function LearningTasksPageView({ tasks }: Props) {
             <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">學習任務（影片預習）</h1>
             <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-slate-600">
               <CalendarRange className="h-4 w-4 shrink-0 text-cyan-600" aria-hidden />
-              依老師指派的日程觀看指定影片，完成後進度會自動更新。
+              新任務在上方；完成觀看後進度會自動更新。
             </p>
           </div>
         </div>
       </motion.section>
 
-      {tasks.length === 0 ? (
+      {totalCount === 0 ? (
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -109,107 +290,25 @@ export function LearningTasksPageView({ tasks }: Props) {
           </p>
         </motion.div>
       ) : (
-        <ul className="space-y-6">
-          {tasks.map((task, taskIndex) => (
-            <motion.li
-              key={task.id}
-              id={`learning-task-${task.id}`}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.06 * taskIndex, duration: 0.4 }}
-              whileHover={{ y: -2, scale: 1.005 }}
-              className={cn(
-                "scroll-mt-24 rounded-3xl border border-cyan-200/60 bg-white/85 p-5 shadow-[0_8px_32px_-12px_rgba(14,165,233,0.18)] backdrop-blur-md transition",
-                "hover:border-cyan-300 hover:shadow-[0_12px_40px_-8px_rgba(34,211,238,0.22)] sm:p-6",
-              )}
-            >
-              <div className="flex flex-col gap-4 border-b border-cyan-100/60 pb-4 sm:flex-row sm:items-start sm:justify-between">
-                <div className="min-w-0 flex-1">
-                  <h2 className="text-lg font-bold text-slate-900 sm:text-xl">{task.title}</h2>
-                  <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-slate-600">
-                    <span>
-                      {task.startDate} — {task.endDate}
-                    </span>
-                    <span
-                      className={cn(
-                        "inline-flex rounded-full border px-2.5 py-0.5 text-xs font-bold",
-                        phaseBadgeClass(task.phase),
-                      )}
-                    >
-                      {phaseLabel[task.phase] ?? task.phase}
-                    </span>
-                  </p>
-                  {task.description ? (
-                    <p className="mt-2 text-sm leading-relaxed text-slate-700">{task.description}</p>
-                  ) : null}
-                </div>
-                <div className="shrink-0 text-left sm:text-right">
-                  <p className="text-sm font-semibold text-slate-800">
-                    完成 {task.completedCount}/{task.totalVideos}
-                    <span className="ml-1 text-cyan-800">（{task.completionRate}%）</span>
-                  </p>
-                  <TaskCompletionBar rate={task.completionRate} />
-                </div>
-              </div>
-
-              <div className="mt-5 space-y-5">
-                {task.days.map((day) => (
-                  <div key={day.dayIndex}>
-                    <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-cyan-900/90">
-                      <span className="h-1.5 w-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_#06b6d4]" />
-                      第 {day.dayIndex} 天
-                    </h3>
-                    <ul className="space-y-2">
-                      {day.videos.map((v) => (
-                        <li
-                          key={v.videoId}
-                          className="flex flex-col gap-3 rounded-2xl border border-slate-200/70 bg-white/70 px-4 py-3 shadow-sm backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between"
-                        >
-                          <span className="min-w-0 flex-1 text-sm font-medium leading-snug text-slate-800">
-                            {v.title}
-                          </span>
-                          <span className="flex shrink-0 flex-wrap items-center gap-3">
-                            {v.isCompleted ? (
-                              <span className="inline-flex items-center gap-1 text-sm font-semibold text-emerald-700">
-                                <CheckCircle2 className="h-4 w-4" aria-hidden />
-                                已觀看完畢
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center gap-1 text-sm font-medium text-slate-500">
-                                <Circle className="h-4 w-4 text-slate-400" aria-hidden />
-                                未完成
-                              </span>
-                            )}
-                            <Link
-                              href={`/student/video/${v.videoId}${buildVideoPageQuery({
-                                fromTask: true,
-                                taskId: task.id,
-                              })}`}
-                              className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-cyan-600 to-sky-600 px-4 text-sm font-semibold text-white shadow-[0_4px_16px_-4px_rgba(8,145,178,0.45)] transition hover:brightness-105"
-                            >
-                              <Play className="h-3.5 w-3.5 fill-current" aria-hidden />
-                              前往觀看
-                            </Link>
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </motion.li>
-          ))}
-        </ul>
+        <div className="space-y-10">
+          <TaskSection title="新任務" tasks={newTasks} badge="NEW" startIndex={0} />
+          <TaskSection title="進行中任務" tasks={inProgressTasks} startIndex={newTasks.length} />
+          <TaskSection
+            title="已完成任務"
+            tasks={completedTasks}
+            startIndex={newTasks.length + inProgressTasks.length}
+          />
+        </div>
       )}
 
-      {tasks.length > 0 ? (
+      {totalCount > 0 ? (
         <motion.section
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
           className="rounded-2xl border border-sky-200/70 bg-sky-50/90 p-4 text-sm font-medium leading-relaxed text-slate-800 shadow-sm backdrop-blur-sm sm:p-5"
         >
-          完成觀看後，任務卡片上的進度會更新；若從測驗返回，可使用網址上的任務錨點自動捲動到對應任務。
+          進入本頁後，系統會將「新任務」標記為已讀；儀表板上的 🔥 提示會更新。若從測驗返回，可使用網址上的任務錨點自動捲動到對應任務。
         </motion.section>
       ) : null}
     </div>

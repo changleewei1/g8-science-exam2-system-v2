@@ -1,21 +1,17 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
-type VideoOption = { id: string; label: string };
-
-type Row = { videoId: string; dayIndex: number };
+import { TaskVideoPicker, type TaskVideoRow } from "@/components/admin/TaskVideoPicker";
 
 type StudentOpt = { id: string; name: string; studentCode: string; className: string | null };
 
 type Props = {
-  videos: VideoOption[];
+  examScopeOptions: { id: string; label: string }[];
   editTaskId?: string;
 };
 
-export function TaskCreateForm({ videos, editTaskId }: Props) {
+export function TaskCreateForm({ examScopeOptions, editTaskId }: Props) {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -27,7 +23,8 @@ export function TaskCreateForm({ videos, editTaskId }: Props) {
   const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([]);
   const [studentOptions, setStudentOptions] = useState<StudentOpt[]>([]);
   const [isActive, setIsActive] = useState(true);
-  const [rows, setRows] = useState<Row[]>([{ videoId: videos[0]?.id ?? "", dayIndex: 1 }]);
+  const [examScopeId, setExamScopeId] = useState("");
+  const [videoRows, setVideoRows] = useState<TaskVideoRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadEdit, setLoadEdit] = useState(!!editTaskId);
   const [error, setError] = useState<string | null>(null);
@@ -47,7 +44,7 @@ export function TaskCreateForm({ videos, editTaskId }: Props) {
   }, []);
 
   useEffect(() => {
-    if (!editTaskId || videos.length === 0) return;
+    if (!editTaskId) return;
     let cancelled = false;
     void (async () => {
       try {
@@ -63,6 +60,9 @@ export function TaskCreateForm({ videos, editTaskId }: Props) {
         setEndDateTouched(true);
         setClassName(t.className);
         setIsActive(t.isActive !== false);
+        if (typeof t.examScopeId === "string" && t.examScopeId) {
+          setExamScopeId(t.examScopeId);
+        }
         if (t.assignmentMode === "students" && Array.isArray(t.assigneeStudentIds)) {
           setAssignmentMode("students");
           setSelectedStudentIds(t.assigneeStudentIds);
@@ -72,7 +72,7 @@ export function TaskCreateForm({ videos, editTaskId }: Props) {
         }
         const vids = data.videos as { videoId: string; dayIndex: number }[];
         if (vids.length > 0) {
-          setRows(
+          setVideoRows(
             vids.map((x) => ({
               videoId: x.videoId,
               dayIndex: x.dayIndex,
@@ -86,7 +86,7 @@ export function TaskCreateForm({ videos, editTaskId }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [editTaskId, videos.length]);
+  }, [editTaskId]);
 
   useEffect(() => {
     if (!startDate) return;
@@ -97,16 +97,13 @@ export function TaskCreateForm({ videos, editTaskId }: Props) {
     setEndDate(next);
   }, [startDate, endDateTouched]);
 
-  function addRow() {
-    setRows((r) => [...r, { videoId: videos[0]?.id ?? "", dayIndex: 1 }]);
-  }
-
-  function updateRow(i: number, patch: Partial<Row>) {
-    setRows((r) => r.map((row, j) => (j === i ? { ...row, ...patch } : row)));
-  }
-
-  function removeRow(i: number) {
-    setRows((r) => r.filter((_, j) => j !== i));
+  function handleExamScopeChange(next: string) {
+    setExamScopeId((prev) => {
+      if (prev !== "" && prev !== next) {
+        setVideoRows([]);
+      }
+      return next;
+    });
   }
 
   function toggleStudent(id: string) {
@@ -116,6 +113,14 @@ export function TaskCreateForm({ videos, editTaskId }: Props) {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    if (!examScopeId.trim()) {
+      setError("請選擇段考範圍。");
+      return;
+    }
+    if (videoRows.length === 0) {
+      setError("請至少勾選一支影片。");
+      return;
+    }
     setLoading(true);
     try {
       const payload = {
@@ -127,7 +132,8 @@ export function TaskCreateForm({ videos, editTaskId }: Props) {
         assignmentMode,
         studentIds: assignmentMode === "students" ? selectedStudentIds : [],
         isActive,
-        videos: rows.filter((x) => x.videoId),
+        examScopeId: examScopeId || null,
+        videos: videoRows,
       };
       const res = await fetch(editTaskId ? `/api/admin/tasks/${editTaskId}` : "/api/admin/tasks", {
         method: editTaskId ? "PATCH" : "POST",
@@ -172,23 +178,11 @@ export function TaskCreateForm({ videos, editTaskId }: Props) {
     );
   }
 
-  if (videos.length === 0) {
+  if (examScopeOptions.length === 0) {
     return (
       <div className="rounded-2xl border border-amber-200/90 bg-amber-50/90 p-5 text-sm text-amber-950 shadow-sm">
-        <p className="font-medium text-slate-900">資料庫中尚無影片資料</p>
-        <p className="mt-2 text-slate-600">
-          學習任務須綁定影片。請先以播放清單匯入後，再建立任務。
-        </p>
-        <ul className="mt-3 list-inside list-disc space-y-1 text-slate-700">
-          <li>
-            <Link
-              href="/admin/help/learning-setup"
-              className="font-medium text-cyan-800 underline underline-offset-2"
-            >
-              學習系統與匯入設定說明
-            </Link>
-          </li>
-        </ul>
+        <p className="font-medium text-slate-900">尚無段考範圍資料</p>
+        <p className="mt-2 text-slate-600">請先於後台建立並啟用段考範圍後，再建立學習任務。</p>
       </div>
     );
   }
@@ -331,65 +325,17 @@ export function TaskCreateForm({ videos, editTaskId }: Props) {
         立即啟用（關閉時學生端將不顯示此任務）
       </label>
 
-      <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 p-4">
-        <div className="mb-2">
-          <span className="font-medium text-slate-700">學習內容（影片）</span>
-          <p className="text-xs text-slate-500">學生需完成觀看的影片內容；請設定觀看順序（第幾天）</p>
-        </div>
-        <div className="mb-3 flex items-center justify-end">
-          <button
-            type="button"
-            onClick={addRow}
-            className="interactive-nav rounded-lg px-2 py-1 text-sm font-medium text-cyan-700 underline decoration-teal-700/40 underline-offset-2"
-          >
-            新增影片
-          </button>
-        </div>
-        <ul className="space-y-3">
-          {rows.map((row, i) => (
-            <li
-              key={i}
-              className="flex flex-wrap items-end gap-2 rounded-lg bg-slate-100 p-3 ring-1 ring-slate-200/90/80"
-            >
-              <label className="min-w-[220px] flex-1 text-sm">
-                <span className="text-slate-400">影片（單元 · 名稱）</span>
-                <select
-                  required
-                  className="mt-1 w-full rounded-lg border border-slate-200/90 px-2 py-2 text-sm"
-                  value={row.videoId}
-                  onChange={(e) => updateRow(i, { videoId: e.target.value })}
-                >
-                  {videos.map((v) => (
-                    <option key={v.id} value={v.id}>
-                      {v.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className="w-32 text-sm">
-                <span className="text-slate-400">順序（第幾天）</span>
-                <input
-                  required
-                  type="number"
-                  min={1}
-                  className="mt-1 w-full rounded-lg border border-slate-200/90 px-2 py-2"
-                  value={row.dayIndex}
-                  onChange={(e) => updateRow(i, { dayIndex: Number(e.target.value) || 1 })}
-                />
-              </label>
-              {rows.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => removeRow(i)}
-                  className="interactive-nav mb-1 rounded-md px-2 py-1 text-sm font-medium text-red-600 underline decoration-red-600/40 underline-offset-2"
-                >
-                  移除
-                </button>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <TaskVideoPicker
+        examScopeOptions={examScopeOptions}
+        examScopeId={examScopeId}
+        onExamScopeIdChange={handleExamScopeChange}
+        value={videoRows}
+        onChange={setVideoRows}
+      />
+
+      {videoRows.length === 0 ? (
+        <p className="text-sm text-amber-800">請至少勾選一支影片。</p>
+      ) : null}
 
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
 

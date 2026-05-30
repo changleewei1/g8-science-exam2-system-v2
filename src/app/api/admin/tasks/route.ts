@@ -45,6 +45,7 @@ export async function POST(req: Request) {
       assignmentMode: b.assignmentMode,
       studentIds: b.studentIds,
       isActive: b.isActive,
+      examScopeId: b.examScopeId ?? null,
     });
     return NextResponse.json(result, { status: 201 });
   } catch (e) {

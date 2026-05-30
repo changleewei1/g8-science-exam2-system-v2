@@ -1,6 +1,5 @@
 import { TaskCreateForm } from "@/app/admin/tasks/TaskCreateForm";
 import { getRepositories } from "@/infrastructure/composition";
-import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
 import { getAdminSession } from "@/lib/session";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -14,29 +13,12 @@ export default async function AdminTaskEditPage({ params }: Props) {
   if (!admin) redirect("/admin/login");
 
   const { taskId } = await params;
-  const { videos: videoRepo, learningTasks } = getRepositories();
+  const { learningTasks, examScopes } = getRepositories();
   const task = await learningTasks.findById(taskId);
   if (!task) notFound();
 
-  const videoEntities = await videoRepo.findAllForAdmin();
-  const unitIds = [...new Set(videoEntities.map((v) => v.unitId))];
-  const unitTitleById = new Map<string, string>();
-  if (unitIds.length > 0) {
-    const supabase = getSupabaseAdmin();
-    const { data: units } = await supabase
-      .from("scope_units")
-      .select("id, unit_title")
-      .in("id", unitIds);
-    for (const u of units ?? []) {
-      const row = u as { id: string; unit_title: string };
-      unitTitleById.set(row.id, row.unit_title);
-    }
-  }
-  const videos = videoEntities.map((v) => {
-    const ut = unitTitleById.get(v.unitId) ?? "單元";
-    const suffix = v.isActive ? "" : "（已停用）";
-    return { id: v.id, label: `${ut} · ${v.title}${suffix}` };
-  });
+  const scopes = await examScopes.findAllActive();
+  const examScopeOptions = scopes.map((s) => ({ id: s.id, label: s.title }));
 
   return (
     <div className="space-y-6">
@@ -50,7 +32,7 @@ export default async function AdminTaskEditPage({ params }: Props) {
         <h1 className="mt-3 text-2xl font-semibold text-slate-900">編輯學習任務</h1>
         <p className="mt-2 text-sm text-slate-400">{task.title}</p>
       </div>
-      <TaskCreateForm videos={videos} editTaskId={taskId} />
+      <TaskCreateForm examScopeOptions={examScopeOptions} editTaskId={taskId} />
     </div>
   );
 }

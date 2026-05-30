@@ -50,6 +50,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<Params> }) {
       assignmentMode: b.assignmentMode,
       studentIds: b.studentIds,
       isActive: b.isActive,
+      examScopeId: b.examScopeId ?? null,
     });
     return NextResponse.json({ ok: true });
   } catch (e) {

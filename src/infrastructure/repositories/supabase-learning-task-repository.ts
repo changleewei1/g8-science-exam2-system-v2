@@ -10,7 +10,7 @@ import {
 
 type TaskUpdateRow = Pick<
   LearningTaskInsert,
-  "title" | "description" | "start_date" | "end_date" | "class_name" | "is_active"
+  "title" | "description" | "start_date" | "end_date" | "class_name" | "is_active" | "exam_scope_id"
 >;
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
 import type { LearningTaskRow, TaskVideoRow } from "@/types/database";

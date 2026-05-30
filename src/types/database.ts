@@ -223,6 +223,8 @@ export type LearningTaskRow = {
   class_name: string;
   /** migration 20250404120000；未套用前可能為 undefined */
   is_active?: boolean;
+  /** migration 20260527120000；篩選任務影片所屬段考 */
+  exam_scope_id?: string | null;
   created_at: string;
   updated_at?: string;
 };
@@ -244,6 +246,20 @@ export type StudentTaskProgressRow = {
   completed_at: string | null;
   created_at: string;
   updated_at: string;
+};
+
+/** 任務＋學生彙總列（migration 20260428000000 + 20260527120000） */
+export type TaskStudentProgressRow = {
+  id: string;
+  task_id: string;
+  student_id: string;
+  video_completed_count: number;
+  total_videos: number;
+  quiz_completed_count: number;
+  total_quizzes: number;
+  updated_at: string;
+  opened_at?: string | null;
+  first_seen_at?: string | null;
 };
 
 export type StudentReportTokenRow = {

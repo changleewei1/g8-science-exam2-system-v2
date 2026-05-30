@@ -7,6 +7,7 @@ export type LearningTaskInsert = {
   end_date: string;
   class_name: string;
   is_active: boolean;
+  exam_scope_id?: string | null;
 };
 
 export type TaskVideoInsert = {
@@ -22,7 +23,7 @@ export interface LearningTaskRepository {
     id: string,
     row: Pick<
       LearningTaskInsert,
-      "title" | "description" | "start_date" | "end_date" | "class_name" | "is_active"
+      "title" | "description" | "start_date" | "end_date" | "class_name" | "is_active" | "exam_scope_id"
     >,
   ): Promise<void>;
   deleteTaskVideosForTask(taskId: string): Promise<void>;

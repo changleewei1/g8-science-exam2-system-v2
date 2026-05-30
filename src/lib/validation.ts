@@ -69,6 +69,7 @@ export const createLearningTaskBodySchema = z
     assignmentMode: z.enum(["class", "students"]).optional().default("class"),
     studentIds: z.array(z.string().uuid()).optional().default([]),
     isActive: z.boolean().optional().default(true),
+    examScopeId: z.string().uuid().nullable().optional(),
     videos: z
       .array(
         z.object({

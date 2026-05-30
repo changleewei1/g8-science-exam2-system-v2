@@ -1,6 +1,7 @@
 import type { LearningTaskRepository, TaskVideoInsert } from "@/domain/repositories/learning-task-repository";
 import type { StudentRepository } from "@/domain/repositories/student-repository";
 import type { StudentTaskProgressRepository } from "@/domain/repositories/student-task-progress-repository";
+import type { TaskStudentEngagementRepository } from "@/domain/repositories/task-student-engagement-repository";
 import type { VideoRepository } from "@/domain/repositories/video-repository";
 import type { Student } from "@/domain/entities/student";
 import type { LearningTaskRow, StudentTaskProgressRow } from "@/types/database";
@@ -19,6 +20,8 @@ export type CreateLearningTaskInput = {
   /** assignmentMode 為 students 時必填至少一位 */
   studentIds: string[];
   isActive: boolean;
+  /** 篩選任務影片所屬段考；有值時會驗證影片皆屬該 scope 之單元 */
+  examScopeId?: string | null;
 };
 
 export type LearningTaskListItem = {
@@ -75,6 +78,7 @@ export type AdminTaskDetail = {
     isActive: boolean;
     assignmentMode: "class" | "students";
     assigneeStudentIds: string[];
+    examScopeId: string | null;
   };
   videos: AdminTaskVideoRow[];
   students: AdminTaskStudentRow[];
@@ -103,6 +107,17 @@ export type StudentTaskView = {
   completedCount: number;
   totalVideos: number;
   completionRate: number;
+  quizzesPassed: number;
+  quizzesTotal: number;
+  /** 任務層級：學生是否曾進入任務頁（task_student_progress.opened_at） */
+  taskOpenedAt: string | null;
+};
+
+export type StudentLearningTaskSummary = {
+  newTaskCount: number;
+  incompleteTaskCount: number;
+  completedTaskCount: number;
+  hasNewTasks: boolean;
 };
 
 function todayYmd(): string {
@@ -168,13 +183,81 @@ function progressStatusLabel(
   return "進行中";
 }
 
+function taskInEffectiveWindow(startDate: string, endDate: string, today: string): boolean {
+  return today >= startDate && today <= endDate;
+}
+
 export class LearningTaskService {
   constructor(
     private readonly taskRepo: LearningTaskRepository,
     private readonly taskProgressRepo: StudentTaskProgressRepository,
+    private readonly taskEngagementRepo: TaskStudentEngagementRepository,
     private readonly students: StudentRepository,
     private readonly videos: VideoRepository,
   ) {}
+
+  private async assertVideosBelongToExamScope(examScopeId: string, videoIds: string[]): Promise<void> {
+    if (!examScopeId || videoIds.length === 0) return;
+    const supabase = getSupabaseAdmin();
+    const { data: units, error: uErr } = await supabase
+      .from("scope_units")
+      .select("id")
+      .eq("exam_scope_id", examScopeId);
+    if (uErr) throw uErr;
+    const unitIds = new Set((units ?? []).map((u: { id: string }) => u.id));
+    if (unitIds.size === 0) {
+      throw new Error("所選段考尚無單元資料，無法建立任務");
+    }
+    const { data: vrows, error: vErr } = await supabase.from("videos").select("id, unit_id").in("id", videoIds);
+    if (vErr) throw vErr;
+    for (const v of vrows ?? []) {
+      const row = v as { id: string; unit_id: string };
+      if (!unitIds.has(row.unit_id)) {
+        throw new Error("含有不屬於所選段考範圍的影片，請重新選擇");
+      }
+    }
+  }
+
+  async markStudentTaskOpened(studentId: string, taskId: string): Promise<void> {
+    const task = await this.taskRepo.findById(taskId);
+    if (!task || !taskRowIsActive(task)) return;
+    const student = await this.students.findById(studentId);
+    if (!student) return;
+    const assignees = await this.taskRepo.findAssigneeStudentIds(taskId);
+    if (assignees.length > 0) {
+      if (!assignees.includes(studentId)) return;
+    } else if (!student.className || task.class_name !== student.className) {
+      return;
+    }
+    await this.taskEngagementRepo.markTaskOpened(studentId, taskId);
+  }
+
+  async getStudentLearningTaskSummary(studentId: string): Promise<StudentLearningTaskSummary> {
+    const tasks = await this.getStudentTasks(studentId);
+    const today = todayYmd();
+    let newTaskCount = 0;
+    let incompleteTaskCount = 0;
+    let completedTaskCount = 0;
+    for (const t of tasks) {
+      const inWin = taskInEffectiveWindow(t.startDate, t.endDate, today);
+      const complete = t.completionRate >= 100;
+      if (complete) {
+        completedTaskCount += 1;
+        continue;
+      }
+      if (inWin) {
+        incompleteTaskCount += 1;
+        const opened = Boolean(t.taskOpenedAt);
+        if (!opened) newTaskCount += 1;
+      }
+    }
+    return {
+      newTaskCount,
+      incompleteTaskCount,
+      completedTaskCount,
+      hasNewTasks: newTaskCount > 0,
+    };
+  }
 
   private async resolveStudentsForTask(task: LearningTaskRow): Promise<Student[]> {
     const assignees = await this.taskRepo.findAssigneeStudentIds(task.id);
@@ -278,6 +361,14 @@ export class LearningTaskService {
     const task = await this.taskRepo.findById(taskId);
     if (!task) throw new Error("找不到任務");
 
+    const scopeId = input.examScopeId ?? (task as LearningTaskRow).exam_scope_id ?? null;
+    if (scopeId) {
+      await this.assertVideosBelongToExamScope(
+        scopeId,
+        input.videos.map((v) => v.videoId),
+      );
+    }
+
     await this.taskRepo.updateTask(taskId, {
       title: input.title,
       description: input.description,
@@ -285,6 +376,7 @@ export class LearningTaskService {
       end_date: input.endDate,
       class_name: input.className,
       is_active: input.isActive,
+      exam_scope_id: input.examScopeId ?? (task as LearningTaskRow).exam_scope_id ?? null,
     });
 
     await this.taskRepo.deleteTaskVideosForTask(taskId);
@@ -306,6 +398,12 @@ export class LearningTaskService {
     if (input.assignmentMode === "students" && input.studentIds.length === 0) {
       throw new Error("請至少選擇一位學生");
     }
+    if (input.examScopeId) {
+      await this.assertVideosBelongToExamScope(
+        input.examScopeId,
+        input.videos.map((v) => v.videoId),
+      );
+    }
     const { id } = await this.taskRepo.insertTask({
       title: input.title,
       description: input.description,
@@ -313,6 +411,7 @@ export class LearningTaskService {
       end_date: input.endDate,
       class_name: input.className,
       is_active: input.isActive,
+      exam_scope_id: input.examScopeId ?? null,
     });
 
     const rows: TaskVideoInsert[] = input.videos.map((v) => ({
@@ -456,6 +555,7 @@ export class LearningTaskService {
         isActive: taskRowIsActive(task),
         assignmentMode,
         assigneeStudentIds,
+        examScopeId: (task as LearningTaskRow).exam_scope_id ?? null,
       },
       videos,
       students,
@@ -593,6 +693,12 @@ export class LearningTaskService {
     const student = await this.students.findById(studentId);
     if (!student?.className) return [];
 
+    const engagementRows = await this.taskEngagementRepo.listByStudent(studentId);
+    const openedByTask = new Map<string, string | null>();
+    for (const r of engagementRows) {
+      openedByTask.set(r.task_id, r.opened_at ?? null);
+    }
+
     const all = await this.taskRepo.findAll();
     const out: StudentTaskView[] = [];
     const today = todayYmd();
@@ -658,7 +764,60 @@ export class LearningTaskService {
         completedCount,
         totalVideos,
         completionRate,
+        quizzesPassed: 0,
+        quizzesTotal: 0,
+        taskOpenedAt: openedByTask.get(task.id) ?? null,
       });
+    }
+
+    const flatVideoIds = new Set<string>();
+    for (const t of out) {
+      for (const d of t.days) {
+        for (const v of d.videos) flatVideoIds.add(v.videoId);
+      }
+    }
+
+    const videoIds = [...flatVideoIds];
+    const videoToQuizId = new Map<string, string>();
+    if (videoIds.length > 0) {
+      const supabase = getSupabaseAdmin();
+      const { data: quizRows } = await supabase.from("quizzes").select("id, video_id").in("video_id", videoIds);
+      for (const q of quizRows ?? []) {
+        const row = q as { id: string; video_id: string };
+        videoToQuizId.set(row.video_id, row.id);
+      }
+
+      const allQuizIds = [...new Set([...videoToQuizId.values()])];
+      const everPassedQuiz = new Set<string>();
+      if (allQuizIds.length > 0) {
+        const { data: attempts } = await supabase
+          .from("student_quiz_attempts")
+          .select("quiz_id, is_passed, submitted_at")
+          .eq("student_id", studentId)
+          .in("quiz_id", allQuizIds)
+          .not("submitted_at", "is", null);
+
+        for (const a of attempts ?? []) {
+          const row = a as { quiz_id: string; is_passed: boolean; submitted_at: string };
+          if (row.is_passed) everPassedQuiz.add(row.quiz_id);
+        }
+      }
+
+      for (const t of out) {
+        const qidsForTask = new Set<string>();
+        for (const d of t.days) {
+          for (const v of d.videos) {
+            const qid = videoToQuizId.get(v.videoId);
+            if (qid) qidsForTask.add(qid);
+          }
+        }
+        let passed = 0;
+        for (const qid of qidsForTask) {
+          if (everPassedQuiz.has(qid)) passed += 1;
+        }
+        t.quizzesTotal = qidsForTask.size;
+        t.quizzesPassed = passed;
+      }
     }
 
     out.sort((a, b) => (a.startDate < b.startDate ? 1 : -1));

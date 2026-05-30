@@ -7,6 +7,7 @@ import { DashboardHashScroll } from "@/components/student/DashboardHashScroll";
 import { DashboardHero } from "@/components/student/dashboard/DashboardHero";
 import { DashboardTechBackground } from "@/components/student/dashboard/DashboardTechBackground";
 import { GradeSection } from "@/components/student/dashboard/GradeSection";
+import { LearningTasksDashboardCard } from "@/components/student/dashboard/LearningTasksDashboardCard";
 import { PersonalLearningOverview } from "@/components/student/dashboard/PersonalLearningOverview";
 import { SummaryCard } from "@/components/student/dashboard/SummaryCard";
 import type { StudentDashboardPayload } from "@/lib/student-dashboard-types";
@@ -77,6 +78,8 @@ export function StudentDashboard({ data }: Props) {
               />
             </motion.div>
           </motion.section>
+
+          <LearningTasksDashboardCard />
 
           <motion.section
             initial={{ opacity: 0, y: 16 }}

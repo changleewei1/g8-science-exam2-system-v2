@@ -29,6 +29,7 @@ import { StudentAdminService } from "@/domain/services/student-admin-service";
 import { VideoTrackingService } from "@/domain/services/video-tracking-service";
 import { SupabaseLearningTaskRepository } from "@/infrastructure/repositories/supabase-learning-task-repository";
 import { SupabaseStudentTaskProgressRepository } from "@/infrastructure/repositories/supabase-student-task-progress-repository";
+import { SupabaseTaskStudentEngagementRepository } from "@/infrastructure/repositories/supabase-task-student-engagement-repository";
 import { SupabaseExamScopeRepository } from "@/infrastructure/repositories/supabase-exam-scope-repository";
 import { SupabaseQuizAttemptRepository } from "@/infrastructure/repositories/supabase-quiz-attempt-repository";
 import { SupabaseQuizQuestionRepository } from "@/infrastructure/repositories/supabase-quiz-question-repository";
@@ -62,6 +63,7 @@ export function getLearningTaskService() {
   return new LearningTaskService(
     r.learningTasks,
     r.studentTaskProgress,
+    new SupabaseTaskStudentEngagementRepository(),
     r.students,
     r.videos,
   );
