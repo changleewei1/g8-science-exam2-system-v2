@@ -34,4 +34,4 @@ comment on column public.task_student_progress.first_seen_at is '首次標記已
 drop trigger if exists trg_task_student_progress_updated on public.task_student_progress;
 create trigger trg_task_student_progress_updated
 before update on public.task_student_progress
-for each row execute function public.set_updated_at ();
+for each row execute function public.set_updated_at();
