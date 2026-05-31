@@ -11,6 +11,7 @@ type Summary = {
   incompleteTaskCount: number;
   completedTaskCount: number;
   hasNewTasks: boolean;
+  todayNewTaskCount: number;
 };
 
 export function LearningTasksDashboardCard() {
@@ -31,6 +32,7 @@ export function LearningTasksDashboardCard() {
           incompleteTaskCount: Number(data.incompleteTaskCount) || 0,
           completedTaskCount: Number(data.completedTaskCount) || 0,
           hasNewTasks: Boolean(data.hasNewTasks),
+          todayNewTaskCount: Number(data.todayNewTaskCount) || 0,
         });
       } catch {
         setErr("無法載入");

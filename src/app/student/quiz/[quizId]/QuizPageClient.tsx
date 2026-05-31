@@ -31,7 +31,7 @@ function useQuizReturnContext() {
     const taskId = searchParams.get("taskId");
     const unitId = searchParams.get("unitId");
     const fromTask = from === "task";
-    let backHref = "/student/dashboard#exam-scopes";
+    let backHref = "/student/dashboard";
     let backLabel = "返回學習總覽";
     if (fromTask) {
       backHref = `/student/tasks${taskId ? `?taskId=${encodeURIComponent(taskId)}` : ""}`;

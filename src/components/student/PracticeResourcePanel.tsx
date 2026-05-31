@@ -16,7 +16,7 @@ export function PracticeResourcePanel({
   onPracticeNext,
   isMastered,
   skillCode,
-  returnHref = "/student/dashboard#learning-overview",
+  returnHref = "/student/dashboard",
   returnLabel = "回到學習總覽",
 }: PracticeResourcePanelProps) {
   const router = useRouter();
@@ -75,7 +75,7 @@ export function PracticeResourcePanel({
           再練一題
         </button>
         <Link
-          href="/student/dashboard#exam-scopes"
+          href="/student/dashboard"
           className="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-800 hover:border-teal-300 hover:bg-teal-50"
         >
           查看學習狀況

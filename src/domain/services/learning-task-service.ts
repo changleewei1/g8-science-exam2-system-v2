@@ -111,6 +111,8 @@ export type StudentTaskView = {
   quizzesTotal: number;
   /** 任務層級：學生是否曾進入任務頁（task_student_progress.opened_at） */
   taskOpenedAt: string | null;
+  /** learning_tasks.created_at（ISO） */
+  taskCreatedAt: string;
 };
 
 export type StudentLearningTaskSummary = {
@@ -118,6 +120,8 @@ export type StudentLearningTaskSummary = {
   incompleteTaskCount: number;
   completedTaskCount: number;
   hasNewTasks: boolean;
+  /** 建立日期為今日、且在有效期內且未完成的任務數 */
+  todayNewTaskCount: number;
 };
 
 function todayYmd(): string {
@@ -238,6 +242,7 @@ export class LearningTaskService {
     let newTaskCount = 0;
     let incompleteTaskCount = 0;
     let completedTaskCount = 0;
+    let todayNewTaskCount = 0;
     for (const t of tasks) {
       const inWin = taskInEffectiveWindow(t.startDate, t.endDate, today);
       const complete = t.completionRate >= 100;
@@ -249,6 +254,10 @@ export class LearningTaskService {
         incompleteTaskCount += 1;
         const opened = Boolean(t.taskOpenedAt);
         if (!opened) newTaskCount += 1;
+        const createdDay = t.taskCreatedAt.slice(0, 10);
+        if (createdDay === today) {
+          todayNewTaskCount += 1;
+        }
       }
     }
     return {
@@ -256,6 +265,7 @@ export class LearningTaskService {
       incompleteTaskCount,
       completedTaskCount,
       hasNewTasks: newTaskCount > 0,
+      todayNewTaskCount,
     };
   }
 
@@ -767,6 +777,7 @@ export class LearningTaskService {
         quizzesPassed: 0,
         quizzesTotal: 0,
         taskOpenedAt: openedByTask.get(task.id) ?? null,
+        taskCreatedAt: task.created_at,
       });
     }
 

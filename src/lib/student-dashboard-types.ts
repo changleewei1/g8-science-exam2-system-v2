@@ -58,3 +58,37 @@ export type StudentDashboardPayload = {
   /** 個人總覽預設段考 scopeId */
   defaultOverviewScopeId: string | null;
 };
+
+/** 學生首頁（單一主畫面）：目前段考、進度、任務、主 CTA */
+export type StudentFocusHomePayload = {
+  studentName: string;
+  studentGrade: number;
+  weeklyLearningLabel: string;
+  nextStepHint: string;
+  taskSummary: {
+    newTaskCount: number;
+    incompleteTaskCount: number;
+    completedTaskCount: number;
+    hasNewTasks: boolean;
+    todayNewTaskCount: number;
+  };
+  activeScope: {
+    id: string;
+    title: string;
+    subject: string;
+    /** 例：國二理化 · 下學期第三次段考 */
+    headline: string;
+    completionRate: number;
+    masteredSkills: number;
+    totalSkills: number;
+    averageMastery: number;
+    /** 目前段考範圍內影片完成率 0–100 */
+    videoCompletionRate: number;
+    /** 已精熟技能數／總技能數 之百分比 0–100 */
+    skillCompletionRate: number;
+    /** 段考範圍內測驗作答通過率（依作答次數加權）0–100 */
+    quizPassRate: number;
+  } | null;
+  /** 近 7 日學習時間（分鐘），供統計卡數字用 */
+  weeklyLearningMinutes: number;
+};

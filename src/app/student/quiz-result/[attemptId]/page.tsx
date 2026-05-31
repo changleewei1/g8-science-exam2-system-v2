@@ -35,9 +35,9 @@ export default async function QuizResultPage({ params, searchParams }: Props) {
 
   const videoBackHref = video
     ? `/student/video/${video.id}${buildVideoPageQuery({ fromTask, taskId })}`
-    : "/student/dashboard#exam-scopes";
+    : "/student/dashboard";
 
-  let primaryHref = "/student/dashboard#exam-scopes";
+  let primaryHref = "/student/dashboard";
   if (fromTask) {
     primaryHref = `/student/tasks${taskId ? `?taskId=${encodeURIComponent(taskId)}` : ""}`;
   } else if (video) {
@@ -50,7 +50,7 @@ export default async function QuizResultPage({ params, searchParams }: Props) {
         {video ? (
           <StudentBackLink href={videoBackHref}>返回影片</StudentBackLink>
         ) : (
-          <StudentBackLink href="/student/dashboard#exam-scopes">返回學習總覽</StudentBackLink>
+          <StudentBackLink href="/student/dashboard">返回學習總覽</StudentBackLink>
         )}
       </div>
       <h1 className="text-2xl font-semibold text-slate-900">測驗結果</h1>

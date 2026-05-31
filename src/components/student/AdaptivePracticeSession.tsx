@@ -47,7 +47,7 @@ export function AdaptivePracticeSession(props: AdaptivePracticeSessionProps) {
     skillCode,
     skillLabel,
     apiBase = "/api/lab/practice",
-    backHref = "/student/dashboard#learning-overview",
+    backHref = "/student/dashboard",
   } = props;
   const returnLabel = backHref.includes("/student/exam-scope/") ? "返回技能樹練習" : "回到學習總覽";
 

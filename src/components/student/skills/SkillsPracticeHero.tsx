@@ -14,7 +14,7 @@ export function SkillsPracticeHero({ scopeId, scopeTitle }: Props) {
         <div className="min-w-0 flex-1 space-y-4">
           <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
             <StudentBackLink href={`/student/exam-scope/${scopeId}`}>返回段考範圍</StudentBackLink>
-            <StudentBackLink href="/student/dashboard#exam-scopes">返回學習總覽</StudentBackLink>
+            <StudentBackLink href="/student/dashboard">返回學習總覽</StudentBackLink>
           </div>
 
           <div className="flex items-start gap-3">

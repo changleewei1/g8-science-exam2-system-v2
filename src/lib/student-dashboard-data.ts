@@ -9,9 +9,10 @@ import type {
   GradeDashboardBlock,
   SemesterLabel,
   StudentDashboardPayload,
+  StudentFocusHomePayload,
   StudentOverviewScopeOption,
 } from "@/lib/student-dashboard-types";
-import { getStudentLearningService } from "@/infrastructure/composition";
+import { getStudentLearningService, getLearningTaskService } from "@/infrastructure/composition";
 
 const EXAM_LABELS = ["第一次段考", "第二次段考", "第三次段考"] as const;
 
@@ -46,7 +47,7 @@ function buildLockedCard(
   };
 }
 
-async function computeWeeklyLearningLabel(studentId: string): Promise<string> {
+async function computeWeeklyLearning(studentId: string): Promise<{ minutes: number; label: string }> {
   const supabase = getSupabaseAdmin();
   const weekStart = new Date();
   weekStart.setDate(weekStart.getDate() - 6);
@@ -84,17 +85,28 @@ async function computeWeeklyLearningLabel(studentId: string): Promise<string> {
 
   const practiceSeconds = answerCount * 90;
   const totalMinutes = Math.round((watchSeconds + practiceSeconds) / 60);
-  if (totalMinutes <= 0) return "本週尚未記錄";
-  if (totalMinutes < 60) return `${totalMinutes} 分鐘`;
+  if (totalMinutes <= 0) return { minutes: 0, label: "本週尚未記錄" };
+  if (totalMinutes < 60) return { minutes: totalMinutes, label: `${totalMinutes} 分鐘` };
   const hours = Math.floor(totalMinutes / 60);
   const mins = totalMinutes % 60;
-  return mins > 0 ? `${hours} 小時 ${mins} 分` : `${hours} 小時`;
+  const label = mins > 0 ? `${hours} 小時 ${mins} 分` : `${hours} 小時`;
+  return { minutes: totalMinutes, label };
+}
+
+async function computeWeeklyLearningLabel(studentId: string): Promise<string> {
+  const { label } = await computeWeeklyLearning(studentId);
+  return label;
 }
 
 async function enrichOpenCard(
   studentId: string,
   scope: ExamScope,
-): Promise<Pick<ExamCard, "completionRate" | "masteredSkills" | "totalSkills" | "averageMastery">> {
+): Promise<
+  Pick<ExamCard, "completionRate" | "masteredSkills" | "totalSkills" | "averageMastery"> & {
+    videoCompletionRate: number;
+    skillCompletionRate: number;
+  }
+> {
   const learning = getStudentLearningService();
   const [videoRate, practice] = await Promise.all([
     learning.getVideoCompletionRate(studentId, scope.id),
@@ -113,7 +125,14 @@ async function enrichOpenCard(
   const skillRate = totalSkills > 0 ? Math.round((masteredSkills / totalSkills) * 100) : 0;
   const completionRate = Math.round((videoRate + skillRate) / 2);
 
-  return { completionRate, masteredSkills, totalSkills, averageMastery };
+  return {
+    completionRate,
+    masteredSkills,
+    totalSkills,
+    averageMastery,
+    videoCompletionRate: videoRate,
+    skillCompletionRate: skillRate,
+  };
 }
 
 function collectSpringExam2And3Options(
@@ -177,6 +196,7 @@ export async function buildStudentDashboardPayload(
 
     const units = await unitsForScope(scope.id);
     const stats = await enrichOpenCard(studentId, scope);
+    const { videoCompletionRate: _v, skillCompletionRate: _s, ...examStats } = stats;
 
     return {
       id: scope.id,
@@ -186,7 +206,7 @@ export async function buildStudentDashboardPayload(
       subject: scope.subject,
       isOpen: true,
       units,
-      ...stats,
+      ...examStats,
     };
   }
 
@@ -260,4 +280,84 @@ export async function buildStudentDashboardPayload(
   const defaultOverviewScopeId = resolveDefaultOverviewScopeId(overviewScopeOptions, overviewScopeQueryId);
 
   return { studentName, summary, hero, grades, overviewScopeOptions, defaultOverviewScopeId };
+}
+
+function pickActiveExamScopeForStudent(scopes: ExamScope[], studentGrade: number): ExamScope | null {
+  const open = scopes.filter((s) => s.isAvailable());
+  const forGrade = open.filter((s) => s.grade === studentGrade);
+  if (forGrade.length === 0) return null;
+  return [...forGrade].sort((a, b) => {
+    if (a.term !== b.term) return b.term - a.term;
+    return b.examNo - a.examNo;
+  })[0] ?? null;
+}
+
+function scopeHeadline(scope: ExamScope): string {
+  const gradeLabel = scope.grade === 8 ? "國二" : scope.grade === 9 ? "國三" : `國${scope.grade}`;
+  const sem = termToSemester(scope.term);
+  const exam = EXAM_LABELS[scope.examNo - 1] ?? `第${scope.examNo}次段考`;
+  return `${gradeLabel}理化 · ${sem}${exam}`;
+}
+
+export async function buildStudentFocusHomePayload(
+  studentId: string,
+  studentName: string,
+  studentGrade: number,
+  scopes: ExamScope[],
+): Promise<StudentFocusHomePayload> {
+  const [taskSummary, weekly] = await Promise.all([
+    getLearningTaskService().getStudentLearningTaskSummary(studentId),
+    computeWeeklyLearning(studentId),
+  ]);
+
+  const active = pickActiveExamScopeForStudent(scopes, studentGrade);
+  if (!active) {
+    return {
+      studentName,
+      studentGrade,
+      weeklyLearningLabel: weekly.label,
+      weeklyLearningMinutes: weekly.minutes,
+      taskSummary,
+      nextStepHint: "目前沒有對應你年級的開放段考，請聯絡老師或稍後再試。",
+      activeScope: null,
+    };
+  }
+
+  const learning = getStudentLearningService();
+  const [stats, quizPassRate] = await Promise.all([
+    enrichOpenCard(studentId, active),
+    learning.getQuizPassRate(studentId, active.id),
+  ]);
+  const completionRate = stats.completionRate;
+
+  let nextStepHint = "進入段考預習：依單元觀看影片並完成智慧練習。";
+  if (taskSummary.hasNewTasks) {
+    nextStepHint = "先完成老師指派的學習任務（新任務）。";
+  } else if (taskSummary.incompleteTaskCount > 0) {
+    nextStepHint = "接著處理尚未完成的學習任務。";
+  } else if (completionRate >= 100) {
+    nextStepHint = "段考整體進度已達標，可進入單元溫習或挑戰進階練習。";
+  }
+
+  return {
+    studentName,
+    studentGrade,
+    weeklyLearningLabel: weekly.label,
+    weeklyLearningMinutes: weekly.minutes,
+    taskSummary,
+    nextStepHint,
+    activeScope: {
+      id: active.id,
+      title: active.title,
+      subject: active.subject,
+      headline: scopeHeadline(active),
+      completionRate,
+      masteredSkills: stats.masteredSkills,
+      totalSkills: stats.totalSkills,
+      averageMastery: stats.averageMastery,
+      videoCompletionRate: stats.videoCompletionRate,
+      skillCompletionRate: stats.skillCompletionRate,
+      quizPassRate,
+    },
+  };
 }

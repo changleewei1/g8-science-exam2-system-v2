@@ -146,7 +146,7 @@ export function UnitVideosEmpty({
             返回段考範圍
           </Link>
           <Link
-            href="/student/dashboard#exam-scopes"
+            href="/student/dashboard"
             className="inline-flex min-h-11 items-center justify-center rounded-xl bg-gradient-to-r from-cyan-600 to-sky-600 px-5 text-sm font-semibold text-white shadow-[0_4px_20px_-4px_rgba(8,145,178,0.5)] transition hover:brightness-105"
           >
             選擇其他段考

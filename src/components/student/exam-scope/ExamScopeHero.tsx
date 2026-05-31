@@ -16,7 +16,7 @@ export function ExamScopeHero({ scopeId, title, description }: Props) {
     <section className="mb-8 rounded-3xl border border-cyan-200/60 bg-white/75 p-5 shadow-[0_8px_40px_-12px_rgba(14,165,233,0.25)] backdrop-blur-xl sm:p-8">
       <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
         <div className="min-w-0 flex-1 space-y-4">
-          <StudentBackLink href="/student/dashboard#exam-scopes">返回學習總覽</StudentBackLink>
+          <StudentBackLink href="/student/dashboard">返回學習總覽</StudentBackLink>
 
           <div className="flex items-start gap-3">
             <div className="mt-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-cyan-200 bg-gradient-to-br from-cyan-50 to-sky-100 shadow-inner shadow-cyan-100/80">

@@ -25,7 +25,7 @@ export default async function StudentLabPracticePage({
   const scopeId = (Array.isArray(scopeIdRaw) ? scopeIdRaw[0] : scopeIdRaw)?.trim() || "";
   const backHref = scopeId
     ? `/student/exam-scope/${encodeURIComponent(scopeId)}/skills`
-    : "/student/dashboard#learning-overview";
+    : "/student/dashboard";
   const backLabel = scopeId ? "返回段考技能樹" : "回到學習總覽";
 
   const { skill_code: raw } = await params;
@@ -35,7 +35,7 @@ export default async function StudentLabPracticePage({
   if (!enabled) {
     return (
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
-        <StudentBackLink href="/student/dashboard#exam-scopes">返回學習總覽</StudentBackLink>
+        <StudentBackLink href="/student/dashboard">返回學習總覽</StudentBackLink>
         <div className="mt-8 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <h1 className="text-lg font-semibold text-slate-900">智慧練習尚未開放</h1>
           <p className="mt-2 text-sm text-slate-600">
