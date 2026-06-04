@@ -10,6 +10,7 @@ import { VideoComprehensionQuizClient } from "@/components/student/VideoComprehe
 type Props = {
   unitId: string;
   videoId: string;
+  examScopeId: string | null;
   youtubeVideoId: string;
   title: string;
   initialPosition: number;
@@ -17,11 +18,13 @@ type Props = {
   canTakeQuiz: boolean;
   fromTask: boolean;
   taskId: string | null;
+  subjectKey?: string;
 };
 
 export function VideoPageClient({
   unitId,
   videoId,
+  examScopeId,
   youtubeVideoId,
   title,
   initialPosition,
@@ -29,6 +32,7 @@ export function VideoPageClient({
   canTakeQuiz,
   fromTask,
   taskId,
+  subjectKey,
 }: Props) {
   const [status, setStatus] = useState<string | null>(null);
   const [unlocked, setUnlocked] = useState(canTakeQuiz);
@@ -98,6 +102,9 @@ export function VideoPageClient({
         key={quizId ?? "no-quiz"}
         quizId={quizId}
         unlocked={unlocked}
+        videoId={videoId}
+        examScopeId={examScopeId}
+        subjectKey={subjectKey}
         moreVideosHref={`/student/unit/${unitId}`}
         moreVideosLabel="返回單元 · 選其他影片"
         taskReturnHref={fromTask ? backHref : undefined}

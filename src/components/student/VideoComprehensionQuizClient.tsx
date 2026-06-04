@@ -7,6 +7,7 @@ import { Brain, Clapperboard, ListVideo } from "lucide-react";
 
 import type { VideoQuizChoicePerm } from "@/lib/student/shuffle-video-quiz-choices";
 import { shuffleChoicesForVideoQuiz } from "@/lib/student/shuffle-video-quiz-choices";
+import { QuizQuestionQualityFeedback } from "@/components/student/quiz/QuizQuestionQualityFeedback";
 
 type Q = {
   id: string;
@@ -17,6 +18,7 @@ type Q = {
   choiceD: string;
   sortOrder: number;
   skillCode: string;
+  questionBankItemId?: string | null;
 };
 
 function choiceLabel(q: Q, letter: string): string {
@@ -32,6 +34,9 @@ type Feedback = { isCorrect: boolean; explanation: string; correctAnswer: string
 type Props = {
   quizId: string | null;
   unlocked: boolean;
+  videoId: string;
+  examScopeId?: string | null;
+  subjectKey?: string | null;
   onPassed?: () => void;
   /** 完成測驗或想換片時：前往單元影片列表 */
   moreVideosHref?: string;
@@ -90,6 +95,9 @@ function FollowUpNavCard({
 export function VideoComprehensionQuizClient({
   quizId,
   unlocked,
+  videoId,
+  examScopeId,
+  subjectKey,
   onPassed,
   moreVideosHref,
   moreVideosLabel = "返回單元 · 選其他影片",
@@ -367,6 +375,15 @@ export function VideoComprehensionQuizClient({
                       <span className="font-medium text-slate-800">詳解：</span>
                       {fb.explanation}
                     </p>
+                  ) : null}
+                  {current.questionBankItemId ? (
+                    <QuizQuestionQualityFeedback
+                      questionBankItemId={current.questionBankItemId}
+                      videoId={videoId}
+                      examScopeId={examScopeId ?? undefined}
+                      skillCode={current.skillCode}
+                      subjectKey={subjectKey ?? undefined}
+                    />
                   ) : null}
                   {step < questions.length - 1 ? (
                     <button

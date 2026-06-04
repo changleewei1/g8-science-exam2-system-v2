@@ -123,6 +123,7 @@ export function quizQuestionFromRow(r: QuizQuestionRow): QuizQuestion {
     r.choice_b_image_url ?? null,
     r.choice_c_image_url ?? null,
     r.choice_d_image_url ?? null,
+    r.question_bank_item_id ?? null,
   );
 }
 

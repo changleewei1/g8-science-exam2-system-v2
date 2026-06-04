@@ -3,6 +3,7 @@ import { StudentLightTechBackground } from "@/components/student/StudentLightTec
 import { getVideoDetailUseCase } from "@/infrastructure/composition";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
 import { ensureExam3VideoQuizReady } from "@/lib/admin/ensure-exam3-video-quiz-ready";
+import { DEFAULT_SUBJECT_KEY } from "@/lib/subject-defaults";
 import { getStudentSession } from "@/lib/session";
 import { parseStudentVideoSearchParams } from "@/lib/student-video-context";
 import { VideoPageClient } from "./VideoPageClient";
@@ -29,6 +30,19 @@ export default async function VideoPage({ params, searchParams }: Props) {
   const progress = data.progress;
   const quiz = data.quiz;
 
+  let examScopeId: string | null = null;
+  try {
+    const supabase = getSupabaseAdmin();
+    const { data: su } = await supabase
+      .from("scope_units")
+      .select("exam_scope_id")
+      .eq("id", v.unitId)
+      .maybeSingle();
+    examScopeId = (su?.exam_scope_id as string | null) ?? null;
+  } catch {
+    examScopeId = null;
+  }
+
   return (
     <div className="relative min-h-[calc(100dvh-3.5rem)]">
       <StudentLightTechBackground />
@@ -36,6 +50,7 @@ export default async function VideoPage({ params, searchParams }: Props) {
         <VideoPageClient
           unitId={v.unitId}
           videoId={v.id}
+          examScopeId={examScopeId}
           youtubeVideoId={v.youtubeVideoId}
           title={v.title}
           initialPosition={progress?.lastPositionSeconds ?? 0}
@@ -43,6 +58,7 @@ export default async function VideoPage({ params, searchParams }: Props) {
           canTakeQuiz={progress?.canTakeQuiz() ?? false}
           fromTask={fromTask}
           taskId={taskId}
+          subjectKey={DEFAULT_SUBJECT_KEY}
         />
       </main>
     </div>

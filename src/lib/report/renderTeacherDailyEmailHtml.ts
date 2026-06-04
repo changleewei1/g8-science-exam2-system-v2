@@ -153,6 +153,17 @@ export function renderTeacherDailyEmailHtml(d: TeacherDailyEmailReportData): str
   </div>`
       : "";
 
+  const questionQualityBlock = `<div style="padding:22px;background:#fff7ed;border-radius:16px;border:1px solid #fdba74;margin-bottom:16px">
+    <h2 style="margin:0 0 12px 0;font-size:17px;color:#9a3412">📌 題目品質警示</h2>
+    <ul style="margin:0;padding-left:20px;font-size:14px;line-height:1.75;color:#431407">
+      <li>今日收到題目回饋：<strong>${d.questionQualityTodayFeedback}</strong> 筆</li>
+      <li>需要修正（待審）題目數：<strong>${d.questionQualityNeedsReview}</strong> 題</li>
+      <li>今日已自動隱藏（品質分過低）題目數：<strong>${d.questionQualityAutoHiddenToday}</strong> 題</li>
+      <li>AI 產題可信度低於 70 的題目數：<strong>${d.questionQualityLowAiConfidence}</strong> 題</li>
+    </ul>
+    <p style="margin:12px 0 0 0;font-size:12px;color:#78716c">本段僅供教師檢視，不會出現在家長信中。</p>
+  </div>`;
+
   const completedBlock = sec(d, "completed_list")
     ? `<div style="padding:22px;background:#ffffff;border-radius:16px;border:1px solid #e2e8f0;margin-bottom:16px">
     <h2 style="margin:0 0 12px 0;font-size:17px;color:#15803d">✅ 已完成學生名單</h2>
@@ -261,6 +272,7 @@ export function renderTeacherDailyEmailHtml(d: TeacherDailyEmailReportData): str
 
   ${classOverviewBlock}
   ${todayBlock}
+  ${questionQualityBlock}
   ${practiceModeBlock}
   ${completedBlock}
   ${incompleteBlock}

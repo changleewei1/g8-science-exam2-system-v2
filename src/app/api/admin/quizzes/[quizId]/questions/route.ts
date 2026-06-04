@@ -120,7 +120,9 @@ export async function PUT(req: Request, ctx: { params: Promise<Params> }) {
   }));
 
   try {
-    await quizQuestions.syncQuestionsForQuiz(quizId, rows);
+    await quizQuestions.syncQuestionsForQuiz(quizId, rows, {
+      bankChangeReason: parsed.data.changeReason ?? null,
+    });
     await quizzes.syncQuestionCountMeta(quizId, rows.length);
   } catch (e) {
     const msg = e instanceof Error ? e.message : getSupabaseErrorMessage(e);

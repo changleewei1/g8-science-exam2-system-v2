@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { AdaptivePracticeSession } from "@/components/student/AdaptivePracticeSession";
 import { StudentBackLink } from "@/components/student/StudentBackLink";
 import { isAdaptivePracticeLabEnabled } from "@/lib/feature-flags";
+import { DEFAULT_SUBJECT_KEY } from "@/lib/subject-defaults";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
 import { getStudentSession } from "@/lib/session";
 
@@ -99,6 +100,8 @@ export default async function StudentLabPracticePage({
       <AdaptivePracticeSession
         skillCode={skillCode}
         skillLabel={skillLabel}
+        examScopeId={scopeId || null}
+        subjectKey={DEFAULT_SUBJECT_KEY}
         apiBase="/api/lab/practice"
         backHref={backHref}
       />

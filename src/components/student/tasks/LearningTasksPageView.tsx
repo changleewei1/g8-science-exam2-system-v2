@@ -8,6 +8,7 @@ import { CalendarRange, CheckCircle2, ChevronDown, Circle, ListTodo, Play, Spark
 import { StudentBackLink } from "@/components/student/StudentBackLink";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { buildVideoPageQuery } from "@/lib/student-video-context";
+import type { StudentQuestionUpdateListItem } from "@/lib/student-question-update-notifications";
 import { studentTasksTodayYmd, taskInEffectiveWindow } from "@/lib/student/partition-learning-tasks";
 import { cn } from "@/lib/utils";
 
@@ -47,6 +48,7 @@ type Props = {
   newTasks: LearningTaskPageTask[];
   inProgressTasks: LearningTaskPageTask[];
   completedTasks: LearningTaskPageTask[];
+  questionUpdates?: StudentQuestionUpdateListItem[];
 };
 
 /** 今日在 startDate～endDate（含）內的任務預設展開，其餘預設收合 */
@@ -232,6 +234,79 @@ function TaskCard({
   );
 }
 
+function formatYmd(iso: string | null | undefined): string {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "—";
+  return d.toLocaleDateString("zh-TW", { year: "numeric", month: "2-digit", day: "2-digit" });
+}
+
+function QuestionUpdatesSection({ items }: { items: StudentQuestionUpdateListItem[] }) {
+  const pending = items.filter((x) => !x.isRead);
+  if (pending.length === 0) return null;
+  return (
+    <motion.section
+      id="question-updates"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.04 }}
+      className="relative overflow-hidden rounded-3xl border border-amber-300/70 bg-gradient-to-br from-amber-50/95 via-white to-orange-50/35 p-5 shadow-[0_12px_44px_-14px_rgba(251,146,60,0.38)] backdrop-blur-xl sm:p-7"
+    >
+      <div className="pointer-events-none absolute -right-8 top-0 h-32 w-32 rounded-full bg-orange-400/20 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-0 left-1/4 h-24 w-40 rounded-full bg-cyan-400/10 blur-2xl" />
+      <div className="relative mb-5 flex flex-wrap items-center gap-3">
+        <span className="inline-flex items-center rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1 text-xs font-bold text-white shadow-[0_0_18px_rgba(251,146,60,0.45)]">
+          🆕 題目已更新
+        </span>
+        <p className="text-sm font-semibold text-amber-950/90">老師已優化影片測驗，建議重新挑戰。</p>
+      </div>
+      <ul className="relative space-y-4">
+        {pending.map((u) => {
+          const href = u.quizId
+            ? `/student/quiz/${u.quizId}`
+            : u.videoId
+              ? `/student/video/${u.videoId}`
+              : "/student/dashboard";
+          return (
+            <li
+              key={u.notificationId}
+              className="rounded-2xl border border-amber-200/80 bg-white/80 p-4 shadow-sm backdrop-blur-sm"
+            >
+              <p className="text-base font-semibold text-slate-900">{u.videoTitle}</p>
+              <dl className="mt-3 grid gap-2 text-xs text-slate-600 sm:grid-cols-2">
+                <div>
+                  <dt className="font-medium text-slate-500">原版本</dt>
+                  <dd className="font-mono font-semibold text-slate-800">v{u.oldVersion}</dd>
+                </div>
+                <div>
+                  <dt className="font-medium text-slate-500">目前版本</dt>
+                  <dd className="font-mono font-semibold text-slate-800">v{u.currentVersion}</dd>
+                </div>
+                <div>
+                  <dt className="font-medium text-slate-500">更新時間</dt>
+                  <dd className="font-semibold text-slate-800">{formatYmd(u.bankUpdatedAt ?? u.createdAt)}</dd>
+                </div>
+                <div className="sm:col-span-2">
+                  <dt className="font-medium text-slate-500">更新原因</dt>
+                  <dd className="text-sm leading-relaxed text-slate-800">{u.changeReason ?? "題目內容已更新"}</dd>
+                </div>
+              </dl>
+              <div className="mt-4">
+                <Link
+                  href={href}
+                  className="inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 py-3 text-sm font-semibold text-white shadow-[0_8px_26px_-8px_rgba(249,115,22,0.55)] transition hover:brightness-105 active:scale-[0.99] sm:w-auto sm:min-w-[140px] sm:px-6"
+                >
+                  重新挑戰
+                </Link>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </motion.section>
+  );
+}
+
 function TaskSection({
   title,
   tasks,
@@ -267,7 +342,12 @@ function TaskSection({
   );
 }
 
-export function LearningTasksPageView({ newTasks, inProgressTasks, completedTasks }: Props) {
+export function LearningTasksPageView({
+  newTasks,
+  inProgressTasks,
+  completedTasks,
+  questionUpdates = [],
+}: Props) {
   const router = useRouter();
   const newIds = useMemo(() => newTasks.map((t) => t.id).join(","), [newTasks]);
 
@@ -279,6 +359,14 @@ export function LearningTasksPageView({ newTasks, inProgressTasks, completedTask
 
   const onTaskOpenChange = useCallback((taskId: string, open: boolean) => {
     setOpenByTaskId((prev) => ({ ...prev, [taskId]: open }));
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.location.hash === "#question-updates") {
+      const el = document.getElementById("question-updates");
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
+    }
   }, []);
 
   useEffect(() => {
@@ -333,6 +421,8 @@ export function LearningTasksPageView({ newTasks, inProgressTasks, completedTask
           </div>
         </div>
       </motion.section>
+
+      <QuestionUpdatesSection items={questionUpdates} />
 
       {totalCount === 0 ? (
         <motion.div

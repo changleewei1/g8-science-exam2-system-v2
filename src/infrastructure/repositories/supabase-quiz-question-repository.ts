@@ -25,7 +25,11 @@ export class SupabaseQuizQuestionRepository implements QuizQuestionRepository {
     throwIfPostgrestError(error);
   }
 
-  async syncQuestionsForQuiz(quizId: string, items: QuizQuestionSyncPayload[]) {
+  async syncQuestionsForQuiz(
+    quizId: string,
+    items: QuizQuestionSyncPayload[],
+    options?: { bankChangeReason?: string | null },
+  ) {
     if (items.length < 1) {
       throw new Error("AT_LEAST_ONE_QUESTION_REQUIRED");
     }
@@ -62,6 +66,27 @@ export class SupabaseQuizQuestionRepository implements QuizQuestionRepository {
           .eq("id", row.id)
           .eq("quiz_id", quizId);
         throwIfPostgrestError(error);
+        const bankId = row.questionBankItemId?.trim();
+        if (bankId) {
+          const reason =
+            (options?.bankChangeReason?.trim() || "老師於影片測驗編輯更新題目").slice(0, 500);
+          const { error: bErr } = await getSupabaseAdmin()
+            .from("question_bank_items")
+            .update({
+              question_text: payload.question_text,
+              choice_a: payload.choice_a,
+              choice_b: payload.choice_b,
+              choice_c: payload.choice_c,
+              choice_d: payload.choice_d,
+              correct_answer: letter,
+              explanation: payload.explanation,
+              difficulty: payload.difficulty,
+              skill_code: payload.skill_code,
+              change_reason: reason,
+            })
+            .eq("id", bankId);
+          throwIfPostgrestError(bErr);
+        }
       } else {
         const { error } = await getSupabaseAdmin()
           .from("quiz_questions")

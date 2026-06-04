@@ -2,6 +2,7 @@ import { TaskListScrollAnchor } from "@/components/student/TaskListScrollAnchor"
 import { LearningTasksPageView } from "@/components/student/tasks/LearningTasksPageView";
 import { StudentLightTechBackground } from "@/components/student/StudentLightTechBackground";
 import { getStudentLearningTasksUseCase } from "@/infrastructure/composition";
+import { fetchStudentQuestionUpdateNotifications } from "@/lib/student-question-update-notifications";
 import { partitionStudentLearningTasks, studentTasksTodayYmd } from "@/lib/student/partition-learning-tasks";
 import { getStudentSession } from "@/lib/session";
 import { redirect } from "next/navigation";
@@ -19,7 +20,10 @@ export default async function StudentTasksPage({ searchParams }: PageProps) {
   const { taskId: focusTaskId } = await searchParams;
 
   const uc = getStudentLearningTasksUseCase();
-  const tasks = await uc.execute(session.studentId);
+  const [tasks, questionUpdates] = await Promise.all([
+    uc.execute(session.studentId),
+    fetchStudentQuestionUpdateNotifications(session.studentId, { onlyUnread: false, limit: 40 }),
+  ]);
   const today = studentTasksTodayYmd();
   const { newTasks, inProgressTasks, completedTasks } = partitionStudentLearningTasks(tasks, today);
 
@@ -32,6 +36,7 @@ export default async function StudentTasksPage({ searchParams }: PageProps) {
           newTasks={newTasks}
           inProgressTasks={inProgressTasks}
           completedTasks={completedTasks}
+          questionUpdates={questionUpdates}
         />
       </main>
     </div>

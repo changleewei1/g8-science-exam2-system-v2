@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
 import { isAdaptivePracticeLabEnabled } from "@/lib/feature-flags";
+import { looksLikePlaceholderQuizQuestion } from "@/lib/exam3-video-quiz-guards";
 import { labPracticeFeatureDisabledResponse } from "@/lib/lab/lab-practice-disabled-response";
+import {
+  compareBankRowsForQuestionPool,
+  isHiddenOrLowQuality,
+  type QuestionQualityStatForPool,
+} from "@/lib/question-quality/bank-pool-sort";
 import { getStudentSession } from "@/lib/session";
 
 function parseDifficulty(raw: string): "基礎" | "進階" {
@@ -10,6 +16,16 @@ function parseDifficulty(raw: string): "基礎" | "進階" {
 
 const NO_QUESTIONS_MSG =
   "目前這個觀念尚未建立足夠題目，請先選擇其他觀念練習。";
+
+type BankPickRow = {
+  id: string;
+  question_text: string;
+  choice_a: string;
+  choice_b: string;
+  choice_c: string;
+  choice_d: string;
+  skill_code: string;
+};
 
 export async function GET(req: Request) {
   if (!isAdaptivePracticeLabEnabled()) {
@@ -49,7 +65,7 @@ export async function GET(req: Request) {
     const currentDifficulty = parseDifficulty(practiceSession.current_difficulty);
     const skill_code = practiceSession.skill_code;
 
-    const selectCols = "id, question_text, choice_a, choice_b, choice_c, choice_d";
+    const selectCols = "id, question_text, choice_a, choice_b, choice_c, choice_d, skill_code";
 
     const { data: strictRows, error: strictErr } = await supabase
       .from("question_bank_items")
@@ -61,7 +77,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "LOAD_FAILED", message: "無法載入題目。", detail: strictErr.message }, { status: 500 });
     }
 
-    let rows = strictRows ?? [];
+    let rows = (strictRows ?? []) as BankPickRow[];
 
     if (rows.length === 0) {
       const { data: anyRows, error: anyErr } = await supabase
@@ -72,10 +88,21 @@ export async function GET(req: Request) {
       if (anyErr) {
         return NextResponse.json({ error: "LOAD_FAILED", message: "無法載入題目。", detail: anyErr.message }, { status: 500 });
       }
-      rows = anyRows ?? [];
+      rows = (anyRows ?? []) as BankPickRow[];
     }
 
-    if (rows.length === 0) {
+    const filtered = rows.filter(
+      (r) =>
+        !looksLikePlaceholderQuizQuestion({
+          questionText: String(r.question_text ?? ""),
+          choiceA: String(r.choice_a ?? ""),
+          choiceB: String(r.choice_b ?? ""),
+          choiceC: String(r.choice_c ?? ""),
+          choiceD: String(r.choice_d ?? ""),
+        }),
+    );
+
+    if (filtered.length === 0) {
       return NextResponse.json(
         {
           error: "NO_QUESTIONS",
@@ -85,7 +112,31 @@ export async function GET(req: Request) {
       );
     }
 
-    const pick = rows[Math.floor(Math.random() * rows.length)]!;
+    const ids = filtered.map((r) => r.id);
+    const statMap = new Map<string, QuestionQualityStatForPool>();
+
+    const { data: qRows, error: qStatErr } = await supabase
+      .from("question_quality_stats")
+      .select(
+        "question_id, helpful_count, quality_score, review_status, not_related_count, confusing_count, wrong_answer_count, bad_explanation_count",
+      )
+      .in("question_id", ids);
+
+    if (!qStatErr && qRows) {
+      for (const s of qRows as QuestionQualityStatForPool[]) {
+        statMap.set(String(s.question_id), s);
+      }
+    }
+
+    const eligible = filtered.filter((r) => !isHiddenOrLowQuality(statMap.get(r.id)));
+
+    const pool = eligible.length > 0 ? [...eligible] : [...filtered];
+    const skillSet = new Set([String(skill_code ?? "").trim()].filter(Boolean));
+    pool.sort((a, b) => compareBankRowsForQuestionPool(a, b, skillSet, statMap));
+
+    const topN = Math.min(18, pool.length);
+    const slice = pool.slice(0, topN);
+    const pick = slice[Math.floor(Math.random() * slice.length)]!;
 
     return NextResponse.json({
       question_id: pick.id,

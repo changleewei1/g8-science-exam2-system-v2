@@ -19,6 +19,7 @@ export class QuizQuestion {
     public readonly choiceBImageUrl: string | null = null,
     public readonly choiceCImageUrl: string | null = null,
     public readonly choiceDImageUrl: string | null = null,
+    public readonly questionBankItemId: string | null = null,
   ) {}
 
   isCorrect(answer: string): boolean {

@@ -71,6 +71,12 @@ export type StudentFocusHomePayload = {
     completedTaskCount: number;
     hasNewTasks: boolean;
     todayNewTaskCount: number;
+    unreadQuestionUpdateCount: number;
+  };
+  /** 題庫升版提醒（有未讀時才帶入） */
+  questionUpdate?: {
+    unreadCount: number;
+    practiceHref: string;
   };
   activeScope: {
     id: string;

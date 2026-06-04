@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSubmitQuizUseCase } from "@/infrastructure/composition";
 import { getStudentSession } from "@/lib/session";
+import { markQuestionUpdateNotificationsReadAfterQuizSubmit } from "@/lib/student-question-update-notifications";
 import { submitQuizBodySchema } from "@/lib/validation";
 
 type Params = { quizId: string };
@@ -19,6 +20,7 @@ export async function POST(req: Request, ctx: { params: Promise<Params> }) {
   const uc = getSubmitQuizUseCase();
   try {
     const result = await uc.execute(quizId, session.studentId, parsed.data.answers);
+    await markQuestionUpdateNotificationsReadAfterQuizSubmit(session.studentId, quizId);
     return NextResponse.json(result);
   } catch (e) {
     const msg = e instanceof Error ? e.message : "ERROR";

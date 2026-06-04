@@ -45,6 +45,7 @@ export class QuizService {
       choiceDImageUrl: q.choiceDImageUrl,
       sortOrder: q.sortOrder,
       skillCode: q.skillCode,
+      questionBankItemId: q.questionBankItemId,
     }));
     const { items: sanitized, incomplete } = filterExam3VideoComprehensionQuestions(examScopeId, mapped);
     return {
@@ -80,6 +81,7 @@ export class QuizService {
       choiceDImageUrl: q.choiceDImageUrl,
       sortOrder: q.sortOrder,
       skillCode: q.skillCode,
+      questionBankItemId: q.questionBankItemId,
     }));
     const { items: sanitized, incomplete } = filterExam3VideoComprehensionQuestions(examScopeId, mapped);
     return { quiz, questions: sanitized, unlocked: true, quizIncomplete: incomplete };

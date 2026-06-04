@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { redirect, notFound } from "next/navigation";
 import { QuizMediaImage } from "@/components/student/QuizMediaImage";
+import { QuizQuestionQualityFeedback } from "@/components/student/quiz/QuizQuestionQualityFeedback";
 import { StudentBackLink } from "@/components/student/StudentBackLink";
 import { getQuizAttemptDetailUseCase } from "@/infrastructure/composition";
+import { resolveExamScopeIdFromVideoId } from "@/lib/resolve-video-exam-scope";
 import { getStudentSession } from "@/lib/session";
 import { buildVideoPageQuery } from "@/lib/student-video-context";
 import { isAcidBaseSkillCode } from "@/lib/acid-base-skills";
@@ -32,6 +34,8 @@ export default async function QuizResultPage({ params, searchParams }: Props) {
 
   const { attempt, quiz, video, questions: rawQuestions } = data;
   const questions = [...rawQuestions].sort((a, b) => a.sortOrder - b.sortOrder);
+
+  const examScopeId = video ? await resolveExamScopeIdFromVideoId(video.id) : null;
 
   const videoBackHref = video
     ? `/student/video/${video.id}${buildVideoPageQuery({ fromTask, taskId })}`
@@ -127,6 +131,13 @@ export default async function QuizResultPage({ params, searchParams }: Props) {
                 !isReactionRateSkillCode(q.skillCode) &&
                 q.explanation?.trim() ? (
                 <p className="mt-3 whitespace-pre-wrap text-sm text-slate-700">{q.explanation.trim()}</p>
+              ) : null}
+              {q.questionBankItemId && video ? (
+                <QuizQuestionQualityFeedback
+                  questionBankItemId={q.questionBankItemId}
+                  videoId={video.id}
+                  examScopeId={examScopeId}
+                />
               ) : null}
             </li>
           );

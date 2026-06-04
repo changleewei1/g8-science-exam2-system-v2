@@ -60,6 +60,11 @@ export type TeacherDailyEmailReportData = {
   reviewHighlightLines: string[];
   /** 納入統計之 active 學生數 */
   activeStudentCount: number;
+  /** 題目品質警示（僅老師信，不進家長版） */
+  questionQualityTodayFeedback: number;
+  questionQualityNeedsReview: number;
+  questionQualityAutoHiddenToday: number;
+  questionQualityLowAiConfidence: number;
 };
 
 export async function buildTeacherDailyEmailReport(
@@ -199,6 +204,50 @@ export async function buildTeacherDailyEmailReport(
     }
   }
 
+  let questionQualityTodayFeedback = 0;
+  let questionQualityNeedsReview = 0;
+  let questionQualityAutoHiddenToday = 0;
+  let questionQualityLowAiConfidence = 0;
+  try {
+    const ymd = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Taipei",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date());
+    const sinceIso = `${ymd}T00:00:00+08:00`;
+    const { count: c1 } = await supabase
+      .from("question_feedback")
+      .select("*", { count: "exact", head: true })
+      .gte("created_at", sinceIso);
+    questionQualityTodayFeedback = c1 ?? 0;
+
+    const { count: c2 } = await supabase
+      .from("question_quality_stats")
+      .select("*", { count: "exact", head: true })
+      .eq("review_status", "needs_review");
+    questionQualityNeedsReview = c2 ?? 0;
+
+    const { count: c3 } = await supabase
+      .from("question_quality_stats")
+      .select("*", { count: "exact", head: true })
+      .eq("review_status", "hidden")
+      .lt("quality_score", 50)
+      .gte("updated_at", sinceIso);
+    questionQualityAutoHiddenToday = c3 ?? 0;
+
+    const { count: c4 } = await supabase
+      .from("question_quality_stats")
+      .select("*", { count: "exact", head: true })
+      .lt("ai_confidence_score", 70);
+    questionQualityLowAiConfidence = c4 ?? 0;
+  } catch {
+    questionQualityTodayFeedback = 0;
+    questionQualityNeedsReview = 0;
+    questionQualityAutoHiddenToday = 0;
+    questionQualityLowAiConfidence = 0;
+  }
+
   const modeLabel = DAILY_REPORT_MODE_LABELS[prefs.reportMode];
 
   const mailTitle = `${p.title}｜${modeLabel}`;
@@ -247,5 +296,9 @@ export async function buildTeacherDailyEmailReport(
     skillPracticeLines,
     reviewHighlightLines,
     activeStudentCount: p.activeStudents.length,
+    questionQualityTodayFeedback,
+    questionQualityNeedsReview,
+    questionQualityAutoHiddenToday,
+    questionQualityLowAiConfidence,
   };
 }

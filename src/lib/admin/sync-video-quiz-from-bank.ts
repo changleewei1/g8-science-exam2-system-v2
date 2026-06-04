@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { looksLikePlaceholderQuizQuestion } from "@/lib/exam3-video-quiz-guards";
+import { compareBankRowsForQuestionPool, isHiddenOrLowQuality } from "@/lib/question-quality/bank-pool-sort";
 
 function shuffleInPlace<T>(arr: T[]) {
   for (let i = arr.length - 1; i > 0; i--) {
@@ -42,26 +43,75 @@ function pickThreeWithSpreadCorrectLetters<T extends { id: string; correct_answe
   return chosen.slice(0, 3);
 }
 
+type BankRow = {
+  id: string;
+  unit: string;
+  skill_code: string;
+  difficulty: string;
+  question_text: string;
+  choice_a: string;
+  choice_b: string;
+  choice_c: string;
+  choice_d: string;
+  correct_answer: string;
+  explanation: string | null;
+  excluded_from_video_quiz_pool?: boolean | null;
+};
+
+type QualityRow = {
+  question_id: string;
+  helpful_count: number;
+  quality_score: number;
+  review_status: string;
+  not_related_count?: number | null;
+  confusing_count?: number | null;
+  wrong_answer_count?: number | null;
+  bad_explanation_count?: number | null;
+};
+
 /**
- * 以「已核准入庫」且帶有 video_id 的 question_bank_items 隨機抽 3 筆，同步該影片的 quizzes／quiz_questions。
- * 僅影響該 video_id；第二次段考題庫列通常無 video_id，不會被掃入。
+ * 以「已核准入庫」且帶有 video_id 的 question_bank_items 抽 3 筆，同步該影片的 quizzes／quiz_questions。
+ * 排除 placeholder、軟排除、品質隱藏／低分題；優先高分與與影片 skill 對應者。
  */
 export async function syncVideoComprehensionQuizFromBank(
   supabase: SupabaseClient,
   videoId: string,
 ): Promise<{ ok: boolean; reason?: string; quizId?: string }> {
-  const { data: rows, error: selErr } = await supabase
+  const selectWithExcluded =
+    "id, unit, skill_code, difficulty, question_text, choice_a, choice_b, choice_c, choice_d, correct_answer, explanation, excluded_from_video_quiz_pool";
+  const selectMin =
+    "id, unit, skill_code, difficulty, question_text, choice_a, choice_b, choice_c, choice_d, correct_answer, explanation";
+
+  const first = await supabase
     .from("question_bank_items")
-    .select(
-      "id, unit, skill_code, difficulty, question_text, choice_a, choice_b, choice_c, choice_d, correct_answer, explanation",
-    )
+    .select(selectWithExcluded)
     .eq("video_id", videoId)
     .order("created_at", { ascending: true })
-    .limit(80);
+    .limit(120);
+
+  let rows = first.data as unknown[] | null;
+  let selErr = first.error;
+
+  if (
+    selErr &&
+    (selErr.code === "42703" ||
+      /excluded_from_video_quiz_pool|column .* does not exist/i.test(String(selErr.message ?? "")))
+  ) {
+    const second = await supabase
+      .from("question_bank_items")
+      .select(selectMin)
+      .eq("video_id", videoId)
+      .order("created_at", { ascending: true })
+      .limit(120);
+    rows = second.data as unknown[] | null;
+    selErr = second.error;
+  }
   if (selErr) throw selErr;
 
-  const bank = (rows ?? []).filter(
+  const bankRaw = (rows ?? []) as BankRow[];
+  const bank = bankRaw.filter(
     (r) =>
+      !(r.excluded_from_video_quiz_pool === true) &&
       !looksLikePlaceholderQuizQuestion({
         questionText: String(r.question_text ?? ""),
         choiceA: String(r.choice_a ?? ""),
@@ -74,7 +124,38 @@ export async function syncVideoComprehensionQuizFromBank(
     return { ok: false, reason: "NEED_THREE_BANK_ITEMS" };
   }
 
-  const pool = [...bank];
+  const ids = bank.map((r) => r.id);
+  /** 未套用品質相關 migration 時略過（避免 42P01 / PGRST 等導致影片頁崩潰） */
+  let qMap = new Map<string, QualityRow>();
+  const { data: qRows, error: qStatErr } = await supabase
+    .from("question_quality_stats")
+    .select(
+      "question_id, helpful_count, quality_score, review_status, not_related_count, confusing_count, wrong_answer_count, bad_explanation_count",
+    )
+    .in("question_id", ids);
+  if (!qStatErr && qRows) {
+    qMap = new Map<string, QualityRow>(
+      qRows.map((s) => {
+        const row = s as QualityRow;
+        return [row.question_id, row];
+      }),
+    );
+  }
+
+  const eligible = bank.filter((r) => {
+    const st = qMap.get(r.id);
+    return !isHiddenOrLowQuality(st);
+  });
+  if (eligible.length < 3) {
+    return { ok: false, reason: "NEED_THREE_BANK_ITEMS" };
+  }
+
+  const { data: tagRows } = await supabase.from("video_skill_tags").select("skill_code").eq("video_id", videoId);
+  const skillSet = new Set((tagRows ?? []).map((t) => (t as { skill_code: string }).skill_code));
+
+  const pool = [...eligible];
+  pool.sort((a, b) => compareBankRowsForQuestionPool(a, b, skillSet, qMap));
+
   const three = pickThreeWithSpreadCorrectLetters(pool);
 
   const { data: existingQuiz, error: qFindErr } = await supabase
@@ -105,7 +186,7 @@ export async function syncVideoComprehensionQuizFromBank(
   const { error: delErr } = await supabase.from("quiz_questions").delete().eq("quiz_id", quizId);
   if (delErr) throw delErr;
 
-  const qRows = three.map((r, idx) => ({
+  const baseRows = three.map((r, idx) => ({
     quiz_id: quizId,
     question_text: r.question_text as string,
     question_type: "mcq",
@@ -123,7 +204,20 @@ export async function syncVideoComprehensionQuizFromBank(
     skill_code: String(r.skill_code ?? "").trim(),
   }));
 
-  const { error: insErr } = await supabase.from("quiz_questions").insert(qRows);
+  const withBankId = baseRows.map((row, idx) => ({
+    ...row,
+    question_bank_item_id: three[idx]!.id,
+  }));
+
+  let insErr = (await supabase.from("quiz_questions").insert(withBankId)).error;
+  /** 未套用 quiz_questions.question_bank_item_id 欄位時降級插入（42703 = undefined_column） */
+  if (
+    insErr &&
+    (insErr.code === "42703" ||
+      /question_bank_item_id|column.*does not exist/i.test(String(insErr.message ?? "")))
+  ) {
+    insErr = (await supabase.from("quiz_questions").insert(baseRows)).error;
+  }
   if (insErr) throw insErr;
 
   return { ok: true, quizId };

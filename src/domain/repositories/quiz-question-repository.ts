@@ -22,7 +22,11 @@ export type QuizQuestionSyncPayload = {
 export interface QuizQuestionRepository {
   findByQuizId(quizId: string): Promise<QuizQuestion[]>;
   insertMany(questions: QuizQuestionInsert[]): Promise<void>;
-  syncQuestionsForQuiz(quizId: string, items: QuizQuestionSyncPayload[]): Promise<void>;
+  syncQuestionsForQuiz(
+    quizId: string,
+    items: QuizQuestionSyncPayload[],
+    options?: { bankChangeReason?: string | null },
+  ): Promise<void>;
 }
 
 export type QuizQuestionInsert = {

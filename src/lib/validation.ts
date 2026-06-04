@@ -173,6 +173,8 @@ const MAX_QUIZ_QUESTIONS = 40;
 
 /** 每份測驗可 1～40 題（與後台 JSON／表單編輯一致） */
 export const adminPutQuizQuestionsBodySchema = z.object({
+  /** 同步至題庫時寫入 change_reason，並觸發版本號 */
+  changeReason: z.string().trim().max(500).optional(),
   questions: z
     .array(adminQuizQuestionItemSchema)
     .min(1, "至少需要 1 題")

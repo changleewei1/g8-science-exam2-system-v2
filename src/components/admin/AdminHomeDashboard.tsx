@@ -11,10 +11,12 @@ import {
   ClipboardList,
   FileCheck2,
   GitBranch,
+  History,
   Layers,
   ListChecks,
   Mail,
   Megaphone,
+  MessageSquareWarning,
   Settings,
   Sparkles,
   Tags,
@@ -96,6 +98,8 @@ const SHORTCUTS: Shortcut[] = [
   { label: "家長摘要預覽", href: "/admin/reports/parent-preview", icon: Mail },
   { label: "影片測驗題編輯", href: "/admin/video-quizzes", icon: BookOpenCheck },
   { label: "題目候選審核", href: "/admin/question-candidates", icon: FileCheck2 },
+  { label: "題庫版本與歷史", href: "/admin/question-bank", icon: History },
+  { label: "題目品質回饋", href: "/admin/question-feedback", icon: MessageSquareWarning },
   { label: "影片技能候選審核", href: "/admin/video-skill-review", icon: ListChecks },
 ];
 

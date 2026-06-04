@@ -6,6 +6,7 @@ import type { VideoRepository } from "@/domain/repositories/video-repository";
 import type { Student } from "@/domain/entities/student";
 import type { LearningTaskRow, StudentTaskProgressRow } from "@/types/database";
 import { getSupabaseAdmin } from "@/infrastructure/supabase/admin-client";
+import { countUnreadQuestionUpdateNotifications } from "@/lib/student-question-update-notifications";
 import { comparePlaylistVideoTitle } from "@/lib/video-title-sort";
 
 export type CreateLearningTaskInput = {
@@ -122,6 +123,8 @@ export type StudentLearningTaskSummary = {
   hasNewTasks: boolean;
   /** 建立日期為今日、且在有效期內且未完成的任務數 */
   todayNewTaskCount: number;
+  /** 題庫升版後尚未標記已讀的通知數 */
+  unreadQuestionUpdateCount: number;
 };
 
 function todayYmd(): string {
@@ -266,6 +269,7 @@ export class LearningTaskService {
       completedTaskCount,
       hasNewTasks: newTaskCount > 0,
       todayNewTaskCount,
+      unreadQuestionUpdateCount: await countUnreadQuestionUpdateNotifications(studentId),
     };
   }
 

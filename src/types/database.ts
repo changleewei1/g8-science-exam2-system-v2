@@ -105,6 +105,7 @@ export type QuizQuestionRow = {
   choice_b_image_url?: string | null;
   choice_c_image_url?: string | null;
   choice_d_image_url?: string | null;
+  question_bank_item_id?: string | null;
   created_at: string;
 };
 
@@ -166,6 +167,10 @@ export type QuestionBankItemRow = {
   /** migration 20260409120000；未套用前可能為 undefined */
   excluded_from_video_quiz_pool?: boolean;
   created_at: string;
+  /** migration 20260529140000 */
+  version?: number;
+  change_reason?: string | null;
+  updated_at?: string | null;
 };
 
 export type ReactionRateQuestionCandidateRow = {

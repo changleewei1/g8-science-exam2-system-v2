@@ -31,7 +31,10 @@ function navLinkClass(active: boolean) {
 export function StudentTopNav() {
   const pathname = usePathname() ?? "";
   const [loggingOut, setLoggingOut] = useState(false);
-  const [incompleteTaskCount, setIncompleteTaskCount] = useState<number | null>(null);
+  const [taskSummary, setTaskSummary] = useState<{
+    incompleteTaskCount: number;
+    unreadQuestionUpdateCount: number;
+  } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -41,15 +44,22 @@ export function StudentTopNav() {
         const data = await res.json().catch(() => ({}));
         if (!res.ok || cancelled) return;
         const n = Number(data.incompleteTaskCount);
-        setIncompleteTaskCount(Number.isFinite(n) ? n : 0);
+        const qu = Number(data.unreadQuestionUpdateCount);
+        setTaskSummary({
+          incompleteTaskCount: Number.isFinite(n) ? n : 0,
+          unreadQuestionUpdateCount: Number.isFinite(qu) ? qu : 0,
+        });
       } catch {
-        if (!cancelled) setIncompleteTaskCount(0);
+        if (!cancelled) setTaskSummary({ incompleteTaskCount: 0, unreadQuestionUpdateCount: 0 });
       }
     })();
     return () => {
       cancelled = true;
     };
   }, [pathname]);
+
+  const incompleteTaskCount = taskSummary?.incompleteTaskCount ?? null;
+  const unreadQuestionUpdateCount = taskSummary?.unreadQuestionUpdateCount ?? null;
 
   const onLogout = useCallback(async () => {
     setLoggingOut(true);
@@ -90,22 +100,44 @@ export function StudentTopNav() {
           <Link
             href="/student/tasks"
             className={cn(navLinkClass(isTasks), "inline-flex items-center gap-2")}
-            aria-describedby={incompleteTaskCount && incompleteTaskCount > 0 ? "nav-tasks-incomplete-hint" : undefined}
+            aria-describedby={
+              (incompleteTaskCount !== null && incompleteTaskCount > 0) ||
+              (unreadQuestionUpdateCount !== null && unreadQuestionUpdateCount > 0)
+                ? "nav-tasks-incomplete-hint"
+                : undefined
+            }
           >
             學習任務
-            {incompleteTaskCount !== null && incompleteTaskCount > 0 ? (
-              <>
+            <span className="flex flex-wrap items-center gap-1.5">
+              {incompleteTaskCount !== null && incompleteTaskCount > 0 ? (
                 <span
-                  className="inline-flex min-h-[1.25rem] min-w-[1.25rem] shrink-0 items-center justify-center rounded-full bg-[#FF3B30] px-1 text-[11px] font-bold leading-none text-white shadow-[0_0_0_1px_rgba(255,255,255,0.95),0_2px_8px_rgba(255,59,48,0.45)] tabular-nums sm:min-h-[1.35rem] sm:min-w-[1.35rem] sm:text-xs"
+                  className="inline-flex min-h-[1.25rem] shrink-0 items-center justify-center rounded-full bg-[#FF3B30] px-1.5 text-[10px] font-bold leading-none text-white shadow-[0_0_0_1px_rgba(255,255,255,0.95),0_2px_8px_rgba(255,59,48,0.45)] tabular-nums sm:min-h-[1.35rem] sm:text-[11px]"
                   title={`尚有 ${incompleteTaskCount} 個任務未完成`}
                   aria-hidden
                 >
-                  {incompleteTaskCount > 9 ? "9+" : incompleteTaskCount}
+                  任務 {incompleteTaskCount > 9 ? "9+" : incompleteTaskCount}
                 </span>
-                <span id="nav-tasks-incomplete-hint" className="sr-only">
-                  尚有 {incompleteTaskCount} 個學習任務未完成
+              ) : null}
+              {unreadQuestionUpdateCount !== null && unreadQuestionUpdateCount > 0 ? (
+                <span
+                  className="inline-flex min-h-[1.25rem] shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-1.5 text-[10px] font-bold leading-none text-white shadow-[0_0_0_1px_rgba(255,255,255,0.95),0_2px_10px_rgba(251,146,60,0.5)] tabular-nums sm:min-h-[1.35rem] sm:text-[11px]"
+                  title={`有 ${unreadQuestionUpdateCount} 題已更新，建議重新挑戰`}
+                  aria-hidden
+                >
+                  題目 {unreadQuestionUpdateCount > 9 ? "9+" : unreadQuestionUpdateCount}
                 </span>
-              </>
+              ) : null}
+            </span>
+            {(incompleteTaskCount !== null && incompleteTaskCount > 0) ||
+            (unreadQuestionUpdateCount !== null && unreadQuestionUpdateCount > 0) ? (
+              <span id="nav-tasks-incomplete-hint" className="sr-only">
+                {incompleteTaskCount !== null && incompleteTaskCount > 0
+                  ? `尚有 ${incompleteTaskCount} 個學習任務未完成。`
+                  : ""}
+                {unreadQuestionUpdateCount !== null && unreadQuestionUpdateCount > 0
+                  ? `有 ${unreadQuestionUpdateCount} 題測驗經老師優化，建議重新挑戰。`
+                  : ""}
+              </span>
             ) : null}
           </Link>
           <button

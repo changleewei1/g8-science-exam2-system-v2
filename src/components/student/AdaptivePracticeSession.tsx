@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { PracticeQuestionCard } from "@/components/student/PracticeQuestionCard";
 import { PracticeResourcePanel } from "@/components/student/PracticeResourcePanel";
 import { PracticeStatusPanel } from "@/components/student/PracticeStatusPanel";
+import { QuizQuestionQualityFeedback } from "@/components/student/quiz/QuizQuestionQualityFeedback";
 
 type Choices = { A: string; B: string; C: string; D: string };
 
@@ -36,6 +37,9 @@ function readApiError(payload: unknown): string {
 type AdaptivePracticeSessionProps = {
   skillCode: string;
   skillLabel: string;
+  /** 段考範圍 id（由技能樹進入時帶入，供題目回饋） */
+  examScopeId?: string | null;
+  subjectKey?: string;
   /** 預設：智慧練習 API */
   apiBase?: string;
   /** 預設：學習總覽（個人總覽區塊） */
@@ -46,6 +50,8 @@ export function AdaptivePracticeSession(props: AdaptivePracticeSessionProps) {
   const {
     skillCode,
     skillLabel,
+    examScopeId,
+    subjectKey,
     apiBase = "/api/lab/practice",
     backHref = "/student/dashboard",
   } = props;
@@ -345,6 +351,15 @@ export function AdaptivePracticeSession(props: AdaptivePracticeSessionProps) {
                   {lastAnswer.explanation || "本題暫無詳解，建議先回看影片並再做一次類似題。"}
                 </p>
               </div>
+
+              {question ? (
+                <QuizQuestionQualityFeedback
+                  questionBankItemId={question.question_id}
+                  skillCode={skillCode}
+                  examScopeId={examScopeId ?? undefined}
+                  subjectKey={subjectKey}
+                />
+              ) : null}
 
               {!lastAnswer.is_mastered ? (
                 <button

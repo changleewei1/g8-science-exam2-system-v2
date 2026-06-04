@@ -13,6 +13,9 @@ import type {
   StudentOverviewScopeOption,
 } from "@/lib/student-dashboard-types";
 import { getStudentLearningService, getLearningTaskService } from "@/infrastructure/composition";
+import {
+  resolveFirstUnreadQuestionQuizHref,
+} from "@/lib/student-question-update-notifications";
 
 const EXAM_LABELS = ["第一次段考", "第二次段考", "第三次段考"] as const;
 
@@ -310,6 +313,16 @@ export async function buildStudentFocusHomePayload(
     computeWeeklyLearning(studentId),
   ]);
 
+  let questionUpdate: StudentFocusHomePayload["questionUpdate"];
+  if (taskSummary.unreadQuestionUpdateCount > 0) {
+    const practiceHref =
+      (await resolveFirstUnreadQuestionQuizHref(studentId)) ?? "/student/tasks#question-updates";
+    questionUpdate = {
+      unreadCount: taskSummary.unreadQuestionUpdateCount,
+      practiceHref,
+    };
+  }
+
   const active = pickActiveExamScopeForStudent(scopes, studentGrade);
   if (!active) {
     return {
@@ -318,6 +331,7 @@ export async function buildStudentFocusHomePayload(
       weeklyLearningLabel: weekly.label,
       weeklyLearningMinutes: weekly.minutes,
       taskSummary,
+      questionUpdate,
       nextStepHint: "目前沒有對應你年級的開放段考，請聯絡老師或稍後再試。",
       activeScope: null,
     };
@@ -345,6 +359,7 @@ export async function buildStudentFocusHomePayload(
     weeklyLearningLabel: weekly.label,
     weeklyLearningMinutes: weekly.minutes,
     taskSummary,
+    questionUpdate,
     nextStepHint,
     activeScope: {
       id: active.id,

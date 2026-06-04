@@ -130,6 +130,21 @@ export function renderParentDailyEmailHtml(d: ParentDailyEmailReportData): strin
   </div>`
       : "";
 
+  const questionUpdateBlock =
+    psv(d, "question_updates") && d.questionUpdateUnreadCount > 0
+      ? (() => {
+          const lines =
+            d.questionUpdateVideoTitles.length > 0
+              ? d.questionUpdateVideoTitles.map((t) => `<li>${escapeHtml(t)}</li>`).join("")
+              : `<li>請登入後至「學習任務」查看「題目已更新」專區。</li>`;
+          return `<div style="padding:18px 20px;background:#fffbeb;border-radius:16px;border:1px solid #fcd34d;margin-bottom:14px">
+    <p style="margin:0 0 8px 0;font-weight:700;font-size:16px;color:#92400e">🆕 題目更新提醒</p>
+    <p style="margin:0 0 10px 0;font-size:15px;line-height:1.65;color:#0f172a">本週有 <strong>${d.questionUpdateUnreadCount}</strong> 題測驗經老師優化。建議孩子重新挑戰以下內容：</p>
+    <ul style="margin:0;padding-left:20px;color:#0f172a;font-size:15px;line-height:1.7">${lines}</ul>
+  </div>`;
+        })()
+      : "";
+
   return `
 <div style="max-width:560px;margin:0 auto;padding:24px 16px;font-family:'Segoe UI',Arial,sans-serif;background:#f8fafc;color:#0f172a">
   <div style="padding:20px 22px;background:#ffffff;border-radius:16px;border:1px solid #e2e8f0;margin-bottom:14px">
@@ -151,6 +166,7 @@ export function renderParentDailyEmailHtml(d: ParentDailyEmailReportData): strin
   ${weakSection}
   ${tonightBlock}
   ${teacherNoteBlock}
+  ${questionUpdateBlock}
 
   <div style="height:1px;background:#cbd5e1;margin:16px 0"></div>
 

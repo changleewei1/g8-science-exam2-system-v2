@@ -9,6 +9,7 @@ import { getStudentWeakSkillSummaries } from "@/lib/report/analysis";
 import type { DailyOverviewPayload } from "@/lib/report/buildDailyOverviewPayload";
 import { buildDailyOverviewPayload } from "@/lib/report/buildDailyOverviewPayload";
 import { resolveStudentAppBaseUrlSafe } from "@/lib/report/reportOrigin";
+import { fetchParentQuestionUpdateSummary } from "@/lib/student-question-update-notifications";
 
 export type ParentToneMode = "encourage" | "remind" | "risk";
 
@@ -34,6 +35,9 @@ export type ParentDailyEmailReportData = {
   recommendedSkillLabel: string;
   studentLoginUrl: string;
   toneMode: ParentToneMode;
+  /** 近 7 日未讀題目更新（家長信） */
+  questionUpdateUnreadCount: number;
+  questionUpdateVideoTitles: string[];
 };
 
 export type BuildParentDailyEmailReportOptions = {
@@ -307,6 +311,8 @@ export async function buildParentDailyEmailReport(
   const classDisplay = st.class_name ? `${st.class_name} 班` : "班級未設定";
   const toneMode = toneFromCompletion(completionRate);
 
+  const questionUp = await fetchParentQuestionUpdateSummary(studentId);
+
   return {
     ok: true,
     data: {
@@ -331,6 +337,8 @@ export async function buildParentDailyEmailReport(
       recommendedSkillLabel,
       studentLoginUrl,
       toneMode,
+      questionUpdateUnreadCount: questionUp.unreadCount,
+      questionUpdateVideoTitles: questionUp.videoTitles,
     },
   };
 }

@@ -86,6 +86,7 @@ export function StudentFocusHome({ data }: Props) {
     weeklyLearningLabel,
     weeklyLearningMinutes,
     taskSummary,
+    questionUpdate,
     activeScope,
     nextStepHint,
   } = data;
@@ -283,6 +284,44 @@ export function StudentFocusHome({ data }: Props) {
             目前沒有進行中的學習任務。
           </div>
         )}
+
+        {/* 題目已更新（新任務區塊下方） */}
+        {questionUpdate && questionUpdate.unreadCount > 0 ? (
+          <motion.section
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+            className="relative mb-10 overflow-hidden rounded-3xl border border-amber-300/70 bg-gradient-to-br from-amber-50/95 via-white to-orange-50/40 p-6 shadow-[0_12px_40px_-14px_rgba(251,146,60,0.35)] backdrop-blur-xl sm:p-8"
+          >
+            <div className="pointer-events-none absolute -right-10 top-0 h-36 w-36 rounded-full bg-orange-400/15 blur-3xl" />
+            <div className="pointer-events-none absolute bottom-0 left-0 h-24 w-40 rounded-full bg-cyan-400/10 blur-2xl" />
+            <div className="relative flex flex-wrap items-start justify-between gap-4 border-l-4 border-amber-500 pl-4">
+              <div className="min-w-0">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-900/90">
+                  Question refresh
+                </p>
+                <h2 className="mt-1 flex flex-wrap items-center gap-2 text-xl font-semibold text-slate-900 sm:text-2xl">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-orange-500 px-2.5 py-0.5 text-sm font-bold text-white shadow-[0_0_16px_rgba(249,115,22,0.45)]">
+                    🆕 {questionUpdate.unreadCount}
+                  </span>
+                  題目已更新
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-slate-700">
+                  有 <span className="font-semibold tabular-nums">{questionUpdate.unreadCount}</span> 題測驗已優化，建議重新挑戰以對齊最新題目與詳解。
+                </p>
+              </div>
+              <Sparkles className="h-7 w-7 shrink-0 text-amber-500/90" aria-hidden />
+            </div>
+            <div className="relative mt-6">
+              <Link
+                href={questionUpdate.practiceHref}
+                className="flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 py-3.5 text-center text-sm font-semibold text-white shadow-[0_8px_28px_-8px_rgba(249,115,22,0.55)] transition hover:brightness-105 active:scale-[0.99]"
+              >
+                立即複習
+              </Link>
+            </div>
+          </motion.section>
+        ) : null}
 
         {/* 第五層：主 CTA */}
         <div className="mt-auto space-y-3 pt-2">

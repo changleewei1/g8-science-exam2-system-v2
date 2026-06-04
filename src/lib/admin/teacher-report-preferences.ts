@@ -43,6 +43,7 @@ export const PARENT_EMAIL_SECTION_KEYS = [
   "recommended_video",
   "tonight_tasks",
   "teacher_note",
+  "question_updates",
 ] as const;
 
 export type ParentEmailSectionKey = (typeof PARENT_EMAIL_SECTION_KEYS)[number];
@@ -361,4 +362,5 @@ export const PARENT_SECTION_LABELS: Record<ParentEmailSectionKey, string> = {
   recommended_video: "推薦影片",
   tonight_tasks: "建議今晚完成任務（推薦影片／技能）",
   teacher_note: "老師提醒文字（手動寄送時填寫）",
+  question_updates: "題目更新提醒（題庫升版）",
 };
